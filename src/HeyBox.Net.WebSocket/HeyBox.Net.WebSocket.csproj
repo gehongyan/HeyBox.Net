@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../HeyBox.Net.props"/>
+
+  <PropertyGroup>
+    <RootNamespace>HeyBox.WebSocket</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>HeyBox.Net.WebSocket</PackageId>
+    <Description>The WebSocket API implementation for HeyBox.Net.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants>DEBUG_PACKETS,DEBUG_AUDIO</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HeyBox.Net.Core\HeyBox.Net.Core.csproj"/>
+    <ProjectReference Include="..\HeyBox.Net.Rest\HeyBox.Net.Rest.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+  </ItemGroup>
+
+</Project>

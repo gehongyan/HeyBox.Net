@@ -3,6 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net.Core", "src\HeyBox.Net.Core\HeyBox.Net.Core.csproj", "{B0F22351-7744-4330-9CC7-E0EF69F7DDD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net", "src\HeyBox.Net\HeyBox.Net.csproj", "{9CE6A426-5ED0-43C5-9B5A-975A2A19CFC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementations", "Implementations", "{EBE3E81A-C136-4837-B862-688539AE3998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net.Rest", "src\HeyBox.Net.Rest\HeyBox.Net.Rest.csproj", "{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net.WebSocket", "src\HeyBox.Net.WebSocket\HeyBox.Net.WebSocket.csproj", "{417B5918-8ECB-4983-B442-7968F9D0C16C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EC9D719D-EB6B-4971-A32F-D1050C4B6E3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net.Samples.SimpleBot", "samples\HeyBox.Net.Samples.SimpleBot\HeyBox.Net.Samples.SimpleBot.csproj", "{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +24,32 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0F22351-7744-4330-9CC7-E0EF69F7DDD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0F22351-7744-4330-9CC7-E0EF69F7DDD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0F22351-7744-4330-9CC7-E0EF69F7DDD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0F22351-7744-4330-9CC7-E0EF69F7DDD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CE6A426-5ED0-43C5-9B5A-975A2A19CFC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CE6A426-5ED0-43C5-9B5A-975A2A19CFC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CE6A426-5ED0-43C5-9B5A-975A2A19CFC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CE6A426-5ED0-43C5-9B5A-975A2A19CFC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{417B5918-8ECB-4983-B442-7968F9D0C16C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{417B5918-8ECB-4983-B442-7968F9D0C16C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{417B5918-8ECB-4983-B442-7968F9D0C16C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{417B5918-8ECB-4983-B442-7968F9D0C16C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF} = {EBE3E81A-C136-4837-B862-688539AE3998}
+		{417B5918-8ECB-4983-B442-7968F9D0C16C} = {EBE3E81A-C136-4837-B862-688539AE3998}
+		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41} = {EC9D719D-EB6B-4971-A32F-D1050C4B6E3F}
 	EndGlobalSection
 EndGlobal

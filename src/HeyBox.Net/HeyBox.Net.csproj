@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../HeyBox.Net.props"/>
+
+  <PropertyGroup>
+    <RootNamespace>HeyBox</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <PackageId>HeyBox.Net</PackageId>
+    <Description>An unofficial C# .NET implementation for QQ Bot API, including all necessary components for building a QQ bot.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HeyBox.Net.Core\HeyBox.Net.Core.csproj" />
+    <ProjectReference Include="..\HeyBox.Net.Rest\HeyBox.Net.Rest.csproj" />
+    <ProjectReference Include="..\HeyBox.Net.WebSocket\HeyBox.Net.WebSocket.csproj" />
+  </ItemGroup>
+
+</Project>

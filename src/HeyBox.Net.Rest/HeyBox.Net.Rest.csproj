@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../HeyBox.Net.props"/>
+
+  <PropertyGroup>
+    <RootNamespace>HeyBox.Rest</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>HeyBox.Net.Rest</PackageId>
+    <Description>The REST API implementation for HeyBox.Net.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants>DEBUG_REST</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HeyBox.Net.Core\HeyBox.Net.Core.csproj" />
+  </ItemGroup>
+
+</Project>
