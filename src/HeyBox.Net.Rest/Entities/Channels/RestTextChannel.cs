@@ -3,7 +3,7 @@ using System.Drawing;
 namespace HeyBox.Rest;
 
 /// <summary>
-///     表示服务器中一个基于 REST 的具有文字聊天能力的频道，可以发送和接收消息。
+///     表示房间中一个基于 REST 的具有文字聊天能力的频道，可以发送和接收消息。
 /// </summary>
 public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChannel
 {
@@ -17,13 +17,6 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
     {
         Type = ChannelType.Text;
     }
-
-    internal static RestTextChannel Create(BaseHeyBoxClient heyBox, IRoom room, ulong id)
-    {
-        RestTextChannel entity = new(heyBox, room, id);
-        return entity;
-    }
-
 
     /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.String,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},HeyBox.IQuote,HeyBox.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(string path, string? filename = null,

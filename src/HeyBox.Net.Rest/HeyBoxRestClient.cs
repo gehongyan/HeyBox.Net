@@ -17,6 +17,13 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
 
+    /// <inheritdoc cref="HeyBox.Rest.BaseHeyBoxClient.CurrentUser" />
+    public new RestSelfUser? CurrentUser
+    {
+        get => base.CurrentUser as RestSelfUser;
+        internal set => base.CurrentUser = value;
+    }
+
     /// <summary>
     ///     使用默认配置初始化一个 <see cref="HeyBoxRestClient"/> 类的新实例。
     /// </summary>
@@ -44,17 +51,25 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
 
     internal override void Dispose(bool disposing)
     {
-        if (disposing) ApiClient.Dispose();
+        if (disposing)
+            ApiClient.Dispose();
         base.Dispose(disposing);
     }
 
     /// <inheritdoc />
     internal override Task OnLoginAsync(TokenType tokenType, string token)
     {
-        ApiClient.CurrentUserId = TokenUtils.TryParseBotTokenUserId(token, out ulong userId)
-            ? userId
-            : null;
+        if (TokenUtils.TryParseBotTokenUserId(token, out uint userId))
+        {
+            ApiClient.CurrentUserId = userId;
+            base.CurrentUser = new RestSelfUser(this, userId);
+        }
         return Task.CompletedTask;
+    }
+
+    internal void CreateRestSelfUser(uint userId)
+    {
+        base.CurrentUser = new RestSelfUser(this, userId);
     }
 
     /// <inheritdoc />
@@ -69,7 +84,7 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
     /// </summary>
     /// <param name="id"> 房间的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的服务器；若指定 ID 的服务器不存在，则为 <c>null</c>。 </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间；若指定 ID 的房间不存在，则为 <c>null</c>。 </returns>
     public Task<RestRoom> GetRoomAsync(ulong id, RequestOptions? options = null) =>
         ClientHelper.GetRoomAsync(this, id, options);
 

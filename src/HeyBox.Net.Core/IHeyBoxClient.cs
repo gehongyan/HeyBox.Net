@@ -36,7 +36,7 @@ public interface IHeyBoxClient : IDisposable
     Task StopAsync();
 
     /// <summary>
-    ///     登录到黑盒语音API。
+    ///     登录到黑盒语音 API。
     /// </summary>
     /// <param name="tokenType"> 要使用的令牌类型。 </param>
     /// <param name="token"> 要使用的令牌。 </param>
@@ -49,7 +49,7 @@ public interface IHeyBoxClient : IDisposable
     Task LoginAsync(TokenType tokenType, string token, bool validateToken = true);
 
     /// <summary>
-    ///     从黑盒语音API 退出登录。
+    ///     从黑盒语音 API 退出登录。
     /// </summary>
     /// <returns> 一个表示异步退出登录操作的任务。 </returns>
     /// <remarks>
@@ -62,12 +62,12 @@ public interface IHeyBoxClient : IDisposable
     #region Room
 
     /// <summary>
-    ///     获取一个服务器。
+    ///     获取一个房间。
     /// </summary>
-    /// <param name="id"> 服务器的 ID。 </param>
+    /// <param name="id"> 房间的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的服务器；若指定 ID 的服务器不存在，则为 <c>null</c>。 </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间；若指定 ID 的房间不存在，则为 <c>null</c>。 </returns>
     Task<IRoom?> GetRoomAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion

@@ -5,15 +5,16 @@
 /// </summary>
 public class RestRoom : RestEntity<ulong>, IRoom
 {
+    /// <inheritdoc />
+    public string? Name { get; private set; }
+
+    /// <inheritdoc />
+    public string? Icon { get; private set; }
+
     internal RestRoom(BaseHeyBoxClient client, ulong id)
         : base(client, id)
     {
         EveryoneRole = new RestRole(Client, this, 0);
-    }
-
-    internal static RestRoom Create(BaseHeyBoxClient client, ulong id)
-    {
-        return new RestRoom(client, id);
     }
 
     /// <inheritdoc cref="HeyBox.IRoom.EveryoneRole" />
@@ -22,7 +23,7 @@ public class RestRoom : RestEntity<ulong>, IRoom
     #region Channels
 
     /// <summary>
-    ///     获取此服务器内指定具有文字聊天能力的频道。
+    ///     获取此房间内指定具有文字聊天能力的频道。
     /// </summary>
     /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -40,6 +41,9 @@ public class RestRoom : RestEntity<ulong>, IRoom
 
     /// <inheritdoc />
     IRole IRoom.EveryoneRole => EveryoneRole;
+
+    /// <inheritdoc />
+    IRole? IRoom.GetRole(uint id) => id == 0 ? EveryoneRole : null;
 
     /// <inheritdoc />
     async Task<ITextChannel?> IRoom.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>

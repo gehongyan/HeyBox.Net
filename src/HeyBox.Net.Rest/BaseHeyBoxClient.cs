@@ -80,8 +80,15 @@ public abstract class BaseHeyBoxClient : IHeyBoxClient
     /// </summary>
     public LoginState LoginState { get; protected set; }
 
+    /// <summary>
+    ///     获取登录到此客户端的当前用户；如果未登录，则为 <c>null</c>。
+    /// </summary>
+    public ISelfUser? CurrentUser { get; protected set; }
+
     /// <inheritdoc />
     public TokenType TokenType => ApiClient.AuthTokenType;
+
+    internal string? Token => ApiClient.AuthToken;
 
     internal BaseHeyBoxClient(HeyBoxRestConfig config, API.HeyBoxRestApiClient client)
     {

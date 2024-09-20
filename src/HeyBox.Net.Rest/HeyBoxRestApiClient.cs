@@ -360,7 +360,7 @@ internal class HeyBoxRestApiClient : IDisposable
 
         BucketIds ids = new();
         return await SendMultipartAsync<CreateAssetResponse>(HttpMethod.Post,
-                () => "https://chat-upload.xiaoheihe.cn/upload", args.ToDictionary(), ids, ClientBucketType.SendEdit, false, options)
+                () => $"{HeyBoxConfig.CreateAssetAPIUrl}upload", args.ToDictionary(), ids, ClientBucketType.SendEdit, false, options)
             .ConfigureAwait(false);
     }
 

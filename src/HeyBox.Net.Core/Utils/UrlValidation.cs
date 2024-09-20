@@ -25,7 +25,7 @@ internal static class UrlValidation
     }
 
     /// <summary>
-    ///     确保 URL 表示的是 HeyBox 对象存储服务器上的资源。
+    ///     确保 URL 表示的是 HeyBox 服务器上的资源。
     /// </summary>
     /// <remarks>
     ///     此方法从 3 个部分检查 URL：
@@ -45,8 +45,8 @@ internal static class UrlValidation
     ///     </list>
     /// </remarks>
     /// <param name="url"> 要校验的 URL。 </param>
-    /// <exception cref="InvalidOperationException"> URL 不是有效的 HeyBox 对象存储服务器上的资源地址。 </exception>
-    /// <returns> 如果 URL 指向了有效的 HeyBox 对象存储服务器上的资源，则为 <c>true</c>，否则为 <c>false</c>。 </returns>
+    /// <exception cref="InvalidOperationException"> URL 不是有效的 HeyBox 服务器上的资源地址。 </exception>
+    /// <returns> 如果 URL 指向了有效的 HeyBox 服务器上的资源，则为 <c>true</c>，否则为 <c>false</c>。 </returns>
     public static bool ValidateHeyBoxAssetUrl(string url)
     {
         if (string.IsNullOrEmpty(url)) return false;

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace HeyBox.Rest;
+﻿namespace HeyBox.Rest;
 
 /// <summary>
 ///     表示一个基于 REST 的房间频道。
@@ -16,6 +14,9 @@ public class RestRoomChannel : RestChannel, IRoomChannel
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
 
+    /// <inheritdoc />
+    public string? Name { get; private set; }
+
     internal RestRoomChannel(BaseHeyBoxClient heyBox, IRoom room, ulong id)
         : base(heyBox, id)
     {
@@ -23,11 +24,12 @@ public class RestRoomChannel : RestChannel, IRoomChannel
         Type = ChannelType.Unspecified;
     }
 
-    internal static RestRoomChannel Create(BaseHeyBoxClient client, IRoom room, ChannelType type, ulong id) =>
-        type switch
-        {
-            ChannelType.Text => RestTextChannel.Create(client, room, id),
-            _ => new RestRoomChannel(client, room, id)
-        };
+    #region IRoomChannel
 
+
+    /// <inheritdoc />
+    IRoom IRoomChannel.Room => Room;
+
+
+    #endregion
 }

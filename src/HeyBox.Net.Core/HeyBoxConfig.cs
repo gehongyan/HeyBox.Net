@@ -35,17 +35,12 @@ public class HeyBoxConfig
     /// <summary>
     ///     获取黑盒语音上传媒体文件 API 请求的根 URL。
     /// </summary>
-    public const string UpdateAssetAPIUrl = "https://chat-upload.xiaoheihe.cn/";
-
-    /// <summary>
-    ///     获取黑盒语音 WebSocket 服务的 URL。
-    /// </summary>
-    public const string WebSocketAPIUrl = "wss://chat.xiaoheihe.cn/chatroom/ws/connect";
+    public const string CreateAssetAPIUrl = "https://chat-upload.xiaoheihe.cn/";
 
     /// <summary>
     ///     获取黑盒语音的版本号。
     /// </summary>
-    public const string ChatVersion = "1.24.5";
+    public const string ChatVersion = "1.27.2";
 
     /// <summary>
     ///     获取用于 API 请求的公共查询参数。

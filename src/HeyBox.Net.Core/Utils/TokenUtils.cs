@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -92,7 +93,7 @@ public static class TokenUtils
         return null;
     }
 
-    internal static bool TryParseBotTokenUserId(string token, out ulong userId)
+    internal static bool TryParseBotTokenUserId([NotNullWhen(true)] string? token, out uint userId)
     {
         if (string.IsNullOrWhiteSpace(token))
         {
@@ -119,7 +120,7 @@ public static class TokenUtils
         }
 
         // ensure all parts could be parsed as a ulong
-        if (!ulong.TryParse(segments[0], NumberStyles.None, CultureInfo.InvariantCulture, out userId))
+        if (!uint.TryParse(segments[0], NumberStyles.None, CultureInfo.InvariantCulture, out userId))
         {
             userId = 0;
             return false;

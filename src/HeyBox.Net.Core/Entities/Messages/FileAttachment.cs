@@ -99,8 +99,8 @@ public struct FileAttachment : IDisposable
     ///     通过 URL 创建附件。
     /// </summary>
     /// <remarks>
-    ///     URL 应该是指向 HeyBox 对象存储服务器上的资源的 URL。如果传入的网络地址不是指向 HeyBox 对象存储服务器上的资源的 URL，
-    ///     虽然此构造函数不会引发异常，但在发送消息时可能会引发异常。此时，网络资源应先通过转存至 HeyBox 对象存储服务器上，再使用此构造函数。
+    ///     URL 应该是指向 HeyBox 服务器上的资源的 URL。如果传入的网络地址不是指向 HeyBox 服务器上的资源的 URL，
+    ///     虽然此构造函数不会引发异常，但在发送消息时可能会引发异常。此时，网络资源应先通过转存至 HeyBox 服务器上，再使用此构造函数。
     /// </remarks>
     /// <param name="uri"> 文件的 URL。 </param>
     /// <param name="filename"> 文件名。 </param>
