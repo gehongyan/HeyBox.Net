@@ -25,6 +25,8 @@ public class SocketSlashCommand : SocketInteraction, ISlashCommandInteraction, I
     internal void Update(Model model)
     {
         Data.Update(model);
+
+        IsPopulated = true;
     }
 
     /// <inheritdoc/>

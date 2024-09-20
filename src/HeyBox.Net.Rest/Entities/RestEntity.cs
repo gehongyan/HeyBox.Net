@@ -12,6 +12,9 @@ public abstract class RestEntity<TId> : IEntity<TId>
     /// <inheritdoc />
     public TId Id { get; }
 
+    /// <inheritdoc />
+    public bool IsPopulated { get; internal set; }
+
     internal RestEntity(BaseHeyBoxClient client, TId id)
     {
         Client = client;

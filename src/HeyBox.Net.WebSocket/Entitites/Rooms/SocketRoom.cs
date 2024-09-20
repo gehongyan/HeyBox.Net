@@ -61,6 +61,8 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
     {
         Name = model.RoomName;
         Icon = model.RoomAvatar;
+
+        IsPopulated = true;
     }
 
     #region Channels

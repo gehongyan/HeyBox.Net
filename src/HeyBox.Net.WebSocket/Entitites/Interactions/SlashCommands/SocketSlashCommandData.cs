@@ -31,6 +31,8 @@ public class SocketSlashCommandData : SocketEntity<ulong>, ISlashCommandInteract
     internal void Update(CommandInfo model)
     {
         Options = [..model.Options.Select(x => new SocketSlashCommandDataOption(this, x))];
+
+        IsPopulated = true;
     }
 
     IReadOnlyCollection<ISlashCommandInteractionDataOption> ISlashCommandInteractionData.Options => Options;

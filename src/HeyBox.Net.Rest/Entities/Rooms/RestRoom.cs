@@ -5,12 +5,6 @@
 /// </summary>
 public class RestRoom : RestEntity<ulong>, IRoom
 {
-    /// <inheritdoc />
-    public string? Name { get; private set; }
-
-    /// <inheritdoc />
-    public string? Icon { get; private set; }
-
     internal RestRoom(BaseHeyBoxClient client, ulong id)
         : base(client, id)
     {
@@ -38,6 +32,12 @@ public class RestRoom : RestEntity<ulong>, IRoom
     #endregion
 
     #region IRoom
+
+    /// <inheritdoc />
+    string? IRoom.Name => null;
+
+    /// <inheritdoc />
+    string? IRoom.Icon => null;
 
     /// <inheritdoc />
     IRole IRoom.EveryoneRole => EveryoneRole;

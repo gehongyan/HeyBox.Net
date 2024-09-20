@@ -6,25 +6,7 @@ namespace HeyBox.Rest;
 public class RestUser : RestEntity<uint>, IUser
 {
     /// <inheritdoc />
-    public string? Username { get; internal set; }
-
-    /// <inheritdoc />
-    public bool? IsBot { get; internal set; }
-
-    /// <inheritdoc />
-    public string? Avatar { get; internal set; }
-
-    /// <inheritdoc />
-    public string? AvatarDecorationType { get; internal set; }
-
-    /// <inheritdoc />
-    public string? AvatarDecorationUrl { get; internal set; }
-
-    /// <inheritdoc />
-    public int? Level { get; internal set; }
-
-    /// <inheritdoc />
-    public string Mention => MentionUtils.MentionUser(Id);
+    string IMentionable.Mention => MentionUtils.MentionUser(Id);
 
     internal RestUser(BaseHeyBoxClient client, uint id)
         : base(client, id)
@@ -36,4 +18,26 @@ public class RestUser : RestEntity<uint>, IUser
         RestUser entity = new(client, id);
         return entity;
     }
+
+    #region IUser
+
+    /// <inheritdoc />
+    string? IUser.Username => null;
+
+    /// <inheritdoc />
+    bool? IUser.IsBot => null;
+
+    /// <inheritdoc />
+    string? IUser.Avatar => null;
+
+    /// <inheritdoc />
+    string? IUser.AvatarDecorationType => null;
+
+    /// <inheritdoc />
+    string? IUser.AvatarDecorationUrl => null;
+
+    /// <inheritdoc />
+    int? IUser.Level => null;
+
+    #endregion
 }

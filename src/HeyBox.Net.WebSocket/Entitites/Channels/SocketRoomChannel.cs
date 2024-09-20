@@ -31,6 +31,8 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
     internal override void Update(ClientState state, Model model)
     {
         Name = model.ChannelName;
+
+        IsPopulated = true;
     }
 
     #region IRoomChannel

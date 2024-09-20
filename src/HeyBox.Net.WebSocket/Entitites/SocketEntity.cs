@@ -12,6 +12,9 @@ public abstract class SocketEntity<TId> : IEntity<TId>
     /// <inheritdoc />
     public TId Id { get; }
 
+    /// <inheritdoc />
+    public bool IsPopulated { get; internal set; }
+
     internal SocketEntity(HeyBoxSocketClient client, TId id)
     {
         Client = client;

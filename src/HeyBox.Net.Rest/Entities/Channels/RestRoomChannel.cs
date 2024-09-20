@@ -14,9 +14,6 @@ public class RestRoomChannel : RestChannel, IRoomChannel
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
 
-    /// <inheritdoc />
-    public string? Name { get; private set; }
-
     internal RestRoomChannel(BaseHeyBoxClient heyBox, IRoom room, ulong id)
         : base(heyBox, id)
     {
@@ -26,10 +23,11 @@ public class RestRoomChannel : RestChannel, IRoomChannel
 
     #region IRoomChannel
 
+    /// <inheritdoc />
+    string? IChannel.Name => null;
 
     /// <inheritdoc />
     IRoom IRoomChannel.Room => Room;
-
 
     #endregion
 }

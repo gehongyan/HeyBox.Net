@@ -42,6 +42,8 @@ public abstract class SocketUser : SocketEntity<uint>, IUser
         AvatarDecorationType = model.AvatarDecoration.SourceType;
         AvatarDecorationUrl = model.AvatarDecoration.SourceUrl;
         Level = model.Level;
+
+        IsPopulated = true;
     }
 
 }
