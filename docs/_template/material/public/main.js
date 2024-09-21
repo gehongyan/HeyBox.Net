@@ -2,18 +2,18 @@
     iconLinks: [
         {
             icon: 'github',
-            href: 'https://github.com/gehongyan/Kook.Net',
+            href: 'https://github.com/gehongyan/HeyBox.Net',
             title: 'GitHub'
         },
         {
             icon: 'box-seam-fill',
-            href: 'https://www.nuget.org/packages/Kook.Net/',
+            href: 'https://www.nuget.org/packages/HeyBox.Net/',
             title: 'NuGet'
         },
         {
             icon: 'chat',
-            href: 'https://kook.top/EvxnOb',
-            title: 'KOOK'
+            href: 'https://chat.xiaoheihe.cn/ihtpuxhq',
+            title: '黑盒语音'
         }
     ],
     start: () =>

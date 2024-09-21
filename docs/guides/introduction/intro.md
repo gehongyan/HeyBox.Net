@@ -1,6 +1,6 @@
 ---
 uid: Guides.Introduction
-title: Kook.Net 简介
+title: HeyBox.Net 简介
 ---
 
 # 简介

@@ -24,9 +24,6 @@ public class SlashCommandOptionChoiceProperties
 
     /// <summary>
     ///     Gets the value of this choice.
-    ///     <note type="warning">
-    ///         Discord only accepts int, double/floats, and string as the input.
-    ///     </note>
     /// </summary>
     public object? Value
     {
