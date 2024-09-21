@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EC9D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net.Samples.SimpleBot", "samples\HeyBox.Net.Samples.SimpleBot\HeyBox.Net.Samples.SimpleBot.csproj", "{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{AFF68ECF-01A5-4597-B59A-5CC3F154C238}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeyBox.Net.Interactions", "src\HeyBox.Net.Interactions\HeyBox.Net.Interactions.csproj", "{4B941C3F-F298-429A-8402-7BE4B18D8A91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,10 +50,15 @@ Global
 		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B941C3F-F298-429A-8402-7BE4B18D8A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B941C3F-F298-429A-8402-7BE4B18D8A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B941C3F-F298-429A-8402-7BE4B18D8A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B941C3F-F298-429A-8402-7BE4B18D8A91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5A5A8DC2-DA7C-4434-AB19-474DE39B1DEF} = {EBE3E81A-C136-4837-B862-688539AE3998}
 		{417B5918-8ECB-4983-B442-7968F9D0C16C} = {EBE3E81A-C136-4837-B862-688539AE3998}
 		{167E6F3A-91F6-48E1-B5E2-A476B8AD7D41} = {EC9D719D-EB6B-4971-A32F-D1050C4B6E3F}
+		{4B941C3F-F298-429A-8402-7BE4B18D8A91} = {AFF68ECF-01A5-4597-B59A-5CC3F154C238}
 	EndGlobalSection
 EndGlobal

@@ -29,13 +29,13 @@ internal class MessageHelper
                 break;
             string content = text.Substring(index, endIndex - index + 1);
 
-            if (MentionUtils.TryParseRole(content, out ulong roleId))
-            {
-                tags.Add(new Tag<ulong, IRole>(TagType.RoleMention, index, content.Length, roleId, null));
-            }
-            else if (MentionUtils.TryParseUser(content, out uint userId))
+            if (MentionUtils.TryParseUser(content, out uint userId))
             {
                 tags.Add(new Tag<uint, IUser>(TagType.UserMention, index, content.Length, userId, null));
+            }
+            else if (MentionUtils.TryParseRole(content, out ulong roleId))
+            {
+                tags.Add(new Tag<ulong, IRole>(TagType.RoleMention, index, content.Length, roleId, null));
             }
             else if (MentionUtils.TryParseChannel(content, out ulong channelId))
             {

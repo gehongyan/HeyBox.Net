@@ -11,7 +11,7 @@ internal class CommandInfo
     public required string Name { get; set; }
 
     [JsonPropertyName("options")]
-    public required CommandInfoOption[] Options { get; set; }
+    public CommandInfoOption[]? Options { get; set; }
 
     [JsonPropertyName("type")]
     public required ApplicationCommandType Type { get; set; }

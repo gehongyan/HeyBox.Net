@@ -225,6 +225,14 @@ public abstract class BaseHeyBoxClient : IHeyBoxClient
         Task.FromResult<IRoom?>(null);
 
     /// <inheritdoc />
+    Task<IChannel?> IHeyBoxClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IChannel?>(null);
+
+    /// <inheritdoc />
+    Task<IUser?> IHeyBoxClient.GetUserAsync(uint id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(null);
+
+    /// <inheritdoc />
     Task IHeyBoxClient.StartAsync() =>
         Task.CompletedTask;
 

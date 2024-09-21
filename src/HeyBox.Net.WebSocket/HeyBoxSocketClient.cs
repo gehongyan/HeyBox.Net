@@ -184,6 +184,12 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     internal SocketRoom GetOrCreateRoom(ClientState state, RoomBaseInfo model) =>
         state.GetOrAddRoom(model.RoomId, _ => SocketRoom.Create(this, state, model));
 
+    /// <inheritdoc />
+    public override SocketChannel? GetChannel(ulong id) => State.GetChannel(id);
+
+    /// <inheritdoc />
+    public override SocketUser? GetUser(uint id) => State.GetUser(id);
+
     internal SocketGlobalUser GetOrCreateSelfUser(ClientState state, uint id) =>
         state.GetOrAddUser(id, _ =>
         {

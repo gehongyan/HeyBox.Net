@@ -18,30 +18,30 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
         Type = ChannelType.Text;
     }
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.String,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},HeyBox.IQuote,HeyBox.RequestOptions)"/>
+    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.String,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(string path, string? filename = null,
-        AttachmentType type = AttachmentType.Image, Size? imageSize = null, IQuote? quote = null,
+        AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,
         RequestOptions? options = null)
     {
         string name = filename ?? Path.GetFileName(path);
-        return ChannelHelper.SendFileAsync(this, Client, path, name, type, imageSize, quote, options);
+        return ChannelHelper.SendFileAsync(this, Client, path, name, type, imageSize, messageReference, options);
     }
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},HeyBox.IQuote,HeyBox.RequestOptions)"/>
+    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(Stream stream, string filename,
-        AttachmentType type = AttachmentType.Image, Size? imageSize = null, IQuote? quote = null,
+        AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,
         RequestOptions? options = null) =>
-        ChannelHelper.SendFileAsync(this, Client, stream, filename, type, imageSize, quote, options);
+        ChannelHelper.SendFileAsync(this, Client, stream, filename, type, imageSize, messageReference, options);
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(HeyBox.FileAttachment,HeyBox.IQuote,HeyBox.RequestOptions)"/>
+    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(HeyBox.FileAttachment,IMessageReference,HeyBox.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(FileAttachment attachment,
-        IQuote? quote = null, RequestOptions? options = null) =>
-        ChannelHelper.SendFileAsync(this, Client, attachment, quote, options);
+        IMessageReference? messageReference = null, RequestOptions? options = null) =>
+        ChannelHelper.SendFileAsync(this, Client, attachment, messageReference, options);
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendTextAsync(System.String,System.Collections.Generic.IEnumerable{HeyBox.FileAttachment},HeyBox.IQuote,HeyBox.RequestOptions)"/>
+    /// <inheritdoc cref="HeyBox.IMessageChannel.SendTextAsync(System.String,System.Collections.Generic.IEnumerable{HeyBox.FileAttachment},IMessageReference,HeyBox.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, ulong>> SendTextAsync(string text,
-        IEnumerable<FileAttachment>? imageFileInfos = null, IQuote? quote = null, RequestOptions? options = null) =>
-        ChannelHelper.SendTextAsync(this, Client, text, imageFileInfos, quote, options);
+        IEnumerable<FileAttachment>? imageFileInfos = null, IMessageReference? messageReference = null, RequestOptions? options = null) =>
+        ChannelHelper.SendTextAsync(this, Client, text, imageFileInfos, messageReference, options);
 
     #endregion
 }

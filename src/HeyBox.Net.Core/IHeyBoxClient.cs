@@ -71,4 +71,30 @@ public interface IHeyBoxClient : IDisposable
     Task<IRoom?> GetRoomAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
+
+    #region Users
+
+    /// <summary>
+    ///     获取一个用户。
+    /// </summary>
+    /// <param name="id"> 用户的 ID。 </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的用户；若指定 ID 的用户不存在，则为 <c>null</c>。 </returns>
+    Task<IUser?> GetUserAsync(uint id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    #endregion
+
+    #region Channels
+
+    /// <summary>
+    ///     获取一个频道。
+    /// </summary>
+    /// <param name="id"> 频道的 ID。 </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的频道；若指定 ID 的频道不存在，则为 <c>null</c>。 </returns>
+    Task<IChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    #endregion
 }

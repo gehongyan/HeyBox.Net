@@ -14,6 +14,9 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
     /// <inheritdoc />
     public ulong? ChannelId { get; private set; }
 
+    /// <inheritdoc />
+    public uint UserId { get; private set; }
+
     /// <inheritdoc cref="HeyBox.IHeyBoxInteraction.User" />
     public SocketUser User { get; private set; }
 
@@ -32,13 +35,14 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
         Channel = channel;
         ChannelId = channel.Id;
         RoomId = channel.Room.Id;
+        UserId = user.Id;
         User = user;
         Data = SocketInteractionData.Instance;
     }
 
     internal static SocketInteraction Create(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user)
     {
-        if (model.Type == ApplicationCommandType.SlashCommand)
+        if (model.Type == ApplicationCommandType.Slash)
             return SocketSlashCommand.Create(client, model, channel, user);
 
         throw new InvalidOperationException("Unknown interaction type.");

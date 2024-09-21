@@ -8,5 +8,5 @@ public enum ApplicationCommandType
     /// <summary>
     ///     斜线命令。
     /// </summary>
-    SlashCommand = 0
+    Slash = 0
 }

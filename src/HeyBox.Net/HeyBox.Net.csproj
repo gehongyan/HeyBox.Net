@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HeyBox.Net.Core\HeyBox.Net.Core.csproj" />
+    <ProjectReference Include="..\HeyBox.Net.Interactions\HeyBox.Net.Interactions.csproj" />
     <ProjectReference Include="..\HeyBox.Net.Rest\HeyBox.Net.Rest.csproj" />
     <ProjectReference Include="..\HeyBox.Net.WebSocket\HeyBox.Net.WebSocket.csproj" />
   </ItemGroup>

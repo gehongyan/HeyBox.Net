@@ -8,6 +8,11 @@ namespace HeyBox.WebSocket;
 public class SocketSlashCommandData : SocketEntity<ulong>, ISlashCommandInteractionData
 {
     /// <summary>
+    ///     获取命令的名称。
+    /// </summary>
+    public string Name { get; private set; }
+
+    /// <summary>
     ///     获取用户提供的选项。
     /// </summary>
     public IReadOnlyCollection<SocketSlashCommandDataOption> Options { get; internal set; }
@@ -17,6 +22,7 @@ public class SocketSlashCommandData : SocketEntity<ulong>, ISlashCommandInteract
     internal SocketSlashCommandData(HeyBoxSocketClient client, ulong id, SocketRoom room)
         : base(client, id)
     {
+        Name = string.Empty;
         Options = [];
         ResolvableData = new SocketResolvableData(room);
     }
@@ -30,7 +36,9 @@ public class SocketSlashCommandData : SocketEntity<ulong>, ISlashCommandInteract
 
     internal void Update(CommandInfo model)
     {
-        Options = [..model.Options.Select(x => new SocketSlashCommandDataOption(this, x))];
+        Name = model.Name.TrimStart('/');
+        if (model.Options is { } options)
+            Options = [..options.Select(x => new SocketSlashCommandDataOption(this, x))];
 
         IsPopulated = true;
     }

@@ -43,6 +43,24 @@ public abstract class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
     }
 
     /// <summary>
+    ///     获取用户。
+    /// </summary>
+    /// <remarks>
+    ///     此方法可能返回 <c>null</c>，因为此方法仅会返回网关缓存中存在的用户，如果在当前 Bot
+    ///     登录会话中，要获取的用户未引发过任何事件，那么该用户实体则不会存在于缓存中。
+    /// </remarks>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。 </returns>
+    public abstract SocketUser? GetUser(uint id);
+
+    /// <summary>
+    ///     获取一个服务器频道。
+    /// </summary>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    public abstract SocketChannel? GetChannel(ulong id);
+
+    /// <summary>
     ///     获取一个房间。
     /// </summary>
     /// <param name="id"> 要获取的房间的 ID。 </param>
@@ -54,4 +72,16 @@ public abstract class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
 
     /// <inheritdoc />
     public abstract Task StopAsync();
+
+    #region IHeyBoxClient
+
+    /// <inheritdoc />
+    Task<IChannel?> IHeyBoxClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IChannel?>(GetChannel(id));
+
+    /// <inheritdoc />
+    Task<IUser?> IHeyBoxClient.GetUserAsync(uint id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(GetUser(id));
+
+    #endregion
 }

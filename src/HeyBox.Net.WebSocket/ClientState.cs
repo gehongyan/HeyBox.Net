@@ -64,6 +64,9 @@ internal class ClientState
 
     #region Users
 
+    internal SocketGlobalUser? GetUser(uint id) =>
+        _users.GetValueOrDefault(id);
+
     internal SocketGlobalUser GetOrAddUser(uint id, Func<uint, SocketGlobalUser> userFactory) =>
         _users.GetOrAdd(id, userFactory);
 

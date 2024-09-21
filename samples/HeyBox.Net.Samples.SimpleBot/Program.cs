@@ -1,23 +1,46 @@
-﻿using System.Drawing;
-using HeyBox;
+﻿using HeyBox;
+using HeyBox.Interactions;
 using HeyBox.WebSocket;
+using InteractionFramework;
 
-HeyBoxSocketClient client = new(new HeyBoxSocketConfig
+HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(null);
+builder.Services.AddSingleton(new HeyBoxSocketConfig
 {
     LogLevel = LogSeverity.Debug
 });
+builder.Services.AddSingleton<HeyBoxSocketClient>();
+builder.Services.AddSingleton(new InteractionServiceConfig());
+builder.Services.AddSingleton<InteractionService>();
+builder.Services.AddSingleton<InteractionHandler>();
+IHost app = builder.Build();
+
+HeyBoxSocketClient client = app.Services.GetRequiredService<HeyBoxSocketClient>();
 client.Log += message =>
 {
     Console.WriteLine(message);
     return Task.CompletedTask;
 };
-client.SlashCommandExecuted += command =>
-{
-    return Task.CompletedTask;
-};
-await client.LoginAsync(TokenType.BotToken, string.Empty);
+await app.Services.GetRequiredService<InteractionHandler>().InitializeAsync();
+await client.LoginAsync(TokenType.BotToken, "");
 await client.StartAsync();
 await Task.Delay(Timeout.Infinite);
+
+// HeyBoxSocketClient client = new(new HeyBoxSocketConfig
+// {
+//     LogLevel = LogSeverity.Debug
+// });
+// client.Log += message =>
+// {
+//     Console.WriteLine(message);
+//     return Task.CompletedTask;
+// };
+// client.SlashCommandExecuted += command =>
+// {
+//     return Task.CompletedTask;
+// };
+// await client.LoginAsync(TokenType.BotToken, "");
+// await client.StartAsync();
+// await Task.Delay(Timeout.Infinite);
 
 // SocketRoom room = client.GetRoom(0);
 // SocketTextChannel textChannel = room.GetTextChannel(0);

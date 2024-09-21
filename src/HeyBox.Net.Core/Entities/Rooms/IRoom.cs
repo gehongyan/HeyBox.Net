@@ -40,7 +40,7 @@ public interface IRoom : IEntity<ulong>
     /// </summary>
     /// <param name="id"> 要获取的角色的 ID。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的角色；如果未找到，则返回 <c>null</c>。 </returns>
-    IRole? GetRole(uint id);
+    IRole? GetRole(ulong id);
 
     #endregion
 }

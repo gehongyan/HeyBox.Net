@@ -120,7 +120,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
 
     #region Roles
 
-    /// <inheritdoc cref="HeyBox.IRoom.GetRole(System.UInt32)" />
+    /// <inheritdoc cref="HeyBox.IRoom.GetRole(System.UInt64)" />
     public SocketRole? GetRole(ulong id) => _roles.GetValueOrDefault(id);
 
     internal SocketRole AddOrUpdateRole(ulong roleId)
@@ -208,7 +208,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
     IRole IRoom.EveryoneRole => EveryoneRole;
 
     /// <inheritdoc />
-    IRole? IRoom.GetRole(uint id) => GetRole(id);
+    IRole? IRoom.GetRole(ulong id) => GetRole(id);
 
     #endregion
 }

@@ -16,6 +16,11 @@ public interface IHeyBoxInteraction : IEntity<ulong>
     IHeyBoxInteractionData Data { get; }
 
     /// <summary>
+    ///     获取执行此交互的用户的 ID。
+    /// </summary>
+    uint UserId { get; }
+
+    /// <summary>
     ///     获取执行此交互的用户。
     /// </summary>
     IUser User { get; }

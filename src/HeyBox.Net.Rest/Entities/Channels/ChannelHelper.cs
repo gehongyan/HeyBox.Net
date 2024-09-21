@@ -16,21 +16,21 @@ internal static class ChannelHelper
     };
 
     public static async Task<Cacheable<IUserMessage, ulong>> SendFileAsync(ITextChannel channel,
-        BaseHeyBoxClient client, string path, string filename, AttachmentType type, Size? imageSize, IQuote? quote, RequestOptions? options)
+        BaseHeyBoxClient client, string path, string filename, AttachmentType type, Size? imageSize, IMessageReference? messageReference, RequestOptions? options)
     {
         using FileAttachment file = new(path, filename, type, imageSize);
-        return await SendFileAsync(channel, client, file, quote, options);
+        return await SendFileAsync(channel, client, file, messageReference, options);
     }
 
     public static async Task<Cacheable<IUserMessage, ulong>> SendFileAsync(ITextChannel channel,
-        BaseHeyBoxClient client, Stream stream, string filename, AttachmentType type, Size? imageSize, IQuote? quote, RequestOptions? options)
+        BaseHeyBoxClient client, Stream stream, string filename, AttachmentType type, Size? imageSize, IMessageReference? messageReference, RequestOptions? options)
     {
         using FileAttachment file = new(stream, filename, type, imageSize);
-        return await SendFileAsync(channel, client, file, quote, options);
+        return await SendFileAsync(channel, client, file, messageReference, options);
     }
 
     public static async Task<Cacheable<IUserMessage, ulong>> SendFileAsync(ITextChannel channel,
-        BaseHeyBoxClient client, FileAttachment attachment, IQuote? quote, RequestOptions? options)
+        BaseHeyBoxClient client, FileAttachment attachment, IMessageReference? messageReference, RequestOptions? options)
     {
         switch (attachment.Mode)
         {
@@ -79,7 +79,7 @@ internal static class ChannelHelper
                 MsgType = messageType,
                 Message = attachment.Uri.OriginalString,
                 HeyChatAckId = string.Empty,
-                ReplyId = quote?.QuotedMessageId,
+                ReplyId = messageReference?.MessageId,
                 Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
                 AtUserId = [],
                 AtRoleId = [],
@@ -91,7 +91,7 @@ internal static class ChannelHelper
     }
 
     public static async Task<Cacheable<IUserMessage, ulong>> SendTextAsync(ITextChannel channel, BaseHeyBoxClient client,
-        string text, IEnumerable<FileAttachment>? imageFileInfos, IQuote? quote, RequestOptions? options)
+        string text, IEnumerable<FileAttachment>? imageFileInfos, IMessageReference? messageReference, RequestOptions? options)
     {
         ImmutableArray<ITag> tags = MessageHelper.ParseTags(text, channel.Room);
         bool hasMention = tags.Any(x => x.Type
@@ -109,7 +109,7 @@ internal static class ChannelHelper
             MsgType = hasMention ? MessageType.MarkdownWithMention : MessageType.Markdown,
             Message = text,
             HeyChatAckId = string.Empty,
-            ReplyId = quote?.QuotedMessageId,
+            ReplyId = messageReference?.MessageId,
             Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
             AtUserId = [..tags.Where(tag => tag.Type == TagType.UserMention).OfType<Tag<uint, IUser>>().Select(x => x.Key)],
             AtRoleId = [..tags.Where(tag => tag.Type == TagType.RoleMention).OfType<Tag<ulong, IRole>>().Select(x => x.Key)],

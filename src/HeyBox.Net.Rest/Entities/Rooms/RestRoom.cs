@@ -43,7 +43,7 @@ public class RestRoom : RestEntity<ulong>, IRoom
     IRole IRoom.EveryoneRole => EveryoneRole;
 
     /// <inheritdoc />
-    IRole? IRoom.GetRole(uint id) => id == 0 ? EveryoneRole : null;
+    IRole? IRoom.GetRole(ulong id) => id == 0 ? EveryoneRole : null;
 
     /// <inheritdoc />
     async Task<ITextChannel?> IRoom.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>

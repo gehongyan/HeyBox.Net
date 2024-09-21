@@ -65,8 +65,8 @@ public partial class HeyBoxSocketClient
     /// </summary>
     public event Func<SocketInteraction, Task> InteractionCreated
     {
-        add { _interactionCreatedEvent.Add(value); }
-        remove { _interactionCreatedEvent.Remove(value); }
+        add => _interactionCreatedEvent.Add(value);
+        remove => _interactionCreatedEvent.Remove(value);
     }
     internal readonly AsyncEvent<Func<SocketInteraction, Task>> _interactionCreatedEvent = new();
 
