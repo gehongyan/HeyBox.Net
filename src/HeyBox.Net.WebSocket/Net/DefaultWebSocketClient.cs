@@ -292,7 +292,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         }
         catch (Exception ex)
         {
-            //This cannot be awaited otherwise we'll deadlock when KookApiClient waits for this task to complete.
+            //This cannot be awaited otherwise we'll deadlock when HeyBoxApiClient waits for this task to complete.
             _ = OnClosed(ex);
         }
     }

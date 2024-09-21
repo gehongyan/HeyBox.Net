@@ -5,7 +5,7 @@ public partial class HeyBoxSocketClient
     #region General
 
     /// <summary>
-    ///     当连接到 KOOK 网关时引发。
+    ///     当连接到黑盒语音网关时引发。
     /// </summary>
     public event Func<Task> Connected
     {
@@ -16,7 +16,7 @@ public partial class HeyBoxSocketClient
     internal readonly AsyncEvent<Func<Task>> _connectedEvent = new();
 
     /// <summary>
-    ///     当与 KOOK 网关断开连接时引发。
+    ///     当与黑盒语音网关断开连接时引发。
     /// </summary>
     public event Func<Exception, Task> Disconnected
     {

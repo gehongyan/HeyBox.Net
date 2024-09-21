@@ -14,7 +14,7 @@
 
 ---
 
-**HeyBox.Net** 是一个为 [小黑盒 API](https://apifox.com/apidoc/shared-43256fe4-9a8c-4f22-949a-74a3f8b431f5) 提供的非官方 C# .NET SDK 实现。
+**HeyBox.Net** 是一个为 [黑盒语音 API](https://apifox.com/apidoc/shared-43256fe4-9a8c-4f22-949a-74a3f8b431f5) 提供的非官方 C# .NET SDK 实现。
 
 ---
 
