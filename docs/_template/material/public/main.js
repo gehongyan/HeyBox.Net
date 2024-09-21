@@ -12,7 +12,7 @@
         },
         {
             icon: 'chat',
-            href: 'https://chat.xiaoheihe.cn/ihtpuxhq',
+            href: 'https://chat.xiaoheihe.cn/iugh82ns',
             title: '黑盒语音'
         }
     ],
