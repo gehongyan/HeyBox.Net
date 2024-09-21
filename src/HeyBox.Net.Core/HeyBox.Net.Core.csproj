@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>HeyBox</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>HeyBox.Net.Core</PackageId>
     <Description>The core definition library for HeyBox.Net.</Description>
   </PropertyGroup>
