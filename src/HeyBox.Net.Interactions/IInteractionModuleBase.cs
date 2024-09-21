@@ -36,14 +36,14 @@ public interface IInteractionModuleBase
     void AfterExecute(ICommandInfo command);
 
     /// <summary>
-    ///     当调用 <see cref="HeyBox.Interactions.Builders.ModuleBuilder.Build(HeyBox.Interactions.InteractionService,System.IServiceProvider)"/> 时执行的方法。
+    ///     当构建模块时执行的方法。
     /// </summary>
     /// <param name="commandService"> 构建此方法的命令服务实例。 </param>
     /// <param name="module"> 此模块的信息。 </param>
     void OnModuleBuilding(InteractionService commandService, ModuleInfo module);
 
     /// <summary>
-    ///     当自动模块创建完成后并在调用 <see cref="Builders.ModuleBuilder.Build(InteractionService, System.IServiceProvider)"/> 之前执行的方法。
+    ///     当模块创建完成后创建模块信息前执行的方法。
     /// </summary>
     /// <param name="builder"> 构建此方法的模块构建器。 </param>
     /// <param name="commandService"> 构建此方法的命令服务实例。 </param>

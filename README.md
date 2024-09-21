@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/github/license/gehongyan/HeyBox.Net)](https://github.com/gehongyan/HeyBox.Net/blob/master/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FHeyBox.Net.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FHeyBox.Net?ref=badge_shield)
 <a href="https://chat.xiaoheihe.cn/ihtpuxhq">
-    <img src="https://imgheybox.max-c.com/oa/2023/03/21/47912df9f48f030c784dd6115b91274b.png" alt="drawing" height="20" alt="Chat on HeyBox"/>
+    <img src="https://imgheybox.max-c.com/oa/2023/03/21/47912df9f48f030c784dd6115b91274b.png" height="20" alt="Chat on HeyBox"/>
 </a>
 
 ---
