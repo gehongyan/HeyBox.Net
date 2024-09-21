@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>HeyBox.WebSocket</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>HeyBox.Net.WebSocket</PackageId>
     <Description>The WebSocket API implementation for HeyBox.Net.</Description>
   </PropertyGroup>

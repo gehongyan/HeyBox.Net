@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>HeyBox.Interactions</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>HeyBox.Net.Interactions</PackageId>
     <Description>An extension for HeyBox.Net adding support for interactions.</Description>
   </PropertyGroup>

@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>HeyBox.Rest</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>HeyBox.Net.Rest</PackageId>
     <Description>The REST API implementation for HeyBox.Net.</Description>
   </PropertyGroup>
