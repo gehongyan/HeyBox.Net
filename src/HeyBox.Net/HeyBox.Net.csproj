@@ -6,7 +6,7 @@
     <RootNamespace>HeyBox</RootNamespace>
     <IsPackable>true</IsPackable>
     <PackageId>HeyBox.Net</PackageId>
-    <Description>An unofficial C# .NET implementation for QQ Bot API, including all necessary components for building a QQ bot.</Description>
+    <Description>An unofficial C# .NET implementation for HeyBox Bot API, including all necessary components for building a HeyBox bot.</Description>
   </PropertyGroup>
 
   <ItemGroup>

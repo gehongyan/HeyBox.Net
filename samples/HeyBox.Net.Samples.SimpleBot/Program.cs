@@ -2,6 +2,8 @@
 using HeyBox.Interactions;
 using HeyBox.WebSocket;
 using InteractionFramework;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(null);
 builder.Services.AddSingleton(new HeyBoxSocketConfig
