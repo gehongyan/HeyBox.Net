@@ -1,9 +1,8 @@
-using HeyBox;
+using System.Reflection;
 using HeyBox.Interactions;
 using HeyBox.WebSocket;
-using System.Reflection;
 
-namespace InteractionFramework;
+namespace HeyBox.Net.Samples.SimpleBot;
 
 public class InteractionHandler
 {

@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace HeyBox.Interactions;
 
 /// <summary>
@@ -35,6 +37,73 @@ public abstract class InteractionModuleBase<T> : IInteractionModuleBase where T 
             throw new InvalidOperationException($"Invalid context type. Expected {typeof(T).Name}, got {context.GetType().Name}.");
         Context = typedContext;
     }
+
+    /// <summary>
+    ///     回复文件到此消息频道。
+    /// </summary>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="imageSize"> 图片文件的图像尺寸。 </param>
+    /// <param name="reply"> 是否回复原消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    public Task<Cacheable<IUserMessage, ulong>> ReplyFileAsync(string path, string? filename = null,
+        AttachmentType type = AttachmentType.Image, Size? imageSize = null, bool reply = false,
+        RequestOptions? options = null)
+    {
+        string name = filename ?? Path.GetFileName(path);
+        IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;
+        return Context.Channel.SendFileAsync(path, name, type, imageSize, messageReference, options);
+    }
+
+    /// <summary>
+    ///     回复文件到此消息频道。
+    /// </summary>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="imageSize"> 图片文件的图像尺寸。 </param>
+    /// <param name="reply"> 是否回复原消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    public Task<Cacheable<IUserMessage, ulong>> ReplyFileAsync(Stream stream, string filename,
+        AttachmentType type = AttachmentType.Image, Size? imageSize = null, bool reply = false,
+        RequestOptions? options = null)
+    {
+        IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;
+        return Context.Channel.SendFileAsync(stream, filename, type, imageSize, messageReference, options);
+    }
+
+    /// <summary>
+    ///     回复文件到此消息频道。
+    /// </summary>
+    /// <param name="attachment"> 文件的附件信息。 </param>
+    /// <param name="reply"> 是否回复原消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    public Task<Cacheable<IUserMessage, ulong>> ReplyFileAsync(FileAttachment attachment,
+        bool reply = false, RequestOptions? options = null)
+    {
+        IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;
+        return Context.Channel.SendFileAsync(attachment, messageReference, options);
+    }
+
+    /// <summary>
+    ///     回复文本消息到此消息频道。
+    /// </summary>
+    /// <param name="text"> 要发送的文本。 </param>
+    /// <param name="imageFileInfos"> 图片文件的信息。 </param>
+    /// <param name="reply"> 是否回复原消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    public Task<Cacheable<IUserMessage, ulong>> ReplyTextAsync(string text,
+        IEnumerable<FileAttachment>? imageFileInfos = null, bool reply = false, RequestOptions? options = null)
+    {
+        IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;
+        return Context.Channel.SendTextAsync(text, imageFileInfos, messageReference, options);
+    }
+
 
     // /// <inheritdoc cref="IHeyBoxInteraction.DeferAsync(bool, RequestOptions)"/>
     // protected virtual Task DeferAsync(bool ephemeral = false, RequestOptions options = null)

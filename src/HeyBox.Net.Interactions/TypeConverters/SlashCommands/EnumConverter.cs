@@ -9,25 +9,34 @@ internal sealed class EnumConverter<T> : TypeConverter<T> where T : struct, Enum
     public override Task<TypeConverterResult> ReadAsync(IInteractionContext context,
         ISlashCommandInteractionDataOption option, IServiceProvider? services)
     {
-        return Task.FromResult(Enum.TryParse(option.RawValue, out T result)
-            ? TypeConverterResult.FromSuccess(result)
-            : TypeConverterResult.FromError(InteractionCommandError.ConvertFailed, $"Value {option.Value} cannot be converted to {nameof(T)}"));
+        if (Enum.TryParse(option.RawValue, out T result))
+            return Task.FromResult(TypeConverterResult.FromSuccess(result));
+        string[] names = Enum.GetNames(typeof(T));
+        foreach (MemberInfo memberInfo in names
+                     .SelectMany(x => typeof(T).GetMember(x))
+                     .Where(x => !x.IsDefined(typeof(HideAttribute), true)))
+        {
+            if (memberInfo.GetCustomAttribute<ChoiceValueAttribute>()?.Value == option.RawValue)
+                return Task.FromResult(TypeConverterResult.FromSuccess(Enum.Parse<T>(memberInfo.Name)));
+        }
+        return Task.FromResult(TypeConverterResult.FromError(InteractionCommandError.ConvertFailed,
+            $"Value {option.Value} cannot be converted to {nameof(T)}"));
     }
 
     public override void Write(SlashCommandOptionProperties properties, IParameterInfo parameterInfo)
     {
-        var names = Enum.GetNames(typeof(T));
-        var members = names
+        string[] names = Enum.GetNames(typeof(T));
+        List<MemberInfo> members = names
             .SelectMany(x => typeof(T).GetMember(x)).Where(x => !x.IsDefined(typeof(HideAttribute), true))
             .ToList();
 
         if (members.Count() <= 25)
         {
-            var choices = new List<SlashCommandOptionChoiceProperties>();
+            List<SlashCommandOptionChoiceProperties> choices = new List<SlashCommandOptionChoiceProperties>();
 
-            foreach (var member in members)
+            foreach (MemberInfo member in members)
             {
-                var displayValue = member.GetCustomAttribute<ChoiceDisplayAttribute>()?.Name ?? member.Name;
+                string displayValue = member.GetCustomAttribute<ChoiceDisplayAttribute>()?.Name ?? member.Name;
                 choices.Add(new SlashCommandOptionChoiceProperties
                 {
                     Name = displayValue,

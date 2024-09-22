@@ -9,15 +9,15 @@ public class SocketSlashCommand : SocketInteraction, ISlashCommandInteraction, I
     /// <inheritdoc cref="HeyBox.IHeyBoxInteraction.Data" />
     public new SocketSlashCommandData Data { get; }
 
-    internal SocketSlashCommand(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user)
-        : base(client, model.Id, channel, user)
+    internal SocketSlashCommand(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
+        : base(client, model.Id, channel, user, messageId)
     {
         Data = SocketSlashCommandData.Create(client, model, channel.Room);
     }
 
-    internal static new SocketInteraction Create(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user)
+    internal static new SocketInteraction Create(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
     {
-        SocketSlashCommand entity = new(client, model, channel, user);
+        SocketSlashCommand entity = new(client, model, channel, user, messageId);
         entity.Update(model);
         return entity;
     }

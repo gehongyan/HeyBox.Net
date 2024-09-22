@@ -25,13 +25,10 @@ public class SocketInteractionContext<TInteraction> : IInteractionContext, IRout
     /// </remarks>
     public SocketRoom? Room { get; }
 
-    /// <inheritdoc />
-    public ulong? ChannelId { get; }
-
     /// <summary>
     ///     Gets the <see cref="ISocketMessageChannel"/> the command originated from.
     /// </summary>
-    public ISocketMessageChannel? Channel { get; }
+    public ISocketMessageChannel Channel { get; }
 
     /// <inheritdoc />
     public uint UserId { get; }
@@ -40,6 +37,9 @@ public class SocketInteractionContext<TInteraction> : IInteractionContext, IRout
     ///     Gets the <see cref="SocketUser"/> who executed the command.
     /// </summary>
     public SocketUser? User { get; }
+
+    /// <inheritdoc />
+    public ulong MessageId { get; }
 
     /// <summary>
     ///     Gets the <see cref="SocketInteraction"/> the command was received with.
@@ -59,10 +59,10 @@ public class SocketInteractionContext<TInteraction> : IInteractionContext, IRout
         Client = client;
         RoomId = (interaction.Channel as SocketRoomChannel)?.Room.Id;
         Room = (interaction.User as SocketRoomUser)?.Room;
-        ChannelId = interaction.ChannelId;
         Channel = interaction.Channel;
-        UserId = interaction.User.Id;
+        UserId = interaction.UserId;
         User = interaction.User;
+        MessageId = interaction.MessageId;
         Interaction = interaction;
     }
 
@@ -81,7 +81,7 @@ public class SocketInteractionContext<TInteraction> : IInteractionContext, IRout
     IRoom? IInteractionContext.Room => Room;
 
     /// <inheritdoc/>
-    IMessageChannel? IInteractionContext.Channel => Channel;
+    IMessageChannel IInteractionContext.Channel => Channel;
 
     /// <inheritdoc/>
     IUser? IInteractionContext.User => User;

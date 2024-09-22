@@ -9,16 +9,21 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
     /// <summary>
     ///     获取执行此交互所在的频道。
     /// </summary>
-    public ISocketMessageChannel? Channel { get; private set; }
+    public ISocketMessageChannel Channel { get; private set; }
 
     /// <inheritdoc />
-    public ulong? ChannelId { get; private set; }
+    public ulong ChannelId { get; private set; }
 
     /// <inheritdoc />
     public uint UserId { get; private set; }
 
     /// <inheritdoc cref="HeyBox.IHeyBoxInteraction.User" />
-    public SocketUser User { get; private set; }
+    public SocketUser? User { get; private set; }
+
+    /// <summary>
+    ///     获取此交互来源的消息的 ID。
+    /// </summary>
+    public ulong MessageId { get; private set; }
 
     /// <inheritdoc />
     public InteractionType Type { get; private set; }
@@ -29,7 +34,7 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
     /// <inheritdoc />
     public ulong? RoomId { get; private set; }
 
-    internal SocketInteraction(HeyBoxSocketClient client, ulong id, SocketTextChannel channel, SocketRoomUser user)
+    internal SocketInteraction(HeyBoxSocketClient client, ulong id, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
         : base(client, id)
     {
         Channel = channel;
@@ -37,13 +42,14 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
         RoomId = channel.Room.Id;
         UserId = user.Id;
         User = user;
+        MessageId = messageId;
         Data = SocketInteractionData.Instance;
     }
 
-    internal static SocketInteraction Create(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user)
+    internal static SocketInteraction Create(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
     {
         if (model.Type == ApplicationCommandType.Slash)
-            return SocketSlashCommand.Create(client, model, channel, user);
+            return SocketSlashCommand.Create(client, model, channel, user, messageId);
 
         throw new InvalidOperationException("Unknown interaction type.");
     }
@@ -51,7 +57,7 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
     #region IHeyBoxInteraction
 
     /// <inheritdoc/>
-    IUser IHeyBoxInteraction.User => User;
+    IUser? IHeyBoxInteraction.User => User;
 
     #endregion
 }

@@ -14,7 +14,7 @@ public class SlashCommandAttribute : Attribute
     /// <summary>
     ///     Gets the description of the Slash Command.
     /// </summary>
-    public string Description { get; }
+    public string? Description { get; }
 
     /// <summary>
     ///     Gets the run mode this command gets executed with.
@@ -27,7 +27,7 @@ public class SlashCommandAttribute : Attribute
     /// <param name="name">Name of the command.</param>
     /// <param name="description">Description of the command.</param>
     /// <param name="runMode">Set the run mode of the command.</param>
-    public SlashCommandAttribute(string name, string description, RunMode runMode = RunMode.Default)
+    public SlashCommandAttribute(string name, string? description = null, RunMode runMode = RunMode.Default)
     {
         Name = name;
         Description = description;

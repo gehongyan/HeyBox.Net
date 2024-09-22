@@ -41,7 +41,7 @@ public partial class HeyBoxSocketClient
             return;
         }
         SocketRoomUser user = room.AddOrUpdateUser(commandEvent.SenderInfo);
-        SocketInteraction interaction = SocketInteraction.Create(this, commandEvent.CommandInfo, channel, user);
+        SocketInteraction interaction = SocketInteraction.Create(this, commandEvent.CommandInfo, channel, user, commandEvent.MessageId);
 
         await TimedInvokeAsync(_interactionCreatedEvent, nameof(InteractionCreated), interaction).ConfigureAwait(false);
         switch (interaction)

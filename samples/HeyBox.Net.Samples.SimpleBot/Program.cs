@@ -1,7 +1,7 @@
 ﻿using HeyBox;
 using HeyBox.Interactions;
+using HeyBox.Net.Samples.SimpleBot;
 using HeyBox.WebSocket;
-using InteractionFramework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -11,7 +11,10 @@ builder.Services.AddSingleton(new HeyBoxSocketConfig
     LogLevel = LogSeverity.Debug
 });
 builder.Services.AddSingleton<HeyBoxSocketClient>();
-builder.Services.AddSingleton(new InteractionServiceConfig());
+builder.Services.AddSingleton(new InteractionServiceConfig
+{
+    LogLevel = LogSeverity.Debug
+});
 builder.Services.AddSingleton<InteractionService>();
 builder.Services.AddSingleton<InteractionHandler>();
 IHost app = builder.Build();

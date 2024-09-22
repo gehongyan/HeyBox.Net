@@ -14,17 +14,18 @@ public class InteractionContext : IInteractionContext, IRouteMatchContainer
     /// <inheritdoc/>
     public IRoom? Room { get; }
 
-    /// <inheritdoc />
-    public ulong? ChannelId { get; }
-
     /// <inheritdoc/>
-    public IMessageChannel? Channel { get; }
+    public IMessageChannel Channel { get; }
 
     /// <inheritdoc />
     public uint UserId { get; }
 
     /// <inheritdoc/>
     public IUser? User { get; }
+
+    /// <inheritdoc />
+    public ulong MessageId { get; }
+
     /// <inheritdoc/>
     public IHeyBoxInteraction Interaction { get; }
 
@@ -37,16 +38,17 @@ public class InteractionContext : IInteractionContext, IRouteMatchContainer
     /// <param name="client"> HeyBox 客户端。 </param>
     /// <param name="interaction"> 交互事件。 </param>
     /// <param name="channel"> 交互事件发生的频道。 </param>
-    public InteractionContext(IHeyBoxClient client, IHeyBoxInteraction interaction, IMessageChannel? channel = null)
+    /// <param name="messageId"> 交互事件来源的消息 ID。 </param>
+    public InteractionContext(IHeyBoxClient client, IHeyBoxInteraction interaction, IMessageChannel channel, ulong messageId)
     {
         Client = client;
         Interaction = interaction;
         RoomId = interaction.RoomId;
         Room = (interaction.User as IRoomUser)?.Room;
-        ChannelId = interaction.ChannelId;
         Channel = channel;
         UserId = interaction.UserId;
         User = interaction.User;
+        MessageId = messageId;
         Interaction = interaction;
     }
 

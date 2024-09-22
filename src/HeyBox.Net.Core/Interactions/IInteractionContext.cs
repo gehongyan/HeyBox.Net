@@ -24,17 +24,12 @@ public interface IInteractionContext
     IRoom? Room { get; }
 
     /// <summary>
-    ///     Gets the channel ID the interaction originated from.
-    /// </summary>
-    ulong? ChannelId { get; }
-
-    /// <summary>
     ///     Gets the channel the interaction originated from.
     /// </summary>
-    IMessageChannel? Channel { get; }
+    IMessageChannel Channel { get; }
 
     /// <summary>
-    ///     Gets the message ID the interaction originated from.
+    ///     Gets the user ID who invoked the interaction.
     /// </summary>
     uint UserId { get; }
 
@@ -42,6 +37,11 @@ public interface IInteractionContext
     ///     Gets the user who invoked the interaction event.
     /// </summary>
     IUser? User { get; }
+
+    /// <summary>
+    ///     Gets the message ID the interaction originated from.
+    /// </summary>
+    ulong MessageId { get; }
 
     /// <summary>
     ///     Gets the underlying interaction.

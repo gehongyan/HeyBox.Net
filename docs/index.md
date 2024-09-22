@@ -28,7 +28,7 @@ HeyBox.Net 是一个对 [黑盒语音 API] 进行功能封装的类库，以 C# 
 > [!TIP]
 > 除 .NET 8.0 外的其他目标框架未经完全测试。
 
-[HEYBOX（黑盒语音 API）API]: https://apifox.com/apidoc/shared-43256fe4-9a8c-4f22-949a-74a3f8b431f5
+[黑盒语音 API]: https://apifox.com/apidoc/shared-43256fe4-9a8c-4f22-949a-74a3f8b431f5
 
 ## 我应该从哪里开始？
 
@@ -43,4 +43,4 @@ HeyBox.Net 是一个对 [黑盒语音 API] 进行功能封装的类库，以 C# 
 [GitHub]: https://github.com/gehongyan/HeyBox.Net
 [用户指南]: ./guides/introduction/intro.md
 [API 文档]: ./api/index.md
-[黑盒语音 HeyBox.Net 社区]: https://chat.xiaoheihe.cn/ihtpuxhq
+[黑盒语音 HeyBox.Net 社区]: https://chat.xiaoheihe.cn/iugh82ns
