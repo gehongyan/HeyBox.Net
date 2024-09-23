@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/gehongyan/HeyBox.Net.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>qq;qqbot</PackageTags>
+    <PackageTags>heybox;xiaoheihe;bot</PackageTags>
     <PackageReleaseNotes>See https://github.com/gehongyan/HeyBox.Net/releases</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 <!--    <PackageIcon>Logo_Small.png</PackageIcon>-->
