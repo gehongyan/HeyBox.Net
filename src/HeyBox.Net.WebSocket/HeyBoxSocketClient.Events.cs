@@ -57,7 +57,6 @@ public partial class HeyBoxSocketClient
 
     #endregion
 
-
     #region Interactions
 
     /// <summary>

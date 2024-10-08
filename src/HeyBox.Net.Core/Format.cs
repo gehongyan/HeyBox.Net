@@ -13,8 +13,7 @@ public static class Format
     /// <param name="url"> 图片的 URL。 </param>
     /// <param name="alternative"> 图片的替代文本。 </param>
     /// <returns></returns>
-    public static string Image(string url, string? alternative = null) =>
-        $"![{alternative}]({url})";
+    public static string Image(string url, string? alternative = null) => $"![{alternative}]({url})";
 
     /// <summary>
     ///     获取一个 Markdown 格式的图片。
@@ -35,7 +34,7 @@ public static class Format
             throw new InvalidOperationException("The attachment is not an image.");
         if (attachment.Uri is null)
             throw new InvalidOperationException("The attachment has not been uploaded yet.");
-        return Image(attachment.Uri.OriginalString, attachment.FileName);
+        return Image(attachment.Uri.OriginalString, attachment.Filename);
     }
 
     /// <summary>

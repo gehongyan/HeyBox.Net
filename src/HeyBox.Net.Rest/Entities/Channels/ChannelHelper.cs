@@ -43,7 +43,7 @@ internal static class ChannelHelper
                 CreateAssetParams createAssetParams = new()
                 {
                     File = attachment.Stream,
-                    FileName = attachment.FileName
+                    FileName = attachment.Filename
                 };
                 CreateAssetResponse assetResponse = await client.ApiClient
                     .CreateAssetAsync(createAssetParams, options).ConfigureAwait(false);

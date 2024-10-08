@@ -22,7 +22,7 @@ public struct FileAttachment : IDisposable
     /// <summary>
     ///     获取此附件的文件名。
     /// </summary>
-    public string FileName { get; }
+    public string Filename { get; }
 
     /// <summary>
     ///     获取包含文件内容的流。
@@ -55,7 +55,7 @@ public struct FileAttachment : IDisposable
             ImageSize = imageSize;
         else if (imageSize.HasValue)
             throw new ArgumentException("Width and height can only be set for image attachments.");
-        FileName = filename;
+        Filename = filename;
         Stream = stream;
         try
         {
@@ -91,7 +91,7 @@ public struct FileAttachment : IDisposable
         else if (imageSize.HasValue)
             throw new ArgumentException("Width and height can only be set for image attachments.");
         Stream = File.OpenRead(path);
-        FileName = filename ?? Path.GetFileName(path);
+        Filename = filename ?? Path.GetFileName(path);
         Uri = null;
     }
 
@@ -117,7 +117,7 @@ public struct FileAttachment : IDisposable
         else if (imageSize.HasValue)
             throw new ArgumentException("Width and height can only be set for image attachments.");
         Stream = null;
-        FileName = filename;
+        Filename = filename;
         Uri = uri;
     }
 
