@@ -128,16 +128,8 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
         {
             await _gatewayLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);
             await ApiClient.ConnectAsync().ConfigureAwait(false);
-            if (TokenUtils.TryParseBotTokenUserId(Token, out uint selfUserId))
-            {
-                SocketSelfUser currentUser = SocketSelfUser.Create(this, State, selfUserId);
-                Rest.CreateRestSelfUser(currentUser.Id);
-                ApiClient.CurrentUserId = currentUser.Id;
-                Rest.CurrentUser = new RestSelfUser(this, currentUser.Id);
-                CurrentUser = currentUser;
-            }
             _heartbeatTask = RunHeartbeatAsync(Connection.CancellationToken);
-            _ = Connection.CompleteAsync();
+            await FetchRequiredDataAsync();
         }
         catch (HttpException ex)
         {
@@ -181,8 +173,13 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     /// <inheritdoc />
     public override SocketRoom GetRoom(ulong id) => State.GetOrAddRoom(id, x => new SocketRoom(this, x));
 
-    internal SocketRoom GetOrCreateRoom(ClientState state, RoomBaseInfo model) =>
-        state.GetOrAddRoom(model.RoomId, _ => SocketRoom.Create(this, state, model));
+    internal async Task<SocketRoom> GetOrCreateRoomAsync(ClientState state, RoomBaseInfo model)
+    {
+        SocketRoom room = state.GetOrAddRoom(model.RoomId, _ => SocketRoom.Create(this, state, model));
+        if (!room.IsPopulated)
+            await room.UpdateAsync().ConfigureAwait(false);
+        return room;
+    }
 
     /// <inheritdoc />
     public override SocketChannel? GetChannel(ulong id) => State.GetChannel(id);
@@ -201,7 +198,7 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     internal SocketGlobalUser GetOrCreateUser(ClientState state, uint id) =>
         state.GetOrAddUser(id, x => new SocketGlobalUser(this, x));
 
-    internal SocketGlobalUser GetOrCreateUser(ClientState state, SenderInfo model) =>
+    internal SocketGlobalUser GetOrCreateUser(ClientState state, RoomUser model) =>
         state.GetOrAddUser(model.UserId, _ => SocketGlobalUser.Create(this, state, model));
 
     internal void RemoveUser(uint id) => State.RemoveUser(id);

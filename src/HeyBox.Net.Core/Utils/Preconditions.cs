@@ -57,6 +57,63 @@ internal static class Preconditions
 
 #if NET7_0_OR_GREATER
     /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal<T>(T? obj, T value, string name, string? msg = null)
+        where T : struct, IEqualityOperators<T, T, bool>
+    {
+        if (obj.HasValue && obj == value)
+            throw CreateEqualException(name, msg, value);
+    }
+#endif
+
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal<T>(T? obj, T? value, string name, string? msg = null)
+    {
+        if (!Equals(obj, value))
+            throw CreateEqualException(name, msg, value);
+    }
+
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(sbyte obj, sbyte value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(byte obj, byte value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(short obj, short value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(ushort obj, ushort value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(int obj, int value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(uint obj, uint value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(long obj, long value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(ulong obj, ulong value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(Guid obj, Guid value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(sbyte? obj, sbyte value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(byte? obj, byte value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(short? obj, short value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(ushort? obj, ushort value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(int? obj, int value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(uint? obj, uint value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(long? obj, long value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(ulong? obj, ulong value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void Equal(Guid? obj, Guid value, string name, string? msg = null) { if (obj != value) throw CreateEqualException(name, msg, value); }
+
+    private static ArgumentException CreateEqualException<T>(string name, string? msg, T value) =>
+        new ArgumentException(message: msg ?? $"Value may not be equal to {value}.", paramName: name);
+
+#if NET7_0_OR_GREATER
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
     public static void NotEqual<T>(T? obj, T value, string name, string? msg = null)
         where T : struct, IEqualityOperators<T, T, bool>
     {
@@ -64,6 +121,13 @@ internal static class Preconditions
             throw CreateNotEqualException(name, msg, value);
     }
 #endif
+
+    /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
+    public static void NotEqual<T>(T? obj, T? value, string name, string? msg = null)
+    {
+        if (Equals(obj, value))
+            throw CreateEqualException(name, msg, value);
+    }
 
     /// <exception cref="ArgumentException"> <paramref name="obj" /> 不可与 <paramref name="value"/> 相等。 </exception>
     public static void NotEqual(sbyte obj, sbyte value, string name, string? msg = null) { if (obj == value) throw CreateNotEqualException(name, msg, value); }

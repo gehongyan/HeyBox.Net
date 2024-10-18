@@ -1,5 +1,6 @@
+using HeyBox.API.Gateway;
+
 namespace HeyBox.WebSocket;
-using Model = API.Gateway.SenderInfo;
 
 /// <summary>
 ///     表示一个基于网关的用户。
@@ -34,7 +35,7 @@ public abstract class SocketUser : SocketEntity<uint>, IUser
     {
     }
 
-    internal virtual void Update(ClientState state, Model model)
+    internal virtual void Update(ClientState state, API.RoomUser model)
     {
         Username = model.Nickname;
         IsBot = model.Bot;

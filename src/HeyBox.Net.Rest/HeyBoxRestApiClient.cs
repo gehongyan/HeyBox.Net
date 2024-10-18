@@ -334,6 +334,93 @@ internal class HeyBoxRestApiClient : IDisposable
 
     #endregion
 
+    #region Room Roles
+
+    public async Task<GetRoomRolesResponse> GetRoomRolesAsync(ulong roomId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(roomId, 0, nameof(roomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(roomId);
+        return await SendAsync<GetRoomRolesResponse>(HttpMethod.Get,
+                () => $"chatroom/v2/room_role/roles?room_id={roomId}&{HeyBoxConfig.CommonQueryString}", ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<Role> CreateRoomRoleAsync(CreateRoomRoleParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotNullOrEmpty(args.Name, nameof(args.Name));
+        Preconditions.Equal(args.Type, RoleType.Custom, nameof(args.Type));
+        Preconditions.NotNullOrWhiteSpace(args.Nonce, nameof(args.Nonce));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        return await SendJsonAsync<Role>(HttpMethod.Post,
+                () => $"chatroom/v2/room_role/create?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<Role> ModifyRoomRoleAsync(ModifyGuildRoleParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotNullOrEmpty(args.Name, nameof(args.Name));
+        Preconditions.Equal(args.Type, RoleType.Custom, nameof(args.Type));
+        Preconditions.NotNullOrWhiteSpace(args.Nonce, nameof(args.Nonce));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        return await SendJsonAsync<Role>(HttpMethod.Post,
+                () => $"chatroom/v2/room_role/update?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeleteRoomRoleAsync(DeleteGuildRoleParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoleId, 0, nameof(args.RoleId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync<object>(HttpMethod.Post,
+                () => $"chatroom/v2/room_role/delete?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<AddRoleResponse> AddRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        Preconditions.NotEqual(args.RoleId, 0, nameof(args.RoleId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        return await SendJsonAsync<AddRoleResponse>(HttpMethod.Post,
+                () => $"chatroom/v2/room_role/grant?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task RemoveRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        Preconditions.NotEqual(args.RoleId, 0, nameof(args.RoleId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room_role/revoke?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    #endregion
+
     #region Messages
 
     public async Task<SendChannelMessageResponse> SendChannelMessageAsync(SendChannelMessageParams args, RequestOptions? options = null)
@@ -361,6 +448,48 @@ internal class HeyBoxRestApiClient : IDisposable
         BucketIds ids = new();
         return await SendMultipartAsync<CreateAssetResponse>(HttpMethod.Post,
                 () => $"{HeyBoxConfig.CreateAssetAPIUrl}upload", args.ToDictionary(), ids, ClientBucketType.SendEdit, false, options)
+            .ConfigureAwait(false);
+    }
+
+    #endregion
+
+    #region Memes
+
+    public async Task<GetRoomMemesResponse> GetRoomMemesAsync(ulong roomId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(roomId, 0, nameof(roomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(roomId);
+        return await SendAsync<GetRoomMemesResponse>(HttpMethod.Get,
+                () => $"chatroom/v3/msg/meme/room/list?{HeyBoxConfig.CommonQueryString}&roomId={roomId}", ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeleteRoomMemeAsync(DeleteRoomMemeParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Path, 0, nameof(args.Path));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync<object>(HttpMethod.Post,
+                () => $"chatroom/v3/msg/meme/room/delete?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task ModifyRoomMemeAsync(ModifyRoomMemeParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Path, 0, nameof(args.Path));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotNullOrEmpty(args.Name, nameof(args.Name));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync<object>(HttpMethod.Post,
+                () => $"chatroom/v3/msg/meme/room/update?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
             .ConfigureAwait(false);
     }
 

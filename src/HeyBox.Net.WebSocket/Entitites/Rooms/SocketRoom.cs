@@ -1,14 +1,16 @@
 ﻿using System.Collections.Concurrent;
-using HeyBox.API.Gateway;
+using System.Diagnostics;
 using Model = HeyBox.API.Gateway.RoomBaseInfo;
 using ChannelModel = HeyBox.API.Gateway.ChannelBaseInfo;
+using RoleModel = HeyBox.API.Role;
 
 namespace HeyBox.WebSocket;
 
 /// <summary>
 ///     表示一个基于网关的房间。
 /// </summary>
-public class SocketRoom : SocketEntity<ulong>, IRoom
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
 {
     private readonly ConcurrentDictionary<ulong, SocketRoomChannel> _channels;
     private readonly ConcurrentDictionary<ulong, SocketRoomUser> _members;
@@ -40,7 +42,11 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
     public IReadOnlyCollection<SocketRoomUser> Users => _members.ToReadOnlyCollection();
 
     /// <inheritdoc cref="HeyBox.IRoom.EveryoneRole" />
-    public SocketRole EveryoneRole => GetRole(0) ?? new SocketRole(this, 0);
+    public SocketRole EveryoneRole => _roles.Values.SingleOrDefault(x => x.Type is RoleType.Everyone)
+        ?? new SocketRole(this, 0) { Type = RoleType.Everyone };
+
+    /// <inheritdoc cref="HeyBox.IRoom.Roles" />
+    public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
 
     internal SocketRoom(HeyBoxSocketClient client, ulong id)
         : base(client, id)
@@ -61,9 +67,30 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
     {
         Name = model.RoomName;
         Icon = model.RoomAvatar;
+    }
+
+    internal void Update(ClientState state, API.Rest.GetRoomRolesResponse model)
+    {
+        _roles.Clear();
+        foreach (RoleModel roleModel in model.Roles)
+        {
+            SocketRole role = SocketRole.Create(this, state, roleModel);
+            _roles.TryAdd(role.Id, role);
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateAsync(RequestOptions? options = null)
+    {
+        await SocketRoomHelper.UpdateAsync(this, Client, options);
 
         IsPopulated = true;
     }
+
+    /// <inheritdoc cref="HeyBox.WebSocket.SocketRoom.Name" />
+    public override string? ToString() => Name;
+
+    private string DebuggerDisplay => $"{Name} ({Id})";
 
     #region Channels
 
@@ -157,7 +184,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
         return member;
     }
 
-    internal SocketRoomUser AddOrUpdateUser(SenderInfo model)
+    internal SocketRoomUser AddOrUpdateUser(API.RoomUser model)
     {
         if (_members.TryGetValue(model.UserId, out SocketRoomUser? cachedMember))
         {
@@ -203,6 +230,9 @@ public class SocketRoom : SocketEntity<ulong>, IRoom
     /// <inheritdoc />
     Task<ITextChannel?> IRoom.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
         Task.FromResult<ITextChannel?>(GetTextChannel(id));
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IRole> IRoom.Roles => Roles;
 
     /// <inheritdoc />
     IRole IRoom.EveryoneRole => EveryoneRole;

@@ -1,18 +1,42 @@
-﻿namespace HeyBox.Rest;
+﻿using System.Collections.Immutable;
+using RoleModel = HeyBox.API.Role;
+
+namespace HeyBox.Rest;
 
 /// <summary>
 ///     表示一个基于 REST 的房间。
 /// </summary>
-public class RestRoom : RestEntity<ulong>, IRoom
+public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 {
+    private ImmutableDictionary<ulong, RestRole> _roles;
+
     internal RestRoom(BaseHeyBoxClient client, ulong id)
         : base(client, id)
     {
-        EveryoneRole = new RestRole(Client, this, 0);
+        _roles = ImmutableDictionary<ulong, RestRole>.Empty;
     }
 
+    /// <inheritdoc cref="HeyBox.IRoom.Roles" />
+    public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
+
     /// <inheritdoc cref="HeyBox.IRoom.EveryoneRole" />
-    public RestRole EveryoneRole { get; }
+    public RestRole EveryoneRole => _roles.Values.SingleOrDefault(x => x.Type is RoleType.Everyone)
+        ?? new RestRole(Client, this, 0) { Type = RoleType.Everyone };
+
+    internal void Update(API.Rest.GetRoomRolesResponse model)
+    {
+        ImmutableDictionary<ulong, RestRole>.Builder roles =
+            ImmutableDictionary.CreateBuilder<ulong, RestRole>();
+        foreach (RoleModel roleModel in model.Roles)
+            roles[roleModel.Id] = RestRole.Create(Client, this, roleModel);
+        _roles = roles.ToImmutable();
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateAsync(RequestOptions? options = null)
+    {
+        await RoomHelper.UpdateAsync(this, Client, options);
+    }
 
     #region Channels
 
@@ -38,6 +62,9 @@ public class RestRoom : RestEntity<ulong>, IRoom
 
     /// <inheritdoc />
     string? IRoom.Icon => null;
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IRole> IRoom.Roles => Roles;
 
     /// <inheritdoc />
     IRole IRoom.EveryoneRole => EveryoneRole;

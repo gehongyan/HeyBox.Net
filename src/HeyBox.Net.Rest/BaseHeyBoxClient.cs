@@ -90,7 +90,7 @@ public abstract class BaseHeyBoxClient : IHeyBoxClient
 
     internal string? Token => ApiClient.AuthToken;
 
-    internal BaseHeyBoxClient(HeyBoxRestConfig config, API.HeyBoxRestApiClient client)
+    internal BaseHeyBoxClient(HeyBoxRestConfig config, HeyBox.API.HeyBoxRestApiClient client)
     {
         ApiClient = client;
         LogManager = new LogManager(config.LogLevel);

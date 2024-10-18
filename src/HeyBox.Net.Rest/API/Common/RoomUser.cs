@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace HeyBox.API.Gateway;
+namespace HeyBox.API;
 
-internal class SenderInfo
+internal class RoomUser
 {
     [JsonPropertyName("avatar")]
     public required string Avatar { get; set; }
@@ -12,26 +12,26 @@ internal class SenderInfo
     public required AvatarDecoration AvatarDecoration { get; set; }
 
     [JsonPropertyName("bot")]
-    public required bool Bot { get; set; }
+    public bool Bot { get; set; }
 
     [JsonPropertyName("level")]
-    public required int Level { get; set; }
+    public int Level { get; set; }
 
     [JsonPropertyName("medals")]
-    public required JsonElement Medals { get; set; }
+    public JsonElement Medals { get; set; }
 
     [JsonPropertyName("nickname")]
     public required string Nickname { get; set; }
 
     [JsonPropertyName("roles")]
-    public required ulong[] Roles { get; set; }
+    public ulong[]? Roles { get; set; }
 
     [JsonPropertyName("room_nickname")]
     public required string RoomNickname { get; set; }
 
     [JsonPropertyName("tag")]
-    public required JsonElement Tag { get; set; }
+    public JsonElement Tag { get; set; }
 
     [JsonPropertyName("user_id")]
-    public required uint UserId { get; set; }
+    public uint UserId { get; set; }
 }

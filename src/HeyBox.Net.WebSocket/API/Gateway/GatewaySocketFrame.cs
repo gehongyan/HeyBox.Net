@@ -19,6 +19,6 @@ internal class GatewaySocketFrame
     public required JsonElement Data { get; init; }
 
     [JsonPropertyName("timestamp")]
-    [DateTimeOffsetTimestampJsonConverter(Unit = DateTimeOffsetTimestampJsonConverter.TimestampUnit.Milliseconds)]
+    [DateTimeOffsetTimestampJsonConverter(Unit = TimestampUnit.Milliseconds)]
     public required DateTimeOffset Timestamp { get; init; }
 }

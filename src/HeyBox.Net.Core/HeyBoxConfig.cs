@@ -40,7 +40,7 @@ public class HeyBoxConfig
     /// <summary>
     ///     获取黑盒语音的版本号。
     /// </summary>
-    public const string ChatVersion = "1.27.2";
+    public const string ChatVersion = "1.29.0";
 
     /// <summary>
     ///     获取用于 API 请求的公共查询参数。
@@ -59,7 +59,8 @@ public class HeyBoxConfig
     /// <summary>
     ///     获取用于 API 请求的公共查询参数的字符串表示形式。
     /// </summary>
-    public static string CommonQueryString { get; } = string.Join("&", CommonQueryParameters.AllKeys.Select(k => $"{k}={CommonQueryParameters[k]}"));
+    public static string CommonQueryString { get; } =
+        string.Join("&", CommonQueryParameters.AllKeys.Select(k => $"{k}={CommonQueryParameters[k]}"));
 
     /// <summary>
     ///     获取请求超时的默认时间，以毫秒为单位。

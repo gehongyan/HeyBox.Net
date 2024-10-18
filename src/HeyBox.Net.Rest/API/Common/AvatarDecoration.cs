@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HeyBox.API.Gateway;
+namespace HeyBox.API;
 
 internal class AvatarDecoration
 {

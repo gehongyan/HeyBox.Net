@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
-using Model = HeyBox.API.Gateway.SenderInfo;
-using UserModel = HeyBox.API.Gateway.SenderInfo;
+using HeyBox.API.Gateway;
 
 namespace HeyBox.WebSocket;
 
@@ -84,7 +83,7 @@ public class SocketRoomUser : SocketUser, IRoomUser
         return entity;
     }
 
-    internal static SocketRoomUser Create(SocketRoom room, ClientState state, UserModel model)
+    internal static SocketRoomUser Create(SocketRoom room, ClientState state, API.RoomUser model)
     {
         SocketRoomUser entity = new(room, room.Client.GetOrCreateUser(state, model));
         entity.Update(state, model);
@@ -92,11 +91,12 @@ public class SocketRoomUser : SocketUser, IRoomUser
     }
 
     /// <inheritdoc />
-    internal override void Update(ClientState state, Model model)
+    internal override void Update(ClientState state, API.RoomUser model)
     {
         base.Update(state, model);
         Nickname = string.IsNullOrEmpty(model.RoomNickname) ? null : model.RoomNickname;
-        _roleIds = [..model.Roles];
+        if (model.Roles is not null)
+            _roleIds = [..model.Roles];
     }
 
     #region IRoomUser

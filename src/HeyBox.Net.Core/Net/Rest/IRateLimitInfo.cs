@@ -20,15 +20,10 @@ public interface IRateLimitInfo
     /// </summary>
     int? Remaining { get; }
 
-    // /// <summary>
-    // ///     获取当前限速桶将在何时重置的总时间（以秒为单位）。
-    // /// </summary>
-    // int? RetryAfter { get; }
-
-    // /// <summary>
-    // ///     获取此限速重置的绝对时间。
-    // /// </summary>
-    // DateTimeOffset? Reset { get; }
+    /// <summary>
+    ///     获取此限速重置的绝对时间。
+    /// </summary>
+    DateTimeOffset? Reset { get; }
 
     /// <summary>
     ///     获取相对于此刻此限速重置的相对时间间隔。

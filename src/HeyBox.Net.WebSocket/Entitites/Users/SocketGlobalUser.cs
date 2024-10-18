@@ -1,5 +1,4 @@
 namespace HeyBox.WebSocket;
-using Model = API.Gateway.SenderInfo;
 
 internal sealed class SocketGlobalUser : SocketUser
 {
@@ -32,7 +31,7 @@ internal sealed class SocketGlobalUser : SocketUser
     {
     }
 
-    internal static SocketGlobalUser Create(HeyBoxSocketClient client, ClientState state, Model model)
+    internal static SocketGlobalUser Create(HeyBoxSocketClient client, ClientState state, API.RoomUser model)
     {
         SocketGlobalUser entity = new(client, model.UserId);
         entity.Update(state, model);

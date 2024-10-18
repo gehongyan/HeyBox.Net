@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using HeyBox.API.Rest;
 using HeyBox.Net.Converters;
 
 namespace HeyBox.API.Gateway;
@@ -21,9 +22,9 @@ internal class CommandEvent
     public required RoomBaseInfo RoomBaseInfo { get; set; }
 
     [JsonPropertyName("send_time")]
-    [DateTimeOffsetTimestampJsonConverter(Unit = DateTimeOffsetTimestampJsonConverter.TimestampUnit.Milliseconds)]
+    [DateTimeOffsetTimestampJsonConverter(Unit = TimestampUnit.Milliseconds)]
     public required DateTimeOffset SendTime { get; set; }
 
     [JsonPropertyName("sender_info")]
-    public required SenderInfo SenderInfo { get; set; }
+    public required RoomUser SenderInfo { get; set; }
 }

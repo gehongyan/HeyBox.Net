@@ -31,6 +31,11 @@ public interface IRoom : IEntity<ulong>
     #region Roles
 
     /// <summary>
+    ///     获取此房间的所有角色。
+    /// </summary>
+    IReadOnlyCollection<IRole> Roles { get; }
+
+    /// <summary>
     ///     获取此房间中的 <c>@全体成员</c> 全体成员角色。
     /// </summary>
     IRole EveryoneRole { get; }

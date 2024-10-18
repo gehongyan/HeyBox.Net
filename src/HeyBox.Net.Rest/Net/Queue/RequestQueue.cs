@@ -154,11 +154,11 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
         await RateLimitTriggered.Invoke(bucketId, info, endpoint).ConfigureAwait(false);
     }
 
-    internal (RequestBucket?, BucketId?) UpdateBucketHash(BucketId id, string HeyBoxHash)
+    internal (RequestBucket?, BucketId?) UpdateBucketHash(BucketId id, string heyBoxHash)
     {
         if (!id.IsHashBucket)
         {
-            BucketId bucket = BucketId.Create(HeyBoxHash, id);
+            BucketId bucket = BucketId.Create(heyBoxHash, id);
             RequestBucket hashReqQueue = (RequestBucket)_buckets.GetOrAdd(bucket, _buckets[id]);
             _buckets.AddOrUpdate(id, bucket, (_, _) => bucket);
             return (hashReqQueue, bucket);

@@ -16,11 +16,8 @@ public struct RateLimitInfo : IRateLimitInfo
     /// <inheritdoc/>
     public int? Remaining { get; }
 
-    // /// <inheritdoc/>
-    // public int? RetryAfter { get; }
-
-    // /// <inheritdoc/>
-    // public DateTimeOffset? Reset { get; }
+    /// <inheritdoc/>
+    public DateTimeOffset? Reset { get; }
 
     /// <inheritdoc/>
     public TimeSpan? ResetAfter { get; }
@@ -38,24 +35,31 @@ public struct RateLimitInfo : IRateLimitInfo
     {
         Endpoint = endpoint;
 
-        IsGlobal = headers.ContainsKey("X-Rate-Limit-Global");
-        Limit = headers.TryGetValue("X-Rate-Limit-Limit", out string? temp)
+        IsGlobal = headers.TryGetValue("X-Ratelimit-Bucket", out string? temp)
+            && string.IsNullOrWhiteSpace(temp);
+        Limit = headers.TryGetValue("X-Ratelimit-Limit", out temp)
             && int.TryParse(temp, NumberStyles.None, CultureInfo.InvariantCulture, out int limit)
                 ? limit
                 : null;
-        Remaining = headers.TryGetValue("X-Rate-Limit-Remaining", out temp)
+        Remaining = headers.TryGetValue("X-Ratelimit-Remaining", out temp)
             && int.TryParse(temp, NumberStyles.None, CultureInfo.InvariantCulture, out int remaining)
                 ? remaining
                 : null;
         // RetryAfter = headers.TryGetValue("Retry-After", out temp) &&
         //              int.TryParse(temp, NumberStyles.None, CultureInfo.InvariantCulture, out var retryAfter) ? retryAfter : (int?)null;
-        ResetAfter = headers.TryGetValue("X-Rate-Limit-Reset", out temp)
+        ResetAfter = headers.TryGetValue("X-Ratelimit-Reset-After", out temp)
             && double.TryParse(temp, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double resetAfter)
                 ? TimeSpan.FromSeconds(resetAfter)
                 : null;
-        // Reset = headers.TryGetValue("X-Rate-Limit-Reset", out temp) &&
-        //         double.TryParse(temp, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var reset) && reset != 0 ? DateTimeOffset.FromUnixTimeMilliseconds((long)(reset * 1000)) : (DateTimeOffset?)null;
-        Bucket = headers.TryGetValue("X-Rate-Limit-Bucket", out temp) ? temp : null;
+        Reset = headers.TryGetValue("X-Ratelimit-Reset", out temp)
+            && double.TryParse(temp, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var reset)
+            && reset != 0
+                ? DateTimeOffset.FromUnixTimeSeconds((long)reset)
+                : null;
+        Bucket = headers.TryGetValue("X-Ratelimit-Bucket", out temp)
+            && !string.IsNullOrWhiteSpace(temp)
+                ? temp
+                : null;
         Lag = headers.TryGetValue("Date", out temp)
             && DateTimeOffset.TryParse(temp, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset date)
                 ? DateTimeOffset.UtcNow - date
