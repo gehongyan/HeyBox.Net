@@ -436,6 +436,32 @@ internal class HeyBoxRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
+    public async Task<ModifyChannelMessageResponse> ModifyChannelMessageAsync(ModifyChannelMessageParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.MessageId, 0, nameof(args.MessageId));
+
+        BucketIds ids = new(args.RoomId, args.ChannelId);
+        return await SendJsonAsync<ModifyChannelMessageResponse>(HttpMethod.Post,
+                () => $"chatroom/v2/channel_msg/update?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeleteChannelMessageAsync(DeleteChannelMessageParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.MessageId, 0, nameof(args.MessageId));
+
+        BucketIds ids = new(args.RoomId, args.ChannelId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/channel_msg/delete?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Assets

@@ -15,21 +15,21 @@ internal static class ChannelHelper
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
 
-    public static async Task<Cacheable<IUserMessage, ulong>> SendFileAsync(ITextChannel channel,
+    public static async Task<IUserMessage> SendFileAsync(ITextChannel channel,
         BaseHeyBoxClient client, string path, string filename, AttachmentType type, Size? imageSize, IMessageReference? messageReference, RequestOptions? options)
     {
         using FileAttachment file = new(path, filename, type, imageSize);
         return await SendFileAsync(channel, client, file, messageReference, options);
     }
 
-    public static async Task<Cacheable<IUserMessage, ulong>> SendFileAsync(ITextChannel channel,
+    public static async Task<IUserMessage> SendFileAsync(ITextChannel channel,
         BaseHeyBoxClient client, Stream stream, string filename, AttachmentType type, Size? imageSize, IMessageReference? messageReference, RequestOptions? options)
     {
         using FileAttachment file = new(stream, filename, type, imageSize);
         return await SendFileAsync(channel, client, file, messageReference, options);
     }
 
-    public static async Task<Cacheable<IUserMessage, ulong>> SendFileAsync(ITextChannel channel,
+    public static async Task<IUserMessage> SendFileAsync(ITextChannel channel,
         BaseHeyBoxClient client, FileAttachment attachment, IMessageReference? messageReference, RequestOptions? options)
     {
         switch (attachment.Mode)
@@ -65,7 +65,7 @@ internal static class ChannelHelper
             _ => throw new ArgumentOutOfRangeException(nameof(attachment.Type), attachment.Type, "Unknown attachment type")
         };
 
-        async Task<Cacheable<IUserMessage, ulong>> SendAttachmentAsync(MessageType messageType)
+        async Task<IUserMessage> SendAttachmentAsync(MessageType messageType)
         {
             ImageFilesInfo imageFilesInfo = new()
             {
@@ -76,9 +76,8 @@ internal static class ChannelHelper
                 RoomId = channel.RoomId,
                 ChannelType = channel.Type,
                 ChannelId = channel.Id,
-                MsgType = messageType,
+                MessageType = messageType,
                 Message = attachment.Uri.OriginalString,
-                HeyChatAckId = string.Empty,
                 ReplyId = messageReference?.MessageId,
                 Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
                 AtUserId = [],
@@ -86,29 +85,29 @@ internal static class ChannelHelper
                 MentionChannelId = []
             };
             SendChannelMessageResponse model = await client.ApiClient.SendChannelMessageAsync(args, options);
-            return new Cacheable<IUserMessage, ulong>(null, model.MessageId, false, () => Task.FromResult<IUserMessage?>(null));
+            return CreateMessageEntity(client, channel, args, model, [attachment]);
         }
     }
 
-    public static async Task<Cacheable<IUserMessage, ulong>> SendTextAsync(ITextChannel channel, BaseHeyBoxClient client,
+    public static async Task<IUserMessage> SendTextAsync(ITextChannel channel, BaseHeyBoxClient client,
         string text, IEnumerable<FileAttachment>? imageFileInfos, IMessageReference? messageReference, RequestOptions? options)
     {
         ImmutableArray<ITag> tags = MessageHelper.ParseTags(text, channel.Room);
         bool hasMention = tags.Any(x => x.Type
             is TagType.UserMention or TagType.ChannelMention
             or TagType.RoleMention or TagType.EveryoneMention or TagType.HereMention);
+        IReadOnlyCollection<FileAttachment>? images = imageFileInfos is not null ? [..imageFileInfos] : null;
         ImageFilesInfo imageFilesInfo = new()
         {
-            FilesInfo = imageFileInfos?.Select(CreateImageFileInfo)?.ToArray() ?? []
+            FilesInfo = images?.Select(CreateImageFileInfo)?.ToArray() ?? []
         };
         SendChannelMessageParams args = new()
         {
             RoomId = channel.RoomId,
             ChannelType = channel.Type,
             ChannelId = channel.Id,
-            MsgType = hasMention ? MessageType.MarkdownWithMention : MessageType.Markdown,
+            MessageType = hasMention ? MessageType.MarkdownWithMention : MessageType.Markdown,
             Message = text,
-            HeyChatAckId = string.Empty,
             ReplyId = messageReference?.MessageId,
             Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
             AtUserId = [..tags.Where(tag => tag.Type == TagType.UserMention).OfType<Tag<uint, IUser>>().Select(x => x.Key)],
@@ -116,14 +115,25 @@ internal static class ChannelHelper
             MentionChannelId = [..tags.Where(tag => tag.Type == TagType.ChannelMention).OfType<Tag<ulong, IChannel>>().Select(x => x.Key)],
         };
         SendChannelMessageResponse model = await client.ApiClient.SendChannelMessageAsync(args, options);
-        return new Cacheable<IUserMessage, ulong>(null, model.MessageId, false, () => Task.FromResult<IUserMessage?>(null));
+        return CreateMessageEntity(client, channel, args, model, images);
     }
 
-    private static ImageFileInfo CreateImageFileInfo(FileAttachment attachment) =>
+    internal static ImageFileInfo CreateImageFileInfo(FileAttachment attachment) =>
         new()
         {
             Url = attachment.Uri?.OriginalString,
             Width = attachment.ImageSize?.Width,
             Height = attachment.ImageSize?.Height
         };
+
+    private static RestUserMessage CreateMessageEntity(BaseHeyBoxClient client, IMessageChannel channel,
+        SendChannelMessageParams args, SendChannelMessageResponse model, IReadOnlyCollection<FileAttachment>? imageFileInfos)
+    {
+        if (client.CurrentUser is null)
+            throw new InvalidOperationException("The client must have a current user.");
+        RestUserMessage message = RestUserMessage.Create(client, channel, client.CurrentUser, args, model);
+        message.Update(imageFileInfos);
+        return message;
+    }
+
 }

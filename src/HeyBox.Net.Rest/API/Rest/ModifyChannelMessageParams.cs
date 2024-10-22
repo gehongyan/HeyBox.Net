@@ -1,17 +1,13 @@
-﻿using System.Text.Json.Serialization;
-using HeyBox;
+using System.Text.Json.Serialization;
 using HeyBox.Rest.Converters;
 
 namespace HeyBox.API.Rest;
 
-internal class SendChannelMessageParams
+internal class ModifyChannelMessageParams
 {
     [JsonPropertyName("room_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
     public required ulong RoomId { get; init; }
-
-    [JsonPropertyName("channel_type")]
-    public required ChannelType ChannelType { get; init; }
 
     [JsonPropertyName("channel_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
@@ -35,13 +31,17 @@ internal class SendChannelMessageParams
 
     [JsonPropertyName("at_user_id")]
     [JsonConverter(typeof(UInt32ArrayStringJoinJsonConverter))]
-    public required uint[] AtUserId { get; init; }
+    public uint[]? AtUserId { get; init; }
 
     [JsonPropertyName("at_role_id")]
     [JsonConverter(typeof(UInt64ArrayStringJoinJsonConverter))]
-    public required ulong[] AtRoleId { get; init; }
+    public ulong[]? AtRoleId { get; init; }
 
     [JsonPropertyName("mention_channel_id")]
     [JsonConverter(typeof(UInt64ArrayStringJoinJsonConverter))]
-    public required ulong[] MentionChannelId { get; init; }
+    public ulong[]? MentionChannelId { get; init; }
+
+    [JsonPropertyName("msg_id")]
+    [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
+    public required ulong MessageId { get; set; }
 }

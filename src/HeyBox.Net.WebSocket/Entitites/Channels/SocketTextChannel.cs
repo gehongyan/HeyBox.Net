@@ -26,7 +26,7 @@ public class SocketTextChannel : SocketRoomChannel, ITextChannel, ISocketMessage
     }
 
     /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.String,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
-    public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(string path, string? filename = null,
+    public Task<IUserMessage> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,
         RequestOptions? options = null)
     {
@@ -35,18 +35,18 @@ public class SocketTextChannel : SocketRoomChannel, ITextChannel, ISocketMessage
     }
 
     /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
-    public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(Stream stream, string filename,
+    public Task<IUserMessage> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Client, stream, filename, type, imageSize, messageReference, options);
 
     /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(HeyBox.FileAttachment,IMessageReference,HeyBox.RequestOptions)"/>
-    public Task<Cacheable<IUserMessage, ulong>> SendFileAsync(FileAttachment attachment,
+    public Task<IUserMessage> SendFileAsync(FileAttachment attachment,
         IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Client, attachment, messageReference, options);
 
     /// <inheritdoc cref="HeyBox.IMessageChannel.SendTextAsync(System.String,System.Collections.Generic.IEnumerable{HeyBox.FileAttachment},IMessageReference,HeyBox.RequestOptions)"/>
-    public Task<Cacheable<IUserMessage, ulong>> SendTextAsync(string text,
+    public Task<IUserMessage> SendTextAsync(string text,
         IEnumerable<FileAttachment>? imageFileInfos = null, IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendTextAsync(this, Client, text, imageFileInfos, messageReference, options);
 

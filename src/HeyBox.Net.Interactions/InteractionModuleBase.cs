@@ -47,8 +47,8 @@ public abstract class InteractionModuleBase<T> : IInteractionModuleBase where T 
     /// <param name="imageSize"> 图片文件的图像尺寸。 </param>
     /// <param name="reply"> 是否回复原消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
-    public Task<Cacheable<IUserMessage, ulong>> ReplyFileAsync(string path, string? filename = null,
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
+    public Task<IUserMessage> ReplyFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, bool reply = false,
         RequestOptions? options = null)
     {
@@ -66,8 +66,8 @@ public abstract class InteractionModuleBase<T> : IInteractionModuleBase where T 
     /// <param name="imageSize"> 图片文件的图像尺寸。 </param>
     /// <param name="reply"> 是否回复原消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
-    public Task<Cacheable<IUserMessage, ulong>> ReplyFileAsync(Stream stream, string filename,
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
+    public Task<IUserMessage> ReplyFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, bool reply = false,
         RequestOptions? options = null)
     {
@@ -81,8 +81,8 @@ public abstract class InteractionModuleBase<T> : IInteractionModuleBase where T 
     /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="reply"> 是否回复原消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
-    public Task<Cacheable<IUserMessage, ulong>> ReplyFileAsync(FileAttachment attachment,
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
+    public Task<IUserMessage> ReplyFileAsync(FileAttachment attachment,
         bool reply = false, RequestOptions? options = null)
     {
         IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;
@@ -96,8 +96,8 @@ public abstract class InteractionModuleBase<T> : IInteractionModuleBase where T 
     /// <param name="imageFileInfos"> 图片文件的信息。 </param>
     /// <param name="reply"> 是否回复原消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
-    public Task<Cacheable<IUserMessage, ulong>> ReplyTextAsync(string text,
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
+    public Task<IUserMessage> ReplyTextAsync(string text,
         IEnumerable<FileAttachment>? imageFileInfos = null, bool reply = false, RequestOptions? options = null)
     {
         IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;

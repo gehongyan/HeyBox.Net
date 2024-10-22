@@ -3,8 +3,17 @@ namespace HeyBox;
 /// <summary>
 ///     表示一个通用的用户消息。
 /// </summary>
-public interface IUserMessage : IMessage
+public interface IUserMessage : IMessage, IDeletable
 {
+    /// <summary>
+    ///     修改此消息。
+    /// </summary>
+    /// <param name="func"> 一个包含修改消息属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
+    /// <seealso cref="HeyBox.MessageProperties"/>
+    Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null);
+
     /// <summary>
     ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>

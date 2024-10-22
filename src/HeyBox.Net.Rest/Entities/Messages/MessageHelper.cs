@@ -1,15 +1,33 @@
 ﻿using System.Collections.Immutable;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using HeyBox.API.Rest;
 
 namespace HeyBox.Rest;
 
 internal class MessageHelper
 {
+    private static readonly JsonSerializerOptions _serializerOptions = new()
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString
+    };
+
     private static readonly Regex InlineCodeRegex = new(@"[^\\]?(`).+?[^\\](`)",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     private static readonly Regex BlockCodeRegex = new(@"[^\\]?(```).+?[^\\](```)",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
+
+    public static string SanitizeMessage(IMessage message)
+    {
+        string newContent = MentionUtils.Resolve(message, 0,
+            TagHandling.FullName, TagHandling.FullName, TagHandling.FullName,
+            TagHandling.FullName, TagHandling.FullName);
+        return Format.StripMarkdown(newContent);
+    }
 
     public static ImmutableArray<ITag> ParseTags(string text, IRoom? room)
     {
@@ -143,5 +161,54 @@ internal class MessageHelper
         if (i > 0 && index < tags[i - 1].Index + tags[i - 1].Length)
             return null; //Overlaps tag before this
         return i;
+    }
+
+    public static async Task ModifyAsync(RestUserMessage message,
+        Action<MessageProperties> func, BaseHeyBoxClient client, RequestOptions? options)
+    {
+        if (message.Channel is not IRoomChannel roomChannel)
+            throw new NotSupportedException("Deleting a message from a non-room channel is not supported.");
+        MessageProperties properties = new()
+        {
+            Content = message.Content,
+            Reference = message.Reference,
+            ImageFileInfos = message.ImageFileInfos is not null ? [..message.ImageFileInfos] : null
+        };
+        func(properties);
+        ImmutableArray<ITag> tags = ParseTags(properties.Content, roomChannel.Room);
+        bool hasMention = tags.Any(x => x.Type
+            is TagType.UserMention or TagType.ChannelMention
+            or TagType.RoleMention or TagType.EveryoneMention or TagType.HereMention);
+        ImageFilesInfo imageFilesInfo = new()
+        {
+            FilesInfo = properties.ImageFileInfos?.Select(ChannelHelper.CreateImageFileInfo)?.ToArray() ?? []
+        };
+        ModifyChannelMessageParams args = new()
+        {
+            MessageId = message.Id,
+            RoomId = roomChannel.RoomId,
+            ChannelId = roomChannel.Id,
+            MessageType = hasMention ? MessageType.MarkdownWithMention : MessageType.Markdown,
+            Message = properties.Content,
+            ReplyId = properties.Reference?.MessageId,
+            Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
+            AtUserId = [..tags.Where(tag => tag.Type == TagType.UserMention).OfType<Tag<uint, IUser>>().Select(x => x.Key)],
+            AtRoleId = [..tags.Where(tag => tag.Type == TagType.RoleMention).OfType<Tag<ulong, IRole>>().Select(x => x.Key)],
+            MentionChannelId = [..tags.Where(tag => tag.Type == TagType.ChannelMention).OfType<Tag<ulong, IChannel>>().Select(x => x.Key)],
+        };
+        await client.ApiClient.ModifyChannelMessageAsync(args, options);
+    }
+
+    public static async Task DeleteAsync(RestUserMessage message, BaseHeyBoxClient client, RequestOptions? options)
+    {
+        if (message.Channel is not IRoomChannel roomChannel)
+            throw new NotSupportedException("Deleting a message from a non-room channel is not supported.");
+        DeleteChannelMessageParams args = new()
+        {
+            RoomId = roomChannel.RoomId,
+            ChannelId = roomChannel.Id,
+            MessageId = message.Id
+        };
+        await client.ApiClient.DeleteChannelMessageAsync(args, options);
     }
 }
