@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace HeyBox.API.Rest;
 
-internal class ModifyGuildRoleParams : CreateRoomRoleParams
+internal class ModifyRoomRoleParams : CreateRoomRoleParams
 {
     [JsonPropertyName("id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]

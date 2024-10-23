@@ -362,7 +362,7 @@ internal class HeyBoxRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Role> ModifyRoomRoleAsync(ModifyGuildRoleParams args, RequestOptions? options = null)
+    public async Task<Role> ModifyRoomRoleAsync(ModifyRoomRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
@@ -378,7 +378,7 @@ internal class HeyBoxRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteRoomRoleAsync(DeleteGuildRoleParams args, RequestOptions? options = null)
+    public async Task DeleteRoomRoleAsync(DeleteRoomRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.RoleId, 0, nameof(args.RoleId));

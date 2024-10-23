@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace HeyBox.API.Rest;
 
-internal class DeleteGuildRoleParams
+internal class DeleteRoomRoleParams
 {
     [JsonPropertyName("role_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]

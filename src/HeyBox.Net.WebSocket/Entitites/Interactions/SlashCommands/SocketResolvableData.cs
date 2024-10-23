@@ -9,7 +9,7 @@ internal class SocketResolvableData
     internal SocketResolvableData(SocketRoom room)
     {
         _channelResolver = room.AddOrUpdateChannel;
-        _roleResolver = room.AddOrUpdateRole;
+        _roleResolver = x => room.GetRole(x) ?? new SocketRole(room, x);
         _userResolver = room.AddOrUpdateUser;
     }
 

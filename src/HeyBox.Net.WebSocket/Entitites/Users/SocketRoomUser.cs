@@ -66,7 +66,7 @@ public class SocketRoomUser : SocketUser, IRoomUser
     /// <summary>
     ///     获取此用户在该房间内拥有的所有角色。
     /// </summary>
-    public IReadOnlyCollection<SocketRole> Roles => [.._roleIds.Select(x => Room.AddOrUpdateRole(x))];
+    public IReadOnlyCollection<SocketRole> Roles => [..Room.Roles.Where(x => _roleIds.Contains(x.Id))];
 
     /// <inheritdoc />
     internal SocketRoomUser(SocketRoom room, SocketGlobalUser globalUser)

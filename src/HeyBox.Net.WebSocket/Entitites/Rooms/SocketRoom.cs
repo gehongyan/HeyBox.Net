@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using HeyBox.Rest;
 using Model = HeyBox.API.Gateway.RoomBaseInfo;
 using ChannelModel = HeyBox.API.Gateway.ChannelBaseInfo;
 using RoleModel = HeyBox.API.Role;
@@ -150,15 +151,27 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     /// <inheritdoc cref="HeyBox.IRoom.GetRole(System.UInt64)" />
     public SocketRole? GetRole(ulong id) => _roles.GetValueOrDefault(id);
 
-    internal SocketRole AddOrUpdateRole(ulong roleId)
+    /// <inheritdoc cref="HeyBox.IRoom.CreateRoleAsync(System.Action{RoleProperties},HeyBox.RequestOptions)" />
+    public async Task<SocketRole> CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options = null)
+    {
+        RoleModel model = await RoomHelper.CreateRoleAsync(this, Client, func, options);
+        return AddOrUpdateRole(model.Id, model);
+    }
+
+    internal SocketRole AddOrUpdateRole(ulong roleId, RoleModel model)
     {
         if (_roles.TryGetValue(roleId, out SocketRole? cachedRole))
+        {
+            cachedRole.Update(Client.State, model);
             return cachedRole;
+        }
 
-        SocketRole role = new(this, roleId);
+        SocketRole role = SocketRole.Create(this, Client.State, model);
         _roles[role.Id] = role;
         return role;
     }
+
+    internal SocketRole? RemoveRole(ulong id) => _roles.TryRemove(id, out SocketRole? role) ? role : null;
 
     #endregion
 
@@ -239,6 +252,10 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
 
     /// <inheritdoc />
     IRole? IRoom.GetRole(ulong id) => GetRole(id);
+
+    /// <inheritdoc />
+    async Task<IRole> IRoom.CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options) =>
+        await CreateRoleAsync(func, options).ConfigureAwait(false);
 
     #endregion
 }

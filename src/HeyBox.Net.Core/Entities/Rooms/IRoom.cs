@@ -47,5 +47,16 @@ public interface IRoom : IEntity<ulong>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的角色；如果未找到，则返回 <c>null</c>。 </returns>
     IRole? GetRole(ulong id);
 
+    /// <summary>
+    ///     在此房间内创建一个新角色。
+    /// </summary>
+    /// <remarks>
+    ///     此方法使用指定的属性创建新角色。要查看可用的属性，请参考 <see cref="HeyBox.RoleProperties"/>。
+    /// </remarks>
+    /// <param name="func"> 一个用于填充新角色属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的角色。 </returns>
+    Task<IRole> CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options = null);
+
     #endregion
 }

@@ -55,6 +55,19 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 
     #endregion
 
+    #region Roles
+
+    /// <inheritdoc cref="HeyBox.IRoom.CreateRoleAsync(System.Action{RoleProperties},HeyBox.RequestOptions)" />
+    public async Task<RestRole> CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options = null)
+    {
+        RoleModel model = await RoomHelper.CreateRoleAsync(this, Client, func, options);
+        RestRole entity = RestRole.Create(Client, this, model);
+        _roles = _roles.Add(entity.Id, entity);
+        return entity;
+    }
+
+    #endregion
+
     #region IRoom
 
     /// <inheritdoc />
@@ -71,6 +84,10 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 
     /// <inheritdoc />
     IRole? IRoom.GetRole(ulong id) => id == 0 ? EveryoneRole : null;
+
+    /// <inheritdoc />
+    async Task<IRole> IRoom.CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options) =>
+        await CreateRoleAsync(func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<ITextChannel?> IRoom.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>

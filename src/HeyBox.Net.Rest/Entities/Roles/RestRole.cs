@@ -62,7 +62,7 @@ public class RestRole : RestEntity<ulong>, IRole
         Icon = string.Empty;
     }
 
-    internal static RestRole Create(BaseHeyBoxClient client, RestRoom room, Model model)
+    internal static RestRole Create(BaseHeyBoxClient client, IRoom room, Model model)
     {
         RestRole entity = new(client, room, model.Id);
         entity.Update(model);
@@ -84,4 +84,15 @@ public class RestRole : RestEntity<ulong>, IRole
         CreatedAt = model.CreateTime;
         CreatorId = model.Creator;
     }
+
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null)
+    {
+        Model model = await RoleHelper.ModifyAsync(this, Client, func, options);
+        Update(model);
+    }
+
+    /// <inheritdoc />
+    public Task DeleteAsync(RequestOptions? options = null) =>
+        RoleHelper.DeleteAsync(this, Client, options);
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using HeyBox.Rest;
 using Model = HeyBox.API.Role;
 
 namespace HeyBox.WebSocket;
@@ -87,6 +88,20 @@ public class SocketRole : SocketEntity<ulong>, IRole
         CreatorId = model.Creator;
 
         IsPopulated = true;
+    }
+
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null)
+    {
+        Model model = await RoleHelper.ModifyAsync(this, Client, func, options);
+        Update(Client.State, model);
+    }
+
+    /// <inheritdoc />
+    public async Task DeleteAsync(RequestOptions? options = null)
+    {
+        await RoleHelper.DeleteAsync(this, Client, options);
+        Room.RemoveRole(Id);
     }
 
     /// <inheritdoc cref="HeyBox.WebSocket.SocketRole.Name" />

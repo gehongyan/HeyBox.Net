@@ -34,7 +34,10 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
             $"布尔值: {boolean}");
 
     [SlashCommand("echo", runMode: RunMode.Async)]
-    public async Task Echo([Summary("内容")] string echo, [Summary("提及")] bool mention = false, [Summary("回复")] bool reply = false)
+    public async Task Echo(
+        [Summary("内容")] string echo,
+        [Summary("提及")] bool mention = false,
+        [Summary("回复")] bool reply = false)
     {
         IUserMessage message = await ReplyTextAsync(
             $"{(mention ? MentionUtils.MentionUser(Context.UserId) : string.Empty)} {echo}",
