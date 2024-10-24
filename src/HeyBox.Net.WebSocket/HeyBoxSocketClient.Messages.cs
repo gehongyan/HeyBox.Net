@@ -156,6 +156,36 @@ public partial class HeyBoxSocketClient
 
     #endregion
 
+    #region Room Members
+
+    private async Task HandleJoinedLeftRoom(JsonElement payload)
+    {
+        if (DeserializePayload<GuildMemberJoinLeftEvent>(payload) is not { } memberEvent) return;
+        SocketRoom room = await GetOrCreateRoomAsync(State, memberEvent.RoomBaseInfo);
+        switch (memberEvent.State)
+        {
+            case GuildMemberAction.Join:
+            {
+                SocketRoomUser user = room.AddOrUpdateUser(memberEvent.UserInfo);
+                // room.MemberCount++;
+                await TimedInvokeAsync(_userJoinedEvent, nameof(UserJoined), user).ConfigureAwait(false);
+                return;
+            }
+            case GuildMemberAction.Left:
+            {
+                SocketRoomUser user = room.RemoveUser(memberEvent.UserInfo.UserId)
+                    ?? SocketRoomUser.Create(room, State, memberEvent.UserInfo);
+                // room.MemberCount--;
+                await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), user).ConfigureAwait(false);
+                return;
+            }
+            default:
+                throw new NotSupportedException("Unsupported member action");
+        }
+    }
+
+    #endregion
+
     #region Interactions
 
     private async Task HandleSlashCommand(JsonElement payload)

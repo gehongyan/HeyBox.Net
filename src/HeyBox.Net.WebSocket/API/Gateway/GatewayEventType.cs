@@ -2,5 +2,6 @@
 
 internal enum GatewayEventType
 {
-    SlashCommand = 50
+    SlashCommand = 50,
+    JoinedExitedRoom = 3001,
 }

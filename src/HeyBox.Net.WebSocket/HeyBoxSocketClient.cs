@@ -9,7 +9,6 @@ using HeyBox.Logging;
 using HeyBox.Net;
 using HeyBox.Net.Queue;
 using HeyBox.Net.WebSockets;
-using HeyBox.Rest;
 
 namespace HeyBox.WebSocket;
 
@@ -176,6 +175,7 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     internal async Task<SocketRoom> GetOrCreateRoomAsync(ClientState state, RoomBaseInfo model)
     {
         SocketRoom room = state.GetOrAddRoom(model.RoomId, _ => SocketRoom.Create(this, state, model));
+        room.Update(state, model);
         if (!room.IsPopulated)
             await room.UpdateAsync().ConfigureAwait(false);
         return room;
@@ -264,6 +264,9 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
         {
             case GatewayEventType.SlashCommand:
                 await HandleSlashCommand(payload).ConfigureAwait(false);
+                break;
+            case GatewayEventType.JoinedExitedRoom:
+                await HandleJoinedLeftRoom(payload).ConfigureAwait(false);
                 break;
             default:
             {

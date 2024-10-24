@@ -211,6 +211,14 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         return member;
     }
 
+    internal SocketRoomUser? RemoveUser(ulong id)
+    {
+        if (!_members.TryRemove(id, out SocketRoomUser? member))
+            return null;
+        member.GlobalUser.RemoveRef(Client);
+        return member;
+    }
+
     /// <summary>
     ///     清除此房间的用户缓存。
     /// </summary>

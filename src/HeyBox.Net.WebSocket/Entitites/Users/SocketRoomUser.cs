@@ -139,7 +139,7 @@ public class SocketRoomUser : SocketUser, IRoomUser
 
     /// <inheritdoc />
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
-        RemoveRolesAsync(roles.Select(x => x.Id));
+        RemoveRolesAsync(roles.Select(x => x.Id), options);
 
     #region IRoomUser
 

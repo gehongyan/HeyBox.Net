@@ -57,6 +57,46 @@ public partial class HeyBoxSocketClient
 
     #endregion
 
+    #region Users
+
+
+    /// <summary>
+    ///     当用户加入房间时引发。
+    /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="HeyBox.WebSocket.SocketRoomUser"/> 参数是加入房间的房间用户。 </item>
+    ///     </list>
+    /// </remarks>
+    public event Func<SocketRoomUser, Task> UserJoined
+    {
+        add => _userJoinedEvent.Add(value);
+        remove => _userJoinedEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<SocketRoomUser, Task>> _userJoinedEvent = new();
+
+    /// <summary>
+    ///     当用户离开房间时引发。
+    /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="HeyBox.WebSocket.SocketRoomUser"/> 参数是离开房间的房间用户。 </item>
+    ///     </list>
+    /// </remarks>
+    public event Func<SocketRoomUser, Task> UserLeft
+    {
+        add => _userLeftEvent.Add(value);
+        remove => _userLeftEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<SocketRoomUser, Task>> _userLeftEvent = new();
+
+
+    #endregion
+
     #region Interactions
 
     /// <summary>
