@@ -35,4 +35,72 @@ public interface IRoomUser : IUser
     ///     获取此用户所属房间的 ID。
     /// </summary>
     ulong RoomId { get; }
+
+    #region Roles
+
+    /// <summary>
+    ///     在该房间内授予此用户指定的角色。
+    /// </summary>
+    /// <param name="roleId"> 要在该房间内为此用户授予的角色的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步授予操作的任务。 </returns>
+    Task AddRoleAsync(ulong roleId, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内授予此用户指定的角色。
+    /// </summary>
+    /// <param name="role"> 要在该房间内为此用户授予的角色。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步授予操作的任务。 </returns>
+    Task AddRoleAsync(IRole role, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内授予此用户指定的一些角色。
+    /// </summary>
+    /// <param name="roleIds"> 要在该房间内为此用户授予的所有角色的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步授予操作的任务。 </returns>
+    Task AddRolesAsync(IEnumerable<ulong> roleIds, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内授予此用户指定的一些角色。
+    /// </summary>
+    /// <param name="roles"> 要在该房间内为此用户授予的所有角色。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步授予操作的任务。 </returns>
+    Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内撤销此用户指定的角色。
+    /// </summary>
+    /// <param name="roleId"> 要在该房间内为此用户撤销的角色的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步撤销操作的任务。 </returns>
+    Task RemoveRoleAsync(ulong roleId, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内撤销此用户指定的角色。
+    /// </summary>
+    /// <param name="role"> 要在该房间内为此用户撤销的角色。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步撤销操作的任务。 </returns>
+    Task RemoveRoleAsync(IRole role, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内撤销此用户指定的一些角色。
+    /// </summary>
+    /// <param name="roleIds"> 要在该房间内为此用户撤销的所有角色的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步撤销操作的任务。 </returns>
+    Task RemoveRolesAsync(IEnumerable<ulong> roleIds, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在该房间内撤销此用户指定的一些角色。
+    /// </summary>
+    /// <param name="roles"> 要在该房间内为此用户撤销的所有角色。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步撤销操作的任务。 </returns>
+    Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null);
+
+    #endregion
 }

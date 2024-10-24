@@ -66,7 +66,7 @@ public class SocketRoomUser : SocketUser, IRoomUser
     /// <summary>
     ///     获取此用户在该房间内拥有的所有角色。
     /// </summary>
-    public IReadOnlyCollection<SocketRole> Roles => [..Room.Roles.Where(x => _roleIds.Contains(x.Id))];
+    public IReadOnlyCollection<SocketRole> Roles => [.._roleIds.Select(x => Room.GetRole(x)).OfType<SocketRole>()];
 
     /// <inheritdoc />
     internal SocketRoomUser(SocketRoom room, SocketGlobalUser globalUser)
@@ -98,6 +98,48 @@ public class SocketRoomUser : SocketUser, IRoomUser
         if (model.Roles is not null)
             _roleIds = [..model.Roles];
     }
+
+    internal void AddRole(ulong roleId)
+    {
+        _roleIds = [.._roleIds, roleId];
+    }
+
+    internal void RemoveRole(ulong roleId)
+    {
+        _roleIds = _roleIds.Remove(roleId);
+    }
+
+    /// <inheritdoc />
+    public Task AddRoleAsync(ulong roleId, RequestOptions? options = null) =>
+        AddRolesAsync([roleId], options);
+
+    /// <inheritdoc />
+    public Task AddRoleAsync(IRole role, RequestOptions? options = null) =>
+        AddRoleAsync(role.Id, options);
+
+    /// <inheritdoc />
+    public Task AddRolesAsync(IEnumerable<ulong> roleIds, RequestOptions? options = null) =>
+        SocketUserHelper.AddRolesAsync(this, Client, roleIds, options);
+
+    /// <inheritdoc />
+    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
+        AddRolesAsync(roles.Select(x => x.Id), options);
+
+    /// <inheritdoc />
+    public Task RemoveRoleAsync(ulong roleId, RequestOptions? options = null) =>
+        RemoveRolesAsync([roleId], options);
+
+    /// <inheritdoc />
+    public Task RemoveRoleAsync(IRole role, RequestOptions? options = null) =>
+        RemoveRoleAsync(role.Id, options);
+
+    /// <inheritdoc />
+    public Task RemoveRolesAsync(IEnumerable<ulong> roleIds, RequestOptions? options = null) =>
+        SocketUserHelper.RemoveRolesAsync(this, Client, roleIds, options);
+
+    /// <inheritdoc />
+    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
+        RemoveRolesAsync(roles.Select(x => x.Id));
 
     #region IRoomUser
 
