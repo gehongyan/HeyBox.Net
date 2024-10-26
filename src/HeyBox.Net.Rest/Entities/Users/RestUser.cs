@@ -6,7 +6,25 @@ namespace HeyBox.Rest;
 public class RestUser : RestEntity<uint>, IUser
 {
     /// <inheritdoc />
-    string IMentionable.Mention => MentionUtils.MentionUser(Id);
+    public string? Username { get; private set; }
+
+    /// <inheritdoc />
+    public bool? IsBot { get; private set; }
+
+    /// <inheritdoc />
+    public string? Avatar { get; private set; }
+
+    /// <inheritdoc />
+    public string? AvatarDecorationType { get; private set; }
+
+    /// <inheritdoc />
+    public string? AvatarDecorationUrl { get; private set; }
+
+    /// <inheritdoc />
+    public int? Level { get; private set; }
+
+    /// <inheritdoc />
+    public string Mention => MentionUtils.MentionUser(Id);
 
     internal RestUser(BaseHeyBoxClient client, uint id)
         : base(client, id)
@@ -19,25 +37,15 @@ public class RestUser : RestEntity<uint>, IUser
         return entity;
     }
 
-    #region IUser
+    internal virtual void Update(API.RoomUser model)
+    {
+        Username = model.Nickname;
+        IsBot = model.Bot;
+        Avatar = model.Avatar;
+        AvatarDecorationType = model.AvatarDecoration.SourceType;
+        AvatarDecorationUrl = model.AvatarDecoration.SourceUrl;
+        Level = model.Level;
 
-    /// <inheritdoc />
-    string? IUser.Username => null;
-
-    /// <inheritdoc />
-    bool? IUser.IsBot => null;
-
-    /// <inheritdoc />
-    string? IUser.Avatar => null;
-
-    /// <inheritdoc />
-    string? IUser.AvatarDecorationType => null;
-
-    /// <inheritdoc />
-    string? IUser.AvatarDecorationUrl => null;
-
-    /// <inheritdoc />
-    int? IUser.Level => null;
-
-    #endregion
+        IsPopulated = true;
+    }
 }

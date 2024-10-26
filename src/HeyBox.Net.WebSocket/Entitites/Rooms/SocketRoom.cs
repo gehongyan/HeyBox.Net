@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using HeyBox.API.Rest;
 using HeyBox.Rest;
 using Model = HeyBox.API.Gateway.RoomBaseInfo;
 using ChannelModel = HeyBox.API.Gateway.ChannelBaseInfo;
@@ -16,6 +17,8 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     private readonly ConcurrentDictionary<ulong, SocketRoomChannel> _channels;
     private readonly ConcurrentDictionary<ulong, SocketRoomUser> _members;
     private readonly ConcurrentDictionary<ulong, SocketRole> _roles;
+    private readonly ConcurrentDictionary<ulong, RoomEmote> _emotes;
+    private readonly ConcurrentDictionary<ulong, RoomSticker> _stickers;
 
     /// <inheritdoc />
     public string? Name { get; private set; }
@@ -55,6 +58,8 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         _channels = [];
         _members = [];
         _roles = [];
+        _emotes = [];
+        _stickers = [];
     }
 
     internal static SocketRoom Create(HeyBoxSocketClient client, ClientState state, Model model)
@@ -77,6 +82,25 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         {
             SocketRole role = SocketRole.Create(this, state, roleModel);
             _roles.TryAdd(role.Id, role);
+        }
+    }
+
+    internal void Update(ClientState state, GetRoomMemesResponse model)
+    {
+        _emotes.Clear();
+        foreach (RoomMeme emojiInfo in model.Emojis)
+        {
+            SocketRoomUser creator = AddOrUpdateUser(emojiInfo.UserInfo);
+            RoomEmote emote = emojiInfo.MemeInfo.ToEmoteEntity(creator);
+            _emotes.TryAdd(emote.Id, emote);
+        }
+
+        _stickers.Clear();
+        foreach (RoomMeme stickerInfo in model.Stickers)
+        {
+            SocketRoomUser creator = AddOrUpdateUser(stickerInfo.UserInfo);
+            RoomSticker sticker = stickerInfo.MemeInfo.ToStickerEntity(creator);
+            _stickers.TryAdd(sticker.Id, sticker);
         }
     }
 
@@ -239,10 +263,46 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
             if (_members.TryRemove(member.Id, out _))
                 member.GlobalUser.RemoveRef(Client);
         }
+
         foreach (SocketRoomUser member in membersToKeep)
             _members.TryAdd(member.Id, member);
     }
 
+    #endregion
+
+    #region Emotes
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        Update(Client.State, model);
+        return _emotes.ToReadOnlyCollection();
+    }
+
+    /// <inheritdoc />
+    public async Task<RoomEmote?> GetEmoteAsync(ulong id, RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        Update(Client.State, model);
+        return _emotes.GetValueOrDefault(id);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        Update(Client.State, model);
+        return _stickers.ToReadOnlyCollection();
+    }
+
+    /// <inheritdoc />
+    public async Task<RoomSticker?> GetStickerAsync(ulong id, RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        Update(Client.State, model);
+        return _stickers.GetValueOrDefault(id);
+    }
 
     #endregion
 

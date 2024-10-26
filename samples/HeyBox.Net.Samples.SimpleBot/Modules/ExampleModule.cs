@@ -52,6 +52,14 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
     public async Task GreetUserAsync() =>
         await ReplyTextAsync(text: $"\ud83c\udfd3 It took me {Context.Client.Latency}ms to respond to you!");
 
+    [SlashCommand("stop")]
+    [RequireUser(12345678)]
+    public async Task StopAsync()
+    {
+        await ReplyTextAsync("Goodbye!");
+        Environment.Exit(0);
+    }
+
     // You can create command choices either by using the [Choice] attribute or by creating an enum. Every enum with 25 or less values will be registered as a multiple
     // choice option
     // [SlashCommand("choice_example", "Enums create choices")]

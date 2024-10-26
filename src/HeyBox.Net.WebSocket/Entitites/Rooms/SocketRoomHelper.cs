@@ -8,5 +8,7 @@ internal static class SocketRoomHelper
     {
         GetRoomRolesResponse roles = await client.ApiClient.GetRoomRolesAsync(room.Id, options);
         room.Update(client.State, roles);
+        GetRoomMemesResponse memes = await client.ApiClient.GetRoomMemesAsync(room.Id, options);
+        room.Update(client.State, memes);
     }
 }

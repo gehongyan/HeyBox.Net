@@ -59,4 +59,42 @@ public interface IRoom : IEntity<ulong>
     Task<IRole> CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options = null);
 
     #endregion
+
+    #region Emotes
+
+    /// <summary>
+    ///     获取此服务器的所有自定义小表情。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义小表情。 </returns>
+    Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null);
+
+    /// <summary>
+    ///     获取此服务器的指定自定义小表情。
+    /// </summary>
+    /// <param name="id"> 要获取的自定义表情的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义小表情；如果未找到，则返回 <c>null</c>。 </returns>
+    Task<RoomEmote?> GetEmoteAsync(ulong id, RequestOptions? options = null);
+
+    #endregion
+
+    #region Stickers
+
+    /// <summary>
+    ///     获取此服务器的所有自定义大表情。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义大表情。 </returns>
+    Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null);
+
+    /// <summary>
+    ///     获取此服务器的指定自定义大表情。
+    /// </summary>
+    /// <param name="id"> 要获取的自定义表情的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义大表情；如果未找到，则返回 <c>null</c>。 </returns>
+    Task<RoomSticker?> GetStickerAsync(ulong id, RequestOptions? options = null);
+
+    #endregion
 }

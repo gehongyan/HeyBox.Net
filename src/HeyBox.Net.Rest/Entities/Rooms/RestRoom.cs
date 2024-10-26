@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using HeyBox.API;
+using HeyBox.API.Rest;
 using RoleModel = HeyBox.API.Role;
 
 namespace HeyBox.Rest;
@@ -67,6 +69,63 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     }
 
     #endregion
+
+    #region Emotes
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        return
+        [
+            ..model.Emojis.Select(x =>
+            {
+                RestRoomUser creator = RestRoomUser.Create(this, x.UserInfo);
+                Meme meme = x.MemeInfo;
+                return new RoomEmote(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+            })
+        ];
+    }
+
+    /// <inheritdoc />
+    public async Task<RoomEmote?> GetEmoteAsync(ulong id, RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        if (model.Emojis.FirstOrDefault(x => x.MemeInfo.Path == id) is not { } emoji)
+            return null;
+        RestRoomUser creator = RestRoomUser.Create(this, emoji.UserInfo);
+        Meme meme = emoji.MemeInfo;
+        return new RoomEmote(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        return
+        [
+            ..model.Stickers.Select(x =>
+            {
+                RestRoomUser creator = RestRoomUser.Create(this, x.UserInfo);
+                Meme meme = x.MemeInfo;
+                return new RoomSticker(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+            })
+        ];
+    }
+
+    /// <inheritdoc />
+    public async Task<RoomSticker?> GetStickerAsync(ulong id, RequestOptions? options = null)
+    {
+        GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
+        if (model.Stickers.FirstOrDefault(x => x.MemeInfo.Path == id) is not { } sticker)
+            return null;
+        RestRoomUser creator = RestRoomUser.Create(this, sticker.UserInfo);
+        Meme meme = sticker.MemeInfo;
+        return new RoomSticker(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+    }
+
+    #endregion
+
 
     #region IRoom
 

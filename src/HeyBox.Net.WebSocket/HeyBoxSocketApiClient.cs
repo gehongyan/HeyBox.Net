@@ -83,13 +83,15 @@ internal class HeyBoxSocketApiClient : HeyBoxRestApiClient
         };
     }
 
-    private static bool TryParseAsJsonElement(string message, [NotNullWhen(true)] out JsonElement? element)
+    private static bool TryParseAsJsonElement(string message,
+        [NotNullWhen(true)] out JsonElement? element)
     {
         byte[] bytes = Encoding.UTF8.GetBytes(message);
         return TryParseAsJsonElement(bytes, 0, bytes.Length, out element);
     }
 
-    private static bool TryParseAsJsonElement(byte[] data, int index, int count, [NotNullWhen(true)] out JsonElement? element)
+    private static bool TryParseAsJsonElement(byte[] data, int index, int count,
+        [NotNullWhen(true)] out JsonElement? element)
     {
         try
         {
