@@ -17,7 +17,7 @@ public class RoomSticker : IEmote
     public IRoom Room { get; }
 
     /// <inheritdoc />
-    public string Name { get; }
+    public string? Name { get; }
 
     /// <inheritdoc />
     public ulong Path => Id;
@@ -26,7 +26,7 @@ public class RoomSticker : IEmote
     public string Extension { get; }
 
     /// <inheritdoc />
-    public DateTimeOffset CreatedAt { get; }
+    public DateTimeOffset? CreatedAt { get; }
 
     /// <inheritdoc />
     public IRoomUser Creator { get; }

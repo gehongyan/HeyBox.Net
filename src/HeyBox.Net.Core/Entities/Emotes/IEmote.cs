@@ -8,7 +8,7 @@ public interface IEmote : IEntity<ulong>
     /// <summary>
     ///     获取此表情符号的显示名称。
     /// </summary>
-    string Name { get; }
+    string? Name { get; }
 
     /// <summary>
     ///     获取此表情符号的路径。
@@ -23,10 +23,5 @@ public interface IEmote : IEntity<ulong>
     /// <summary>
     ///     获取此表情符号的创建时间。
     /// </summary>
-    DateTimeOffset CreatedAt { get; }
-
-    /// <summary>
-    ///     获取此表情符号的创建者。
-    /// </summary>
-    public IRoomUser Creator { get; }
+    DateTimeOffset? CreatedAt { get; }
 }
