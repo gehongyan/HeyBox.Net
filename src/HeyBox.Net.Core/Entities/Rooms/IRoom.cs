@@ -77,6 +77,23 @@ public interface IRoom : IEntity<ulong>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义小表情；如果未找到，则返回 <c>null</c>。 </returns>
     Task<RoomEmote?> GetEmoteAsync(ulong id, RequestOptions? options = null);
 
+    /// <summary>
+    ///     修改此服务器内的现有自定义小表情。
+    /// </summary>
+    /// <param name="emote"> 要修改的自定义小表情。 </param>
+    /// <param name="func"> 一个用于设置自定义表情属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。任务的结果包含修改后的自定义表情。 </returns>
+    Task ModifyEmoteAsync(RoomEmote emote, Action<EmoteProperties> func, RequestOptions? options = null);
+
+    /// <summary>
+    ///     删除此服务器内的现有自定义小表情。
+    /// </summary>
+    /// <param name="emote"> 要删除的自定义小表情。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步删除操作的任务。 </returns>
+    Task DeleteEmoteAsync(RoomEmote emote, RequestOptions? options = null);
+
     #endregion
 
     #region Stickers
@@ -95,6 +112,23 @@ public interface IRoom : IEntity<ulong>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义大表情；如果未找到，则返回 <c>null</c>。 </returns>
     Task<RoomSticker?> GetStickerAsync(ulong id, RequestOptions? options = null);
+
+    /// <summary>
+    ///     修改此服务器内的现有自定义大表情。
+    /// </summary>
+    /// <param name="emote"> 要修改的自定义大表情。 </param>
+    /// <param name="func"> 一个用于设置自定义表情属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。任务的结果包含修改后的自定义表情。 </returns>
+    Task ModifyStickerAsync(RoomSticker emote, Action<EmoteProperties> func, RequestOptions? options = null);
+
+    /// <summary>
+    ///     删除此服务器内的现有自定义大表情。
+    /// </summary>
+    /// <param name="emote"> 要删除的自定义大表情。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步删除操作的任务。 </returns>
+    Task DeleteStickerAsync(RoomSticker emote, RequestOptions? options = null);
 
     #endregion
 }

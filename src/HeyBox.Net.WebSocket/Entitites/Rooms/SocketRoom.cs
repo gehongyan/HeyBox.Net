@@ -289,6 +289,14 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     }
 
     /// <inheritdoc />
+    public Task ModifyEmoteAsync(RoomEmote emote, Action<EmoteProperties> func, RequestOptions? options = null) =>
+        RoomHelper.ModifyMemeAsync(this, Client, emote, func, options);
+
+    /// <inheritdoc />
+    public Task DeleteEmoteAsync(RoomEmote emote, RequestOptions? options = null) =>
+        RoomHelper.DeleteMemeAsync(this, Client, emote, options);
+
+    /// <inheritdoc />
     public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null)
     {
         GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
@@ -303,6 +311,14 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         Update(Client.State, model);
         return _stickers.GetValueOrDefault(id);
     }
+
+    /// <inheritdoc />
+    public Task ModifyStickerAsync(RoomSticker sticker, Action<EmoteProperties> func, RequestOptions? options = null) =>
+        RoomHelper.ModifyMemeAsync(this, Client, sticker, func, options);
+
+    /// <inheritdoc />
+    public Task DeleteStickerAsync(RoomSticker sticker, RequestOptions? options = null) =>
+        RoomHelper.DeleteMemeAsync(this, Client, sticker, options);
 
     #endregion
 

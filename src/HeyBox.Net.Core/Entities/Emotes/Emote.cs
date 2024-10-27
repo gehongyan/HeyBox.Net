@@ -7,7 +7,7 @@ namespace HeyBox;
 ///     表示一个小表情符号。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class Emote : IEmote, IEquatable<Emote>
+public abstract class Emote : IEmote, IEquatable<Emote>
 {
     /// <inheritdoc />
     public ulong Id { get; }

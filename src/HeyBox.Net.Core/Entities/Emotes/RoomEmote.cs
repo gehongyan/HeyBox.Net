@@ -7,7 +7,7 @@ namespace HeyBox;
 ///     表示一个房间小表情符号。
 /// </summary>hey
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class RoomEmote : Emote, IEquatable<RoomEmote>, IEntity<ulong>
+public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong>
 {
     /// <summary>
     ///     获取此表情符号所在的房间。

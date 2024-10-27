@@ -6,40 +6,34 @@ namespace HeyBox;
 ///     表示一个房间大表情符号。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class RoomSticker : IEmote
+public class RoomSticker : Emote, IRoomEmote
 {
-    /// <inheritdoc />
-    public ulong Id { get; }
-
     /// <summary>
     ///     获取此表情符号所在的房间。
     /// </summary>
     public IRoom Room { get; }
 
-    /// <inheritdoc />
-    public string? Name { get; }
+    /// <summary>
+    ///     获取此表情符号所在的房间的 ID。
+    /// </summary>
+    public ulong RoomId => Room.Id;
 
-    /// <inheritdoc />
-    public ulong Path => Id;
-
-    /// <inheritdoc />
-    public string Extension { get; }
-
-    /// <inheritdoc />
-    public DateTimeOffset? CreatedAt { get; }
-
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取此表情符号的创建者。
+    /// </summary>
     public IRoomUser Creator { get; }
+
+    /// <summary>
+    ///     获取此表情符号的创建者的 ID。
+    /// </summary>
+    public ulong CreatorId => Creator.Id;
 
     internal RoomSticker(IRoom room, IRoomUser creator,
         string name, ulong path, string extension, DateTimeOffset createdAt)
+        : base(name, path, extension, createdAt)
     {
         Room = room;
         Creator = creator;
-        Name = name;
-        Id = path;
-        Extension = extension;
-        CreatedAt = createdAt;
     }
 
     private string DebuggerDisplay => $"{Name} ({Path}.{Extension})";
@@ -54,4 +48,7 @@ public class RoomSticker : IEmote
 
     /// <inheritdoc />
     bool IEntity<ulong>.IsPopulated => true;
+
+    /// <inheritdoc />
+    ulong? IRoomEmote.CreatorId => CreatorId;
 }
