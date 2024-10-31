@@ -161,7 +161,7 @@ public partial class HeyBoxSocketClient
     private async Task HandleJoinedLeftRoom(JsonElement payload)
     {
         if (DeserializePayload<GuildMemberJoinLeftEvent>(payload) is not { } memberEvent) return;
-        SocketRoom room = await GetOrCreateRoomAsync(State, memberEvent.RoomBaseInfo);
+        SocketRoom room = await GetOrCreateRoomAsync(State, memberEvent.RoomBaseInfo.RoomId, memberEvent.RoomBaseInfo);
         switch (memberEvent.State)
         {
             case GuildMemberAction.Join:
@@ -186,6 +186,40 @@ public partial class HeyBoxSocketClient
 
     #endregion
 
+    #region Reactions
+
+    private async Task HandleAddedRemovedReaction(JsonElement payload)
+    {
+        if (DeserializePayload<ReactionEvent>(payload) is not { } reactionEvent) return;
+        SocketRoom room = await GetOrCreateRoomAsync(State, reactionEvent.RoomId, null);
+        if (room.AddOrUpdateChannel(reactionEvent.ChannelId, ChannelType.Text) is not SocketTextChannel textChannel)
+        {
+            await _gatewayLogger.WarningAsync("Received a reaction event for a non-text channel").ConfigureAwait(false);
+            return;
+        }
+        Cacheable<IUserMessage, ulong> cacheableMessage = CreateCacheableUserMessage(reactionEvent.MessageId);
+        Cacheable<SocketTextChannel, ulong> cacheableChannel = CreateCacheableTextChannel(textChannel);
+        Cacheable<SocketRoomUser, uint> cacheableUser = CreateCacheableRoomUser(reactionEvent.UserId);
+        SocketReaction reaction = SocketReaction.Create(reactionEvent);
+        switch (reactionEvent.Action)
+        {
+            case ReactionAction.Add:
+                await TimedInvokeAsync(_reactionAddedEvent, nameof(ReactionAdded),
+                        cacheableMessage, cacheableChannel, cacheableUser, reaction)
+                    .ConfigureAwait(false);
+                break;
+            case ReactionAction.Remove:
+                await TimedInvokeAsync(_reactionRemovedEvent, nameof(ReactionRemoved),
+                        cacheableMessage, cacheableChannel, cacheableUser, reaction)
+                    .ConfigureAwait(false);
+                break;
+            default:
+                throw new NotSupportedException("Unsupported reaction operation");
+        }
+    }
+
+    #endregion
+
     #region Interactions
 
     private async Task HandleSlashCommand(JsonElement payload)
@@ -197,7 +231,7 @@ public partial class HeyBoxSocketClient
             return;
         }
 
-        SocketRoom room = await GetOrCreateRoomAsync(State, commandEvent.RoomBaseInfo);
+        SocketRoom room = await GetOrCreateRoomAsync(State, commandEvent.RoomBaseInfo.RoomId, commandEvent.RoomBaseInfo);
         if (room.AddOrUpdateChannel(commandEvent.ChannelBaseInfo) is not SocketTextChannel channel)
         {
             await _gatewayLogger.WarningAsync("Received a command event for a non-text channel").ConfigureAwait(false);
@@ -214,6 +248,22 @@ public partial class HeyBoxSocketClient
                 break;
         }
     }
+
+    #endregion
+
+    #region Cacheable
+
+    private Cacheable<IUserMessage, ulong> CreateCacheableUserMessage(ulong id) =>
+        new(null, id, false, () => Task.FromResult<IUserMessage?>(null));
+
+    private Cacheable<SocketTextChannel, ulong> CreateCacheableTextChannel(SocketTextChannel channel) =>
+        new(null, channel.Id, true, () => Task.FromResult<SocketTextChannel?>(channel));
+
+    private Cacheable<SocketTextChannel, ulong> CreateCacheableTextChannel(ulong id) =>
+        new(null, id, false, () => Task.FromResult<SocketTextChannel?>(null));
+
+    private Cacheable<SocketRoomUser, uint> CreateCacheableRoomUser(uint id) =>
+        new(null, id, false, () => Task.FromResult<SocketRoomUser?>(null));
 
     #endregion
 }

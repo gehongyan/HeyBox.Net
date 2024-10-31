@@ -488,7 +488,7 @@ internal class HeyBoxRestApiClient : IDisposable
 
         BucketIds ids = new(roomId);
         return await SendAsync<GetRoomMemesResponse>(HttpMethod.Get,
-                () => $"chatroom/v3/msg/meme/room/list?{HeyBoxConfig.CommonQueryString}&roomId={roomId}", ids, options: options)
+                () => $"chatroom/v3/msg/meme/room/list?{HeyBoxConfig.CommonQueryString}&room_id={roomId}", ids, options: options)
             .ConfigureAwait(false);
     }
 

@@ -8,32 +8,46 @@ namespace HeyBox;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RoomSticker : Emote, IRoomEmote
 {
-    /// <summary>
-    ///     获取此表情符号所在的房间。
-    /// </summary>
-    public IRoom Room { get; }
+    /// <inheritdoc />
+    public IRoom? Room { get; }
 
-    /// <summary>
-    ///     获取此表情符号所在的房间的 ID。
-    /// </summary>
-    public ulong RoomId => Room.Id;
+    /// <inheritdoc />
+    public ulong RoomId { get; }
 
-    /// <summary>
-    ///     获取此表情符号的创建者。
-    /// </summary>
-    public IRoomUser Creator { get; }
+    /// <inheritdoc />
+    public string Extension { get; }
 
-    /// <summary>
-    ///     获取此表情符号的创建者的 ID。
-    /// </summary>
-    public ulong CreatorId => Creator.Id;
+    /// <inheritdoc />
+    public DateTimeOffset? CreatedAt { get; }
 
-    internal RoomSticker(IRoom room, IRoomUser creator,
-        string name, ulong path, string extension, DateTimeOffset createdAt)
-        : base(name, path, extension, createdAt)
+    /// <inheritdoc />
+    public IRoomUser? Creator { get; }
+
+    /// <inheritdoc />
+    public ulong? CreatorId { get; }
+
+    /// <inheritdoc />
+    public ulong Path { get; }
+
+    internal RoomSticker(ulong roomId, ulong path, string extension)
+        : base("custom", null)
     {
+        RoomId = roomId;
+        Path = path;
+        Extension = extension;
+    }
+
+    internal RoomSticker(string name, ulong path, IRoom room, IRoomUser creator,
+        string extension, DateTimeOffset? createdAt)
+        : base("custom", name)
+    {
+        Extension = extension;
         Room = room;
+        RoomId = room.Id;
+        Path = path;
+        CreatedAt = createdAt;
         Creator = creator;
+        CreatorId = creator.Id;
     }
 
     private string DebuggerDisplay => $"{Name} ({Path}.{Extension})";
@@ -44,11 +58,8 @@ public class RoomSticker : Emote, IRoomEmote
     /// <returns>
     ///     表示表情符号的原始表示（例如 <c>[custom3358126864697663488_1843946660894564352.png]</c>）。
     /// </returns>
-    public override string ToString() => $"[custom{Room.Id}_{Path}.{Extension}]";
+    public override string ToString() => $"[custom{RoomId}_{Path}.{Extension}]";
 
     /// <inheritdoc />
-    bool IEntity<ulong>.IsPopulated => true;
-
-    /// <inheritdoc />
-    ulong? IRoomEmote.CreatorId => CreatorId;
+    string IEmote.Group => "custom";
 }

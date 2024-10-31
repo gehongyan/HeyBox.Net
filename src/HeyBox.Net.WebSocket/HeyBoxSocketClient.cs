@@ -172,10 +172,11 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     /// <inheritdoc />
     public override SocketRoom GetRoom(ulong id) => State.GetOrAddRoom(id, x => new SocketRoom(this, x));
 
-    internal async Task<SocketRoom> GetOrCreateRoomAsync(ClientState state, RoomBaseInfo model)
+    internal async Task<SocketRoom> GetOrCreateRoomAsync(ClientState state, ulong roomId, RoomBaseInfo? model)
     {
-        SocketRoom room = state.GetOrAddRoom(model.RoomId, _ => SocketRoom.Create(this, state, model));
-        room.Update(state, model);
+        SocketRoom room = state.GetOrAddRoom(roomId, x => new SocketRoom(this, x));
+        if (model is not null)
+            room.Update(state, model);
         if (!room.IsPopulated)
             await room.UpdateAsync().ConfigureAwait(false);
         return room;
@@ -267,6 +268,9 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
                 break;
             case GatewayEventType.JoinedExitedRoom:
                 await HandleJoinedLeftRoom(payload).ConfigureAwait(false);
+                break;
+            case GatewayEventType.AddedRemovedReaction:
+                await HandleAddedRemovedReaction(payload).ConfigureAwait(false);
                 break;
             default:
             {

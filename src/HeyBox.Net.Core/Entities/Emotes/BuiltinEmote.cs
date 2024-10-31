@@ -1,24 +1,16 @@
-﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace HeyBox;
 
 /// <summary>
-///     表示一个小表情符号。
+///     表示一个内置的表情符号。
 /// </summary>
-[DebuggerDisplay("{DebuggerDisplay,nq}")]
-public abstract class Emote : IEmote, IEquatable<Emote>
+public class BuiltinEmote : Emote, IEquatable<BuiltinEmote>
 {
     /// <inheritdoc />
-    public string Group { get; }
-
-    /// <inheritdoc />
-    public string? Name { get; }
-
-    internal Emote(string group, string? name)
+    public BuiltinEmote(string group, string name)
+        : base(group, name)
     {
-        Group = group;
-        Name = name;
     }
 
     /// <summary>
@@ -29,7 +21,7 @@ public abstract class Emote : IEmote, IEquatable<Emote>
     /// </param>
     /// <param name="result"> 如果解析成功，则为解析出的 <see cref="HeyBox.BuiltinEmote"/>。 </param>
     /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool TryParse(string text, [NotNullWhen(true)] out IEmote? result)
+    public static bool TryParse(string text, [NotNullWhen(true)] out BuiltinEmote? result)
     {
         try
         {
@@ -53,21 +45,21 @@ public abstract class Emote : IEmote, IEquatable<Emote>
     /// <exception cref="ArgumentException">
     ///     无法解析 <paramref name="text"/> 为一个有效的表情符号。
     /// </exception>
-    public static IEmote Parse(string text)
+    public static new BuiltinEmote Parse(string text)
     {
         ReadOnlySpan<char> textSpan = text.AsSpan();
-        if (textSpan.StartsWith("[custom"))
-            return RoomEmote.Parse(text);
+        if (textSpan is not ['[', .., ']'])
+            throw new ArgumentException("Invalid emote format.", nameof(text));
         int underscoreIndex = textSpan.LastIndexOf('_');
         if (underscoreIndex == -1)
-            throw new FormatException("The input text is not a valid emote format.");
-        if (ulong.TryParse(textSpan.Slice(1, underscoreIndex - 1), out ulong _))
-            return Emoji.Parse(text);
-        return BuiltinEmote.Parse(text);
+            throw new ArgumentException("Invalid emote format.", nameof(text));
+        string group = textSpan[1..underscoreIndex].ToString();
+        string name = textSpan[(underscoreIndex + 1)..^1].ToString();
+        return new BuiltinEmote(group, name);
     }
 
     /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] Emote? other)
+    public bool Equals([NotNullWhen(true)] BuiltinEmote? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
@@ -76,10 +68,11 @@ public abstract class Emote : IEmote, IEquatable<Emote>
 
     /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is Emote other && Equals(other);
+        obj is BuiltinEmote other && Equals(other);
 
     /// <inheritdoc />
     public override int GetHashCode() => HashCode.Combine(Group, Name);
 
-    private string DebuggerDisplay => $"[{Group}_{Name}]";
+    /// <inheritdoc />
+    public override string ToString() => $"[{Group}_{Name}]";
 }

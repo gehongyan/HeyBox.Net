@@ -7,42 +7,48 @@ namespace HeyBox;
 ///     表示一个房间小表情符号。
 /// </summary>hey
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong>
+public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
 {
-    /// <summary>
-    ///     获取此表情符号所在的房间。
-    /// </summary>
+    /// <inheritdoc />
     public IRoom? Room { get; }
 
-    /// <summary>
-    ///     获取此表情符号所在的房间的 ID。
-    /// </summary>
+    /// <inheritdoc />
     public ulong RoomId { get; }
 
-    /// <summary>
-    ///     获取此表情符号的创建者。
-    /// </summary>
+    /// <inheritdoc />
+    public string Extension { get; }
+
+    /// <inheritdoc />
+    public DateTimeOffset? CreatedAt { get; }
+
+    /// <inheritdoc />
     public IRoomUser? Creator { get; }
 
-    /// <summary>
-    ///     获取此表情符号的创建者的 ID。
-    /// </summary>
+    /// <inheritdoc />
     public ulong? CreatorId { get; }
 
-    internal RoomEmote(IRoom room, IRoomUser creator,
-        string name, ulong path, string extension, DateTimeOffset createdAt)
-        : base(name, path, extension, createdAt)
-    {
-        Room = room;
-        RoomId = room.Id;
-        Creator = creator;
-        CreatorId = creator.Id;
-    }
+    /// <inheritdoc />
+    public ulong Path { get; }
 
     internal RoomEmote(ulong roomId, ulong path, string extension)
-        : base(null, path, extension, null)
+        : base("custom", null)
     {
         RoomId = roomId;
+        Path = path;
+        Extension = extension;
+    }
+
+    internal RoomEmote(string name, ulong path, IRoom room, IRoomUser creator,
+        string extension, DateTimeOffset? createdAt)
+        : base("custom", name)
+    {
+        Extension = extension;
+        Room = room;
+        RoomId = room.Id;
+        Path = path;
+        CreatedAt = createdAt;
+        Creator = creator;
+        CreatorId = creator.Id;
     }
 
     /// <summary>
@@ -89,7 +95,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong
     ///     Emote emote = Emote.Parse("[custom3358126864697663488_1843946660894564352.png]");
     ///     </code>
     /// </example>
-    public static RoomEmote Parse(string text)
+    public static new RoomEmote Parse(string text)
     {
         ReadOnlySpan<char> textSpan = text.AsSpan();
         if (!textSpan.StartsWith("[custom") || !textSpan.EndsWith("]"))
@@ -100,11 +106,11 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong
         int dotIndex = textSpan.LastIndexOf('.');
         if (dotIndex == -1)
             throw new FormatException("The input text is not a valid emote format.");
-        if (!ulong.TryParse(textSpan.Slice(8, underscoreIndex - 8), out ulong roomId))
+        if (!ulong.TryParse(textSpan[7..underscoreIndex], out ulong roomId))
             throw new FormatException("The input text is not a valid emote format.");
-        if (!ulong.TryParse(textSpan.Slice(underscoreIndex + 1, dotIndex - underscoreIndex - 1), out ulong path))
+        if (!ulong.TryParse(textSpan[(underscoreIndex + 1)..dotIndex], out ulong path))
             throw new FormatException("The input text is not a valid emote format.");
-        string extension = textSpan.Slice(dotIndex + 1, textSpan.Length - dotIndex - 2).ToString();
+        string extension = textSpan[(dotIndex + 1)..^1].ToString();
         return new RoomEmote(roomId, path, extension);
     }
 
@@ -113,7 +119,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Id == other.Id;
+        return RoomId == other.RoomId && Path == other.Path && Extension == other.Extension;
     }
 
     /// <inheritdoc />
@@ -121,7 +127,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong
         obj is RoomEmote other && Equals(other);
 
     /// <inheritdoc />
-    public override int GetHashCode() => Id.GetHashCode();
+    public override int GetHashCode() => HashCode.Combine(RoomId, Path, Extension);
 
     private string DebuggerDisplay => $"{Name} ({Path}.{Extension})";
 
@@ -134,5 +140,5 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>, IEntity<ulong
     public override string ToString() => $"[custom{RoomId}_{Path}.{Extension}]";
 
     /// <inheritdoc />
-    bool IEntity<ulong>.IsPopulated => true;
+    string IEmote.Group => "custom";
 }

@@ -92,7 +92,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         {
             SocketRoomUser creator = AddOrUpdateUser(emojiInfo.UserInfo);
             RoomEmote emote = emojiInfo.MemeInfo.ToEmoteEntity(creator);
-            _emotes.TryAdd(emote.Id, emote);
+            _emotes.TryAdd(emote.Path, emote);
         }
 
         _stickers.Clear();
@@ -100,7 +100,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         {
             SocketRoomUser creator = AddOrUpdateUser(stickerInfo.UserInfo);
             RoomSticker sticker = stickerInfo.MemeInfo.ToStickerEntity(creator);
-            _stickers.TryAdd(sticker.Id, sticker);
+            _stickers.TryAdd(sticker.Path, sticker);
         }
     }
 
@@ -131,12 +131,12 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     public SocketTextChannel GetTextChannel(ulong id) =>
         Client.State.GetChannel(id) as SocketTextChannel ?? new SocketTextChannel(Client, id, this);
 
-    internal SocketRoomChannel AddOrUpdateChannel(ulong id)
+    internal SocketRoomChannel AddOrUpdateChannel(ulong id, ChannelType type = ChannelType.Unspecified)
     {
         if (_channels.TryGetValue(id, out SocketRoomChannel? cachedChannel))
             return cachedChannel;
 
-        SocketRoomChannel channel = new(Client, id, this);
+        SocketRoomChannel channel = SocketRoomChannel.Create(this, id, type);
         _channels[id] = channel;
         Client.State.AddChannel(channel);
         return channel;

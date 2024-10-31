@@ -95,7 +95,7 @@ internal class HeyBoxSocketApiClient : HeyBoxRestApiClient
     {
         try
         {
-            Utf8JsonReader reader = new(data.AsSpan()[index..(index + count)]);
+            Utf8JsonReader reader = new(new ReadOnlySpan<byte>(data)[index..(index + count)]);
             return JsonElement.TryParseValue(ref reader, out element);
         }
         catch

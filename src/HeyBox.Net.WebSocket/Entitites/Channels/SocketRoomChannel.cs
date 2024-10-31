@@ -21,6 +21,13 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
         Room = room;
     }
 
+    internal static SocketRoomChannel Create(SocketRoom room, ulong id, ChannelType type) =>
+        type switch
+        {
+            ChannelType.Text => new SocketTextChannel(room.Client, id, room),
+            _ => new SocketRoomChannel(room.Client, id, room)
+        };
+
     internal static SocketRoomChannel Create(SocketRoom room, ClientState state, Model model) =>
         model.ChannelType switch
         {

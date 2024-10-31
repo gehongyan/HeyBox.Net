@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using HeyBox.Net.Converters;
 
 namespace HeyBox.API;
 
@@ -14,7 +15,8 @@ internal class Meme
     public required string Extension { get; set; }
 
     [JsonPropertyName("create_time")]
-    public DateTimeOffset CreateTime { get; set; }
+    [DateTimeOffsetTimestampJsonConverter]
+    public DateTimeOffset? CreateTime { get; set; }
 
     [JsonPropertyName("mtype")]
     public int MemeType { get; set; }

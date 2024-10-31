@@ -25,7 +25,7 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     public RestRole EveryoneRole => _roles.Values.SingleOrDefault(x => x.Type is RoleType.Everyone)
         ?? new RestRole(Client, this, 0) { Type = RoleType.Everyone };
 
-    internal void Update(API.Rest.GetRoomRolesResponse model)
+    internal void Update(GetRoomRolesResponse model)
     {
         ImmutableDictionary<ulong, RestRole>.Builder roles =
             ImmutableDictionary.CreateBuilder<ulong, RestRole>();
@@ -82,7 +82,7 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
             {
                 RestRoomUser creator = RestRoomUser.Create(this, x.UserInfo);
                 Meme meme = x.MemeInfo;
-                return new RoomEmote(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+                return new RoomEmote(meme.Name, meme.Path, this, creator, meme.Extension, meme.CreateTime);
             })
         ];
     }
@@ -95,7 +95,7 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
             return null;
         RestRoomUser creator = RestRoomUser.Create(this, emoji.UserInfo);
         Meme meme = emoji.MemeInfo;
-        return new RoomEmote(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+        return new RoomEmote(meme.Name, meme.Path, this, creator, meme.Extension, meme.CreateTime);
     }
 
     /// <inheritdoc />
@@ -116,7 +116,7 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
             {
                 RestRoomUser creator = RestRoomUser.Create(this, x.UserInfo);
                 Meme meme = x.MemeInfo;
-                return new RoomSticker(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+                return new RoomSticker(meme.Name, meme.Path, this, creator, meme.Extension, meme.CreateTime);
             })
         ];
     }
@@ -129,7 +129,7 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
             return null;
         RestRoomUser creator = RestRoomUser.Create(this, sticker.UserInfo);
         Meme meme = sticker.MemeInfo;
-        return new RoomSticker(this, creator, meme.Name, meme.Path, meme.Extension, meme.CreateTime);
+        return new RoomSticker(meme.Name, meme.Path, this, creator, meme.Extension, meme.CreateTime);
     }
 
     /// <inheritdoc />

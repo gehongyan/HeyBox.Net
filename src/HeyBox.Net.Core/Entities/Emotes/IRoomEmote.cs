@@ -16,6 +16,16 @@ public interface IRoomEmote : IEmote
     ulong RoomId { get; }
 
     /// <summary>
+    ///     获取此表情符号的扩展名。
+    /// </summary>
+    string Extension { get; }
+
+    /// <summary>
+    ///     获取此表情符号的创建时间。
+    /// </summary>
+    DateTimeOffset? CreatedAt { get; }
+
+    /// <summary>
     ///     获取此表情符号的创建者。
     /// </summary>
     IRoomUser? Creator { get; }
@@ -24,4 +34,9 @@ public interface IRoomEmote : IEmote
     ///     获取此表情符号的创建者的 ID。
     /// </summary>
     ulong? CreatorId { get; }
+
+    /// <summary>
+    ///     获取此表情符号的路径。
+    /// </summary>
+    ulong Path { get; }
 }

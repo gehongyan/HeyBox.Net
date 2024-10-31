@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using HeyBox.API.Gateway;
 
 namespace HeyBox.WebSocket;
 

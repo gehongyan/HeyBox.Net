@@ -6,7 +6,7 @@ namespace HeyBox.WebSocket;
 /// <summary>
 ///     表示一个基于网关的客户端的抽象基类。
 /// </summary>
-public abstract class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
+public abstract partial class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
 {
     /// <summary>
     ///     获取此客户端使用的配置。
