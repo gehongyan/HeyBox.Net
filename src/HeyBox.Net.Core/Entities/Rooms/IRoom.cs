@@ -63,6 +63,11 @@ public interface IRoom : IEntity<ulong>
     #region Emotes
 
     /// <summary>
+    ///     获取此服务器的所有自定义表情。
+    /// </summary>
+    IReadOnlyCollection<RoomEmote> Emotes { get; }
+
+    /// <summary>
     ///     获取此服务器的所有自定义小表情。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -97,6 +102,11 @@ public interface IRoom : IEntity<ulong>
     #endregion
 
     #region Stickers
+
+    /// <summary>
+    ///     获取此服务器的所有自定义大表情。
+    /// </summary>
+    IReadOnlyCollection<RoomSticker> Stickers { get; }
 
     /// <summary>
     ///     获取此服务器的所有自定义大表情。

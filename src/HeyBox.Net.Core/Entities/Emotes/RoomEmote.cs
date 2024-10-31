@@ -10,7 +10,7 @@ namespace HeyBox;
 public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
 {
     /// <inheritdoc />
-    public IRoom? Room { get; }
+    public IRoom? Room { get; internal set; }
 
     /// <inheritdoc />
     public ulong RoomId { get; }
@@ -22,7 +22,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     public DateTimeOffset? CreatedAt { get; }
 
     /// <inheritdoc />
-    public IRoomUser? Creator { get; }
+    public IRoomUser? Creator { get; internal set; }
 
     /// <inheritdoc />
     public ulong? CreatorId { get; }

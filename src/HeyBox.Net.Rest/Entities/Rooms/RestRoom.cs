@@ -142,7 +142,6 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 
     #endregion
 
-
     #region IRoom
 
     /// <inheritdoc />
@@ -159,6 +158,12 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 
     /// <inheritdoc />
     IRole? IRoom.GetRole(ulong id) => id == 0 ? EveryoneRole : null;
+
+    /// <inheritdoc />
+    IReadOnlyCollection<RoomEmote> IRoom.Emotes => [];
+
+    /// <inheritdoc />
+    IReadOnlyCollection<RoomSticker> IRoom.Stickers => [];
 
     /// <inheritdoc />
     async Task<IRole> IRoom.CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options) =>

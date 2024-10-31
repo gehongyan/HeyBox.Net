@@ -46,12 +46,24 @@ public class SocketReaction : IReaction
     /// </remarks>
     public ISocketMessageChannel? Channel { get; }
 
+    /// <summary>
+    ///     获取此回应所在的消息频道的 ID。
+    /// </summary>
+    public ulong? RoomId { get; }
+
+    /// <summary>
+    ///     获取此回应所在的消息频道。
+    /// </summary>
+    public SocketRoom? Room { get; internal set; }
+
     /// <inheritdoc />
     public IEmote Emote { get; }
 
-    internal SocketReaction(ulong channelId, ISocketMessageChannel? channel, ulong messageId,
-        IMessage? message, uint userId, IUser? user, IEmote emoji)
+    internal SocketReaction(ulong? roomId, SocketRoom? room, ulong channelId, ISocketMessageChannel? channel,
+        ulong messageId, IMessage? message, uint userId, IUser? user, IEmote emoji)
     {
+        RoomId = roomId;
+        Room = room;
         ChannelId = channelId;
         Channel = channel;
         MessageId = messageId;
@@ -61,10 +73,26 @@ public class SocketReaction : IReaction
         Emote = emoji;
     }
 
-    internal static SocketReaction Create(API.Gateway.ReactionEvent model)
+    internal static SocketReaction Create(ClientState state, API.Gateway.ReactionEvent model)
     {
         IEmote emote = HeyBox.Emote.Parse(model.Emoji);
-        return new SocketReaction(model.ChannelId, null, model.MessageId, null, model.UserId, null, emote);
+        if (emote is RoomEmote roomEmote)
+        {
+            if (state.GetRoom(model.RoomId)?.Emotes.SingleOrDefault(x => x.Path == roomEmote.Path) is { } entity)
+                emote = entity;
+            else
+            {
+                SocketRoom? room = state.GetRoom(model.ChannelId);
+                roomEmote.Room = room;
+                roomEmote.Creator = room?.GetUser(model.UserId);
+            }
+        }
+        return new SocketReaction(
+            model.RoomId, state.GetRoom(model.RoomId),
+            model.ChannelId, state.GetChannel(model.ChannelId) as ISocketMessageChannel,
+            model.MessageId, null,
+            model.UserId, state.GetUser(model.UserId),
+            emote);
     }
 
     /// <inheritdoc />

@@ -501,7 +501,7 @@ internal class HeyBoxRestApiClient : IDisposable
 
         BucketIds ids = new(args.RoomId);
         await SendJsonAsync<object>(HttpMethod.Post,
-                () => $"chatroom/v3/msg/meme/room/delete?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+                () => $"chatroom/v2/msg/meme/room/del?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
             .ConfigureAwait(false);
     }
 
@@ -515,7 +515,7 @@ internal class HeyBoxRestApiClient : IDisposable
 
         BucketIds ids = new(args.RoomId);
         await SendJsonAsync<object>(HttpMethod.Post,
-                () => $"chatroom/v3/msg/meme/room/update?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+                () => $"chatroom/v2/msg/meme/room/edit?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
             .ConfigureAwait(false);
     }
 

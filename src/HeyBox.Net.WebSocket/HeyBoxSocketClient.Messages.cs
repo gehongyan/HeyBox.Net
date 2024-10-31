@@ -206,7 +206,7 @@ public partial class HeyBoxSocketClient
         Cacheable<IUserMessage, ulong> cacheableMessage = CreateCacheableUserMessage(reactionEvent.MessageId);
         Cacheable<SocketTextChannel, ulong> cacheableChannel = CreateCacheableTextChannel(textChannel);
         Cacheable<SocketRoomUser, uint> cacheableUser = CreateCacheableRoomUser(reactionEvent.UserId);
-        SocketReaction reaction = SocketReaction.Create(reactionEvent);
+        SocketReaction reaction = SocketReaction.Create(State, reactionEvent);
         switch (reactionEvent.Action)
         {
             case ReactionAction.Add:
@@ -263,7 +263,7 @@ public partial class HeyBoxSocketClient
         new(null, id, false, () => Task.FromResult<IUserMessage?>(null));
 
     private Cacheable<SocketTextChannel, ulong> CreateCacheableTextChannel(SocketTextChannel channel) =>
-        new(null, channel.Id, true, () => Task.FromResult<SocketTextChannel?>(channel));
+        new(channel, channel.Id, true, () => Task.FromResult<SocketTextChannel?>(channel));
 
     private Cacheable<SocketTextChannel, ulong> CreateCacheableTextChannel(ulong id) =>
         new(null, id, false, () => Task.FromResult<SocketTextChannel?>(null));

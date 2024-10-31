@@ -52,6 +52,12 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     /// <inheritdoc cref="HeyBox.IRoom.Roles" />
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
 
+    /// <inheritdoc />
+    public IReadOnlyCollection<RoomEmote> Emotes => _emotes.ToReadOnlyCollection();
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<RoomSticker> Stickers => _stickers.ToReadOnlyCollection();
+
     internal SocketRoom(HeyBoxSocketClient client, ulong id)
         : base(client, id)
     {
