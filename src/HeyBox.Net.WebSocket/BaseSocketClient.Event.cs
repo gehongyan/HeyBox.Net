@@ -102,6 +102,44 @@ public abstract partial class BaseSocketClient
 
     #endregion
 
+    #region Rooms
+
+    /// <summary>
+    ///     当当前用户新加入服务器时引发。
+    /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="HeyBox.WebSocket.SocketRoom"/> 参数是当前用户新加入的服务器。 </item>
+    ///     </list>
+    /// </remarks>
+    public event Func<SocketRoom, Task> JoinedRoom
+    {
+        add => _joinedRoomEvent.Add(value);
+        remove => _joinedRoomEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<SocketRoom, Task>> _joinedRoomEvent = new();
+
+    /// <summary>
+    ///     当当前用户离开服务器时引发。
+    /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="HeyBox.WebSocket.SocketRoom"/> 参数是当前用户离开的服务器。 </item>
+    ///     </list>
+    /// </remarks>
+    public event Func<SocketRoom, Task> LeftRoom
+    {
+        add => _leftRoomEvent.Add(value);
+        remove => _leftRoomEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<SocketRoom, Task>> _leftRoomEvent = new();
+
+    #endregion
+
     #region Interactions
 
     /// <summary>

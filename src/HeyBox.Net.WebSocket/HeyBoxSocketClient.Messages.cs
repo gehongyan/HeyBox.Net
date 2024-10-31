@@ -168,7 +168,10 @@ public partial class HeyBoxSocketClient
             {
                 SocketRoomUser user = room.AddOrUpdateUser(memberEvent.UserInfo);
                 // room.MemberCount++;
-                await TimedInvokeAsync(_userJoinedEvent, nameof(UserJoined), user).ConfigureAwait(false);
+                if (memberEvent.UserInfo.UserId == CurrentUser?.Id)
+                    await TimedInvokeAsync(_joinedRoomEvent, nameof(JoinedRoom), room).ConfigureAwait(false);
+                else
+                    await TimedInvokeAsync(_userJoinedEvent, nameof(UserJoined), user).ConfigureAwait(false);
                 return;
             }
             case GuildMemberAction.Left:
@@ -176,7 +179,10 @@ public partial class HeyBoxSocketClient
                 SocketRoomUser user = room.RemoveUser(memberEvent.UserInfo.UserId)
                     ?? SocketRoomUser.Create(room, State, memberEvent.UserInfo);
                 // room.MemberCount--;
-                await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), user).ConfigureAwait(false);
+                if (memberEvent.UserInfo.UserId == CurrentUser?.Id)
+                    await TimedInvokeAsync(_leftRoomEvent, nameof(LeftRoom), room).ConfigureAwait(false);
+                else
+                    await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), user).ConfigureAwait(false);
                 return;
             }
             default:
