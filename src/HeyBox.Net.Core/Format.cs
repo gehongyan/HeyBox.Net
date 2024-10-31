@@ -147,16 +147,6 @@ public static class Format
     }
 
     /// <summary>
-    ///     获取有序列表的 Markdown 格式化字符串。
-    /// </summary>
-    /// <param name="items"> 要格式化的列表项。 </param>
-    /// <param name="indentLevel"> 列表项的缩进级别。 </param>
-    /// <returns> 获取格式化后的列表。 </returns>
-    public static string OrderedList(IEnumerable<string> items, int indentLevel = 0) => items
-        .Select((item, index) => $"{new string(' ', indentLevel * 4)}{index + 1}. {item}")
-        .Aggregate((current, next) => $"{current}\n{next}");
-
-    /// <summary>
     ///     获取无序列表的 Markdown 格式化字符串。
     /// </summary>
     /// <param name="items"> 要格式化的列表项。 </param>
