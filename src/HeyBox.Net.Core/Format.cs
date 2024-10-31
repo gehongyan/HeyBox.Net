@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace HeyBox;
 
@@ -7,6 +9,113 @@ namespace HeyBox;
 /// </summary>
 public static class Format
 {
+    // Characters which need escaping
+    private static readonly string[] SensitiveCharacters =
+    [
+        "\\", "*", "_", "~", "`", ".", ":", "/", ">", "|", "#"
+    ];
+
+    /// <summary>
+    ///     返回一个使用粗体格式的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>*</c> 字符转义为 <c>\*</c>。
+    /// </remarks>
+    public static string Bold(string? text, bool sanitize = true) =>
+        $"**{(sanitize ? Sanitize(text, "*") : text)}**";
+
+    /// <summary>
+    ///     返回一个使用斜体格式的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>*</c> 字符转义为 <c>\*</c>。
+    /// </remarks>
+    public static string Italics(string? text, bool sanitize = true) =>
+        $"*{(sanitize ? Sanitize(text, "*") : text)}*";
+
+    /// <summary>
+    ///     返回一个使用粗斜体格式的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>*</c> 字符转义为 <c>\*</c>。
+    /// </remarks>
+    public static string BoldItalics(string? text, bool sanitize = true) =>
+        $"***{(sanitize ? Sanitize(text, "*") : text)}***";
+
+    /// <summary>
+    ///     返回一个使用删除线格式的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>~</c> 字符转义为 <c>\~</c>。
+    /// </remarks>
+    public static string Strikethrough(string? text, bool sanitize = true) =>
+        $"~~{(sanitize ? Sanitize(text, "~") : text)}~~";
+
+    /// <summary>
+    ///     返回格式化为 Markdown 链接的字符串。
+    /// </summary>
+    /// <param name="url"> 要链接到的 URL。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="url"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的链接文本。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c>，将会对 URL 中出现的所有 <c>&lt;</c> 和 <c>&gt;</c> 字符分别转义为
+    ///     <c>\&lt;</c> 和 <c>\&gt;</c>。
+    /// </remarks>
+    public static string Url(string url, bool sanitize = true) => $"<{Sanitize(url, "<", ">")}>";
+
+    /// <inheritdoc cref="Format.Url(System.String,System.Boolean)" />
+    public static string Url(Uri url, bool sanitize = true) => Url(url.OriginalString, sanitize);
+
+    /// <summary>
+    ///     返回格式化为 Markdown 链接的字符串。
+    /// </summary>
+    /// <param name="url"> 要链接到的 URL。 </param>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 与 <paramref name="url"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的链接文本。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c>，将会对文本中出现的所有 <c>[</c> 和 <c>]</c> 字符分别转义为
+    ///     <c>\[</c> 和 <c>\]</c>，并对 URL 中出现的所有 <c>(</c> 和 <c>)</c> 字符分别转义为 <c>\(</c> 和 <c>\)</c>。
+    /// </remarks>
+    public static string Url(string url, string text, bool sanitize = true) =>
+        $"[{(sanitize ? Sanitize(text, "[", "]") : text)}]({(sanitize ? Sanitize(url, "(", ")") : url)})";
+
+    /// <inheritdoc cref="Format.Url(System.String,System.String,System.Boolean)" />
+    public static string Url(Uri url, string text, bool sanitize = true) => Url(url.OriginalString, text, sanitize);
+
+    /// <summary>
+    ///     返回格式化为 Markdown 一级标题的字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string H1(string text) => $"# {text}";
+
+    /// <summary>
+    ///     返回格式化为 Markdown 二级标题的字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string H2(string text) => $"## {text}";
+
+    /// <summary>
+    ///     返回格式化为 Markdown 三级标题的字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string H3(string text) => $"### {text}";
+
     /// <summary>
     ///     获取一个 Markdown 格式的图片。
     /// </summary>
@@ -35,6 +144,111 @@ public static class Format
         if (attachment.Uri is null)
             throw new InvalidOperationException("The attachment has not been uploaded yet.");
         return Image(attachment.Uri.OriginalString, attachment.Filename);
+    }
+
+    /// <summary>
+    ///     获取有序列表的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="items"> 要格式化的列表项。 </param>
+    /// <param name="indentLevel"> 列表项的缩进级别。 </param>
+    /// <returns> 获取格式化后的列表。 </returns>
+    public static string OrderedList(IEnumerable<string> items, int indentLevel = 0) => items
+        .Select((item, index) => $"{new string(' ', indentLevel * 4)}{index + 1}. {item}")
+        .Aggregate((current, next) => $"{current}\n{next}");
+
+    /// <summary>
+    ///     获取无序列表的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="items"> 要格式化的列表项。 </param>
+    /// <param name="indentLevel"> 列表项的缩进级别。 </param>
+    /// <returns> 获取格式化后的列表。 </returns>
+    public static string UnorderedList(IEnumerable<string> items, int indentLevel = 0) => items
+        .Select(item => $"{new string(' ', indentLevel * 4)}- {item}")
+        .Aggregate((current, next) => $"{current}\n{next}");
+
+    /// <summary>
+    ///     返回一个使用代码格式的 KMarkdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="language"> 代码块的语言。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的内联代码或代码块。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>`</c> 字符转义为 <c>\`</c>。 <br />
+    ///     当 <paramref name="language"/> 不为 <c>null</c> 或 <paramref name="text"/> 中包含换行符时，将返回一个代码块；
+    ///     否则，将返回一个内联代码块。
+    /// </remarks>
+    public static string Code(string? text, string? language = null, bool sanitize = true)
+    {
+        if (text is null)
+            return "``";
+        return text.Contains('\n') || string.IsNullOrWhiteSpace(language)
+            ? CodeBlock(text, language, sanitize)
+            : $"`{(sanitize ? Sanitize(text, "`") : text)}`";
+    }
+
+    /// <summary>
+    ///     返回一个使用代码块格式的 KMarkdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <param name="language"> 代码块的语言。 </param>
+    /// <param name="sanitize"> 是否要先对 <paramref name="text"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的代码块。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>`</c> 字符转义为 <c>\`</c>。
+    /// </remarks>
+    public static string CodeBlock(string? text, string? language = null, bool sanitize = true) =>
+        text is null
+            ? "```\n```"
+            : $"""
+            ```{(language is not null ? language.Trim() : string.Empty)}
+            {(sanitize ? Sanitize(text, "`") : text)}
+            ```
+            """;
+
+    /// <summary>
+    ///     获取一个 Markdown 格式的块引用。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的块引用。 </returns>
+    public static string BlockQuote(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return text;
+        StringBuilder result = new();
+        int startIndex = 0;
+        int newLineIndex;
+        do
+        {
+            newLineIndex = text.IndexOf('\n', startIndex);
+            if (newLineIndex == -1)
+                result.Append($"> {text[startIndex..]}");
+            else
+                result.Append($"> {text[startIndex..newLineIndex]}\n");
+            startIndex = newLineIndex + 1;
+        } while (newLineIndex != -1 && startIndex != text.Length);
+
+        return result.ToString();
+    }
+
+    /// <summary>
+    ///     获取一个 Markdown 格式的水平分割线。
+    /// </summary>
+    /// <returns> 获取格式化后的块引用。 </returns>
+    public static string HorizontalRule() => "***";
+
+    /// <summary>
+    ///     转义字符串，安全地转义任何 Markdown 序列。
+    /// </summary>
+    /// <param name="text"> 要转义的文本。 </param>
+    /// <param name="sensitiveCharacters"> 要转义的字符。 </param>
+    /// <returns> 获取转义后的文本。 </returns>
+    [return: NotNullIfNotNull(nameof(text))]
+    public static string? Sanitize(string? text, params string[] sensitiveCharacters)
+    {
+        if (text is null) return null;
+        string[] sensitiveChars = sensitiveCharacters.Length > 0 ? sensitiveCharacters : SensitiveCharacters;
+        return sensitiveChars.Aggregate(text,
+            (current, unsafeChar) => current.Replace(unsafeChar, $"\u200B{unsafeChar}"));
     }
 
     /// <summary>
