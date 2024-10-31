@@ -197,36 +197,6 @@ public static class Format
             """;
 
     /// <summary>
-    ///     获取一个 Markdown 格式的块引用。
-    /// </summary>
-    /// <param name="text"> 要格式化的文本。 </param>
-    /// <returns> 获取格式化后的块引用。 </returns>
-    public static string BlockQuote(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text)) return text;
-        StringBuilder result = new();
-        int startIndex = 0;
-        int newLineIndex;
-        do
-        {
-            newLineIndex = text.IndexOf('\n', startIndex);
-            if (newLineIndex == -1)
-                result.Append($"> {text[startIndex..]}");
-            else
-                result.Append($"> {text[startIndex..newLineIndex]}\n");
-            startIndex = newLineIndex + 1;
-        } while (newLineIndex != -1 && startIndex != text.Length);
-
-        return result.ToString();
-    }
-
-    /// <summary>
-    ///     获取一个 Markdown 格式的水平分割线。
-    /// </summary>
-    /// <returns> 获取格式化后的块引用。 </returns>
-    public static string HorizontalRule() => "***";
-
-    /// <summary>
     ///     转义字符串，安全地转义任何 Markdown 序列。
     /// </summary>
     /// <param name="text"> 要转义的文本。 </param>
@@ -238,7 +208,7 @@ public static class Format
         if (text is null) return null;
         string[] sensitiveChars = sensitiveCharacters.Length > 0 ? sensitiveCharacters : SensitiveCharacters;
         return sensitiveChars.Aggregate(text,
-            (current, unsafeChar) => current.Replace(unsafeChar, $"\u200B{unsafeChar}"));
+            (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
 
     /// <summary>
