@@ -30,7 +30,13 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     /// <inheritdoc />
     public ulong Path { get; }
 
-    internal RoomEmote(ulong roomId, ulong path, string extension)
+    /// <summary>
+    ///     初始化一个 <see cref="HeyBox.RoomEmote"/> 的新实例。
+    /// </summary>
+    /// <param name="roomId"> 表情符号所在的房间的 ID。 </param>
+    /// <param name="path"> 表情符号的路径。 </param>
+    /// <param name="extension"> 表情符号的扩展名。 </param>
+    public RoomEmote(ulong roomId, ulong path, string extension)
         : base("custom", null)
     {
         RoomId = roomId;
@@ -92,7 +98,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     /// <example>
     ///     下面的示例演示了如何解析一个表情符号的原始格式：
     ///     <code language="cs">
-    ///     Emote emote = Emote.Parse("[custom3358126864697663488_1843946660894564352.png]");
+    ///     RoomEmote emote = RoomEmote.Parse("[custom3358126864697663488_1843946660894564352.png]");
     ///     </code>
     /// </example>
     public static new RoomEmote Parse(string text)

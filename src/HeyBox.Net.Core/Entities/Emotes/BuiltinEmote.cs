@@ -7,7 +7,11 @@ namespace HeyBox;
 /// </summary>
 public class BuiltinEmote : Emote, IEquatable<BuiltinEmote>
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     初始化一个 <see cref="BuiltinEmote"/> 的新实例。
+    /// </summary>
+    /// <param name="group"> 表情符号的分组。 </param>
+    /// <param name="name"> 表情符号的名称。 </param>
     public BuiltinEmote(string group, string name)
         : base(group, name)
     {
