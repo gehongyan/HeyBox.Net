@@ -101,7 +101,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     ///     RoomEmote emote = RoomEmote.Parse("[custom3358126864697663488_1843946660894564352.png]");
     ///     </code>
     /// </example>
-    public static new RoomEmote Parse(string text)
+    public static RoomEmote Parse(string text)
     {
         ReadOnlySpan<char> textSpan = text.AsSpan();
         if (!textSpan.StartsWith("[custom") || !textSpan.EndsWith("]"))

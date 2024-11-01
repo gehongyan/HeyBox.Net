@@ -75,7 +75,7 @@ public class SocketReaction : IReaction
 
     internal static SocketReaction Create(ClientState state, API.Gateway.ReactionEvent model)
     {
-        IEmote emote = HeyBox.Emote.Parse(model.Emoji);
+        IEmote emote = IEmote.Parse(model.Emoji);
         if (emote is RoomEmote roomEmote)
         {
             if (state.GetRoom(model.RoomId)?.Emotes.SingleOrDefault(x => x.Path == roomEmote.Path) is { } entity)

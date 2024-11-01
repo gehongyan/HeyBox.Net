@@ -49,7 +49,7 @@ public class BuiltinEmote : Emote, IEquatable<BuiltinEmote>
     /// <exception cref="ArgumentException">
     ///     无法解析 <paramref name="text"/> 为一个有效的表情符号。
     /// </exception>
-    public static new BuiltinEmote Parse(string text)
+    public static BuiltinEmote Parse(string text)
     {
         ReadOnlySpan<char> textSpan = text.AsSpan();
         if (textSpan is not ['[', .., ']'])
