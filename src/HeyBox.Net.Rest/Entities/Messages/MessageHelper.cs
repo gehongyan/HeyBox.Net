@@ -205,4 +205,44 @@ internal class MessageHelper
         };
         await client.ApiClient.DeleteChannelMessageAsync(args, options);
     }
+
+    #region Reactions
+
+    public static async Task AddReactionAsync(ulong messageId, ulong channelId, ulong roomId, IEmote emote,
+        BaseHeyBoxClient client, RequestOptions? options)
+    {
+        ReplyReactionParams args = new()
+        {
+            MessageId = messageId,
+            Emoji = emote.Id,
+            IsAdd = true,
+            ChannelId = channelId,
+            RoomId = roomId,
+        };
+        await client.ApiClient.ReplyReactionAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static Task AddReactionAsync(IMessage message, ITextChannel textChannel, IEmote emote,
+        BaseHeyBoxClient client, RequestOptions? options) =>
+        AddReactionAsync(message.Id, textChannel.Id, textChannel.RoomId, emote, client, options);
+
+    public static async Task RemoveReactionAsync(ulong messageId, ulong channelId, ulong roomId, IEmote emote,
+        BaseHeyBoxClient client, RequestOptions? options)
+    {
+        ReplyReactionParams args = new()
+        {
+            MessageId = messageId,
+            Emoji = emote.Id,
+            IsAdd = false,
+            ChannelId = channelId,
+            RoomId = roomId,
+        };
+        await client.ApiClient.ReplyReactionAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static Task RemoveReactionAsync(IMessage message, ITextChannel textChannel, IEmote emote,
+        BaseHeyBoxClient client, RequestOptions? options) =>
+        RemoveReactionAsync(message.Id, textChannel.Id, textChannel.RoomId, emote, client, options);
+
+    #endregion
 }

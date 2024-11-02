@@ -464,6 +464,25 @@ internal class HeyBoxRestApiClient : IDisposable
 
     #endregion
 
+    #region Reactions
+
+    public async Task ReplyReactionAsync(ReplyReactionParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.MessageId, 0, nameof(args.MessageId));
+        Preconditions.NotNullOrWhiteSpace(args.Emoji, nameof(args.MessageId));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId, args.ChannelId);
+        await SendJsonAsync<object>(HttpMethod.Post,
+                () => $"chatroom/v2/channel_msg/emoji/reply?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    #endregion
+
     #region Assets
 
     public async Task<CreateAssetResponse> CreateAssetAsync(CreateAssetParams args, RequestOptions? options = null)

@@ -90,6 +90,34 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
 
     #endregion
 
+    #region Reactions
+
+    /// <summary>
+    ///     向指定的消息添加一个回应。
+    /// </summary>
+    /// <param name="messageId"> 要为其添加回应的消息的 ID。 </param>
+    /// <param name="channelId"> 要为其添加回应的消息所在的频道的 ID。 </param>
+    /// <param name="roomId"> 要为其添加回应的消息所在的房间的 ID。 </param>
+    /// <param name="emote"> 要用于向指定消息添加回应的表情符号。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示添加添加异步操作的任务。 </returns>
+    public Task AddReactionAsync(ulong messageId, ulong channelId, ulong roomId, IEmote emote, RequestOptions? options = null) =>
+        MessageHelper.AddReactionAsync(messageId, channelId, roomId, emote, this, options);
+
+    /// <summary>
+    ///     从指定的消息移除一个回应。
+    /// </summary>
+    /// <param name="messageId"> 要从中移除回应的消息的 ID。 </param>
+    /// <param name="channelId"> 要从中移除回应的消息所在的频道的 ID。 </param>
+    /// <param name="roomId"> 要从中移除回应的消息所在的房间的 ID。 </param>
+    /// <param name="emote"> 要从指定消息移除的回应的表情符号。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
+    public Task RemoveReactionAsync(ulong messageId, ulong channelId, ulong roomId, IEmote emote, RequestOptions? options = null) =>
+        MessageHelper.RemoveReactionAsync(messageId, channelId, roomId, emote, this, options);
+
+    #endregion
+
     #region IHeyBoxClient
 
     /// <inheritdoc />

@@ -60,4 +60,26 @@ public abstract class RestMessage : RestEntity<ulong>, IMessage
     {
         ImageFileInfos = imageFileInfos;
     }
+
+    #region Reactions
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
+    public Task AddReactionAsync(IEmote emote, RequestOptions? options = null) =>
+        Channel switch
+        {
+            ITextChannel textChannel => MessageHelper.AddReactionAsync(this, textChannel, emote, Client, options),
+            _ => throw new NotSupportedException("The operation is not supported for this message type.")
+        };
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
+    public Task RemoveReactionAsync(IEmote emote, RequestOptions? options = null) =>
+        Channel switch
+        {
+            ITextChannel textChannel => MessageHelper.RemoveReactionAsync(this, textChannel, emote, Client, options),
+            _ => throw new NotSupportedException("The operation is not supported for this message type.")
+        };
+
+    #endregion
 }
