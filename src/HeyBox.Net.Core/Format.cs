@@ -16,6 +16,27 @@ public static class Format
     ];
 
     /// <summary>
+    ///     返回格式化为 Markdown 一级标题的字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string H1(string text) => $"# {text}";
+
+    /// <summary>
+    ///     返回格式化为 Markdown 二级标题的字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string H2(string text) => $"## {text}";
+
+    /// <summary>
+    ///     返回格式化为 Markdown 三级标题的字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string H3(string text) => $"### {text}";
+
+    /// <summary>
     ///     返回一个使用粗体格式的 Markdown 格式化字符串。
     /// </summary>
     /// <param name="text"> 要格式化的文本。 </param>
@@ -64,6 +85,20 @@ public static class Format
         $"~~{(sanitize ? Sanitize(text, "~") : text)}~~";
 
     /// <summary>
+    ///     返回一个使用上标格式的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string SuperScript(string text) => $"<sup>{text}</sup>";
+
+    /// <summary>
+    ///     返回一个使用下标格式的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="text"> 要格式化的文本。 </param>
+    /// <returns> 获取格式化后的文本。 </returns>
+    public static string SubScript(string text) => $"<sub>{text}</sub>";
+
+    /// <summary>
     ///     返回格式化为 Markdown 链接的字符串。
     /// </summary>
     /// <param name="url"> 要链接到的 URL。 </param>
@@ -73,7 +108,8 @@ public static class Format
     ///     设置 <paramref name="sanitize"/> 为 <c>true</c>，将会对 URL 中出现的所有 <c>&lt;</c> 和 <c>&gt;</c> 字符分别转义为
     ///     <c>\&lt;</c> 和 <c>\&gt;</c>。
     /// </remarks>
-    public static string Url(string url, bool sanitize = true) => $"<{Sanitize(url, "<", ">")}>";
+    public static string Url(string url, bool sanitize = true) =>
+        $"<{(sanitize ? Sanitize(url, "<", ">") : url)}>";
 
     /// <inheritdoc cref="Format.Url(System.String,System.Boolean)" />
     public static string Url(Uri url, bool sanitize = true) => Url(url.OriginalString, sanitize);
@@ -96,41 +132,22 @@ public static class Format
     public static string Url(Uri url, string text, bool sanitize = true) => Url(url.OriginalString, text, sanitize);
 
     /// <summary>
-    ///     返回格式化为 Markdown 一级标题的字符串。
-    /// </summary>
-    /// <param name="text"> 要格式化的文本。 </param>
-    /// <returns> 获取格式化后的文本。 </returns>
-    public static string H1(string text) => $"# {text}";
-
-    /// <summary>
-    ///     返回格式化为 Markdown 二级标题的字符串。
-    /// </summary>
-    /// <param name="text"> 要格式化的文本。 </param>
-    /// <returns> 获取格式化后的文本。 </returns>
-    public static string H2(string text) => $"## {text}";
-
-    /// <summary>
-    ///     返回格式化为 Markdown 三级标题的字符串。
-    /// </summary>
-    /// <param name="text"> 要格式化的文本。 </param>
-    /// <returns> 获取格式化后的文本。 </returns>
-    public static string H3(string text) => $"### {text}";
-
-    /// <summary>
     ///     获取一个 Markdown 格式的图片。
     /// </summary>
     /// <param name="url"> 图片的 URL。 </param>
     /// <param name="alternative"> 图片的替代文本。 </param>
-    /// <returns></returns>
-    public static string Image(string url, string? alternative = null) => $"![{alternative}]({url})";
+    /// <param name="sanitize"> 是否要先对 <paramref name="alternative"/> 与 <paramref name="url"/> 中与当前格式化操作有冲突的字符进行转义。 </param>
+    /// <returns> 获取格式化后的图片。 </returns>
+    /// <remarks>
+    ///     设置 <paramref name="sanitize"/> 为 <c>true</c>，将会对 <paramref name="alternative"/> 中出现的所有
+    ///     <c>[</c> 和 <c>]</c> 字符分别转义为 <c>\[</c> 和 <c>\]</c>，并对 <paramref name="url"/> 中出现的所有 <c>(</c> 和 <c>)</c>
+    ///     字符分别转义为 <c>\(</c> 和 <c>\)</c>。
+    /// </remarks>
+    public static string Image(string url, string? alternative = null, bool sanitize = true) =>
+        $"![{(sanitize ? Sanitize(alternative, "[", "]") : alternative)}]({(sanitize ? Sanitize(url, "(", ")") : url)})";
 
-    /// <summary>
-    ///     获取一个 Markdown 格式的图片。
-    /// </summary>
-    /// <param name="uri"> 图片的 URL。 </param>
-    /// <param name="alternative"> 图片的替代文本。 </param>
-    /// <returns></returns>
-    public static string Image(Uri uri, string? alternative = null) => Image(uri.OriginalString, alternative);
+    /// <inheritdoc cref="HeyBox.Format.Image(System.String,System.String,System.Boolean)" />
+    public static string Image(Uri url, string? alternative = null, bool sanitize = true) => Image(url.OriginalString, alternative, sanitize);
 
     /// <summary>
     ///     获取一个 Markdown 格式的图片。
@@ -145,6 +162,16 @@ public static class Format
             throw new InvalidOperationException("The attachment has not been uploaded yet.");
         return Image(attachment.Uri.OriginalString, attachment.Filename);
     }
+
+    /// <summary>
+    ///     获取有序列表的 Markdown 格式化字符串。
+    /// </summary>
+    /// <param name="items"> 要格式化的列表项。 </param>
+    /// <param name="indentLevel"> 列表项的缩进级别。 </param>
+    /// <returns> 获取格式化后的列表。 </returns>
+    public static string OrderedList(IEnumerable<string> items, int indentLevel = 0) => items
+        .Select((item, index) => $"{new string(' ', indentLevel * 4)}{index + 1}. {item}")
+        .Aggregate((current, next) => $"{current}\n{next}");
 
     /// <summary>
     ///     获取无序列表的 Markdown 格式化字符串。
@@ -218,8 +245,9 @@ public static class Format
     /// <returns> 获取移除 Markdown 格式字符后的文本。 </returns>
     /// <remarks>
     ///     此方法不会过多地分析 Markdown 的复杂格式，只会简单地移除 KMarkdown 中的以下字符：<br />
-    ///     <c>*</c>、<c>`</c>、<c>~</c>、<c>&gt;</c>、<c>\</c>。
+    ///     <c>&lt;sup&gt;</c>、<c>&lt;/sup&gt;</c>、<c>&lt;sub&gt;</c>、<c>&lt;/sub&gt;</c>、
+    ///     <c>#</c>、<c>*</c>、<c>`</c>、<c>~</c>、<c>&lt;</c>、<c>&gt;</c>、<c>\</c>。
     /// </remarks>
     public static string StripMarkdown(string text) =>
-        Regex.Replace(text, @"\*|`|~|>|\\", "", RegexOptions.Compiled);
+        Regex.Replace(text, @"</?(sup|sub)>|[#*`~<>\\]", "", RegexOptions.Compiled);
 }
