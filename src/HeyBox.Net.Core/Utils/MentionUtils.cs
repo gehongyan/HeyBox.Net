@@ -46,10 +46,7 @@ public static class MentionUtils
     /// <summary>
     ///     返回在线成员提及字符串。
     /// </summary>
-    /// <remarks>
-    ///     黑盒语音的文档中，提及在线成员的字符串为 <c>@{hear}</c>。
-    /// </remarks>
-    public static string MentionHere => "@{hear}";
+    public static string MentionHere => "@{here}";
 
     /// <summary>
     ///     将指定的用户提及字符串解析为用户 ID。
@@ -269,7 +266,7 @@ public static class MentionUtils
         {
             TagHandling.Name or TagHandling.FullName => "@在线成员",
             TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => "在线成员",
-            TagHandling.Sanitize => $"@{{{SanitizeChar}hear}}",
+            TagHandling.Sanitize => $"@{{{SanitizeChar}here}}",
             _ => ""
         };
     }
