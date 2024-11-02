@@ -15,7 +15,7 @@ public interface IUpdateable
     /// <returns> 一个表示异步更新操作的任务。 </returns>
     /// <remarks>
     ///     <note type="warning">
-    ///         此方法将从 KOOK REST API 获取最新数据，并替换当前对象的属性，而非使用指定的属性修改黑盒语音服务端的数据。
+    ///         此方法将从黑盒语音 REST API 获取最新数据，并替换当前对象的属性，而非使用指定的属性修改黑盒语音服务端的数据。
     ///     </note>
     /// </remarks>
     Task UpdateAsync(RequestOptions? options = null);
