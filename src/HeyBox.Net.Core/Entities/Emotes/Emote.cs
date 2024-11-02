@@ -37,4 +37,7 @@ public abstract class Emote : IEmote, IEquatable<Emote>
     public override int GetHashCode() => HashCode.Combine(Group, Name);
 
     private string DebuggerDisplay => $"[{Group}_{Name}]";
+
+    /// <inheritdoc />
+    bool IEntity<string>.IsPopulated => true;
 }

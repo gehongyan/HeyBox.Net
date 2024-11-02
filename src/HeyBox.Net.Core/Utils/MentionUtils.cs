@@ -203,54 +203,49 @@ public static class MentionUtils
 
     internal static string ResolveUserMention(ITag tag, TagHandling mode)
     {
-        return string.Empty;
-        // if (mode == TagHandling.Remove)
-        //     return string.Empty;
-        // if (tag.Value is not IUser user)
-        //     return string.Empty;
-        //
-        // IRoomUser? roomUser = user as IRoomUser;
-        // return mode switch
-        // {
-        //     TagHandling.Name => $"@{roomUser?.Nickname ?? user.Username}",
-        //     TagHandling.NameNoPrefix => $"{roomUser?.Nickname ?? user.Username}",
-        //     TagHandling.FullName => $"@{user.Username}#{user.IdentifyNumber}",
-        //     TagHandling.FullNameNoPrefix => $"{user.Username}#{user.IdentifyNumber}",
-        //     TagHandling.Sanitize => MentionUser($"{SanitizeChar}{tag.Key}"),
-        //     _ => string.Empty
-        // };
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IUser user)
+            return string.Empty;
+
+        IRoomUser? roomUser = user as IRoomUser;
+        return mode switch
+        {
+            TagHandling.Name or TagHandling.FullName => $"@{roomUser?.Nickname ?? user.Username}",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{roomUser?.Nickname ?? user.Username}",
+            TagHandling.Sanitize => MentionUser($"{SanitizeChar}{tag.Key}"),
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveChannelMention(ITag tag, TagHandling mode)
     {
-        return string.Empty;
-        // if (mode == TagHandling.Remove)
-        //     return string.Empty;
-        // if (tag.Value is not IChannel channel)
-        //     return string.Empty;
-        // return mode switch
-        // {
-        //     TagHandling.Name or TagHandling.FullName => $"#{channel.Name}",
-        //     TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{channel.Name}",
-        //     TagHandling.Sanitize => MentionChannel($"{SanitizeChar}{tag.Key}"),
-        //     _ => string.Empty
-        // };
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IChannel channel)
+            return string.Empty;
+        return mode switch
+        {
+            TagHandling.Name or TagHandling.FullName => $"#{channel.Name}",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{channel.Name}",
+            TagHandling.Sanitize => MentionChannel($"{SanitizeChar}{tag.Key}"),
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveRoleMention(ITag tag, TagHandling mode)
     {
-        return string.Empty;
-        // if (mode == TagHandling.Remove)
-        //     return string.Empty;
-        // if (tag.Value is not IRole role)
-        //     return string.Empty;
-        // return mode switch
-        // {
-        //     TagHandling.Name or TagHandling.FullName => $"@{role.Name}",
-        //     TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{role.Name}",
-        //     TagHandling.Sanitize => MentionRole($"{SanitizeChar}{tag.Key}"),
-        //     _ => string.Empty
-        // };
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IRole role)
+            return string.Empty;
+        return mode switch
+        {
+            TagHandling.Name or TagHandling.FullName => $"@{role.Name}",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{role.Name}",
+            TagHandling.Sanitize => MentionRole($"{SanitizeChar}{tag.Key}"),
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveEveryoneMention(ITag tag, TagHandling mode)
@@ -281,22 +276,21 @@ public static class MentionUtils
 
     internal static string ResolveEmoji(ITag tag, TagHandling mode)
     {
-        return string.Empty;
-        // if (mode == TagHandling.Remove)
-        //     return string.Empty;
-        // if (tag.Value is not Emote emoji)
-        //     return string.Empty;
-        //
-        // //Remove if its name contains any bad chars (prevents a few tag exploits)
-        // if (emoji.Name.Any(c => !char.IsLetterOrDigit(c) && c != '_' && c != '-'))
-        //     return string.Empty;
-        //
-        // return mode switch
-        // {
-        //     TagHandling.Name or TagHandling.FullName => $":{emoji.Name}:",
-        //     TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{emoji.Name}",
-        //     TagHandling.Sanitize => $"(emj){SanitizeChar}{emoji.Name}(emj)[{SanitizeChar}{emoji.Id}]",
-        //     _ => ""
-        // };
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IEmote emoji)
+            return string.Empty;
+
+        return mode switch
+        {
+            TagHandling.Name or TagHandling.FullName => $":{emoji.Name}:",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{emoji.Name}",
+            TagHandling.Sanitize => emoji switch
+            {
+                RoomEmote emote => $"[custom{SanitizeChar}{emote.RoomId}_{SanitizeChar}{emote.Path}.{SanitizeChar}{emote.Extension}]",
+                _ => $"[{SanitizeChar}{emoji.Group}_{SanitizeChar}{emoji.Id}]"
+            },
+            _ => ""
+        };
     }
 }

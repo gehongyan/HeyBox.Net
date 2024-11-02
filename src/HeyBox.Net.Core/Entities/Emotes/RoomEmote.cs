@@ -30,6 +30,9 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     /// <inheritdoc />
     public ulong Path { get; }
 
+    /// <inheritdoc />
+    public bool IsPopulated { get; }
+
     /// <summary>
     ///     初始化一个 <see cref="HeyBox.RoomEmote"/> 的新实例。
     /// </summary>
@@ -55,6 +58,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
         CreatedAt = createdAt;
         Creator = creator;
         CreatorId = creator.Id;
+        IsPopulated = true;
     }
 
     /// <summary>

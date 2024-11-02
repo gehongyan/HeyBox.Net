@@ -48,19 +48,13 @@ internal class MessageHelper
             string content = text.Substring(index, endIndex - index + 1);
 
             if (MentionUtils.TryParseUser(content, out uint userId))
-            {
                 tags.Add(new Tag<uint, IUser>(TagType.UserMention, index, content.Length, userId, null));
-            }
             else if (MentionUtils.TryParseRole(content, out ulong roleId))
-            {
                 tags.Add(new Tag<ulong, IRole>(TagType.RoleMention, index, content.Length, roleId, null));
-            }
             else if (MentionUtils.TryParseChannel(content, out ulong channelId))
-            {
                 tags.Add(new Tag<ulong, IChannel>(TagType.ChannelMention, index, content.Length, channelId, null));
-            }
-            // else if (Emote.TryParse(content, out var emoji))
-            //     tags.Add(new Tag<Emote>(TagType.Emoji, index, content.Length, emoji.Id, emoji));
+            else if (IEmote.TryParse(content, out IEmote? emoji))
+                tags.Add(new Tag<string, IEmote>(TagType.Emoji, index, content.Length, emoji.Id, emoji));
             else //Bad Tag
             {
                 index++;
