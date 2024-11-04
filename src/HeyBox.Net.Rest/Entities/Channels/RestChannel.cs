@@ -19,5 +19,9 @@ public class RestChannel : RestEntity<ulong>, IChannel
     /// <inheritdoc />
     string IChannel.Name => string.Empty;
 
+    /// <inheritdoc />
+    Task<IUser?> IChannel.GetUserAsync(uint id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(null); // TODO: Not supported yet.
+
     #endregion
 }

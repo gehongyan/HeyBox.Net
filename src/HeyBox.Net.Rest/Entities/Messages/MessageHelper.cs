@@ -29,7 +29,8 @@ internal class MessageHelper
         return Format.StripMarkdown(newContent);
     }
 
-    public static ImmutableArray<ITag> ParseTags(string text, IRoom? room)
+    public static ImmutableArray<ITag> ParseTags(string text, IMessageChannel channel, IRoom? room,
+        IReadOnlyCollection<IUser> userMentions)
     {
         ImmutableArray<ITag>.Builder tags = ImmutableArray.CreateBuilder<ITag>();
         int index = 0;
@@ -48,11 +49,21 @@ internal class MessageHelper
             string content = text.Substring(index, endIndex - index + 1);
 
             if (MentionUtils.TryParseUser(content, out uint userId))
-                tags.Add(new Tag<uint, IUser>(TagType.UserMention, index, content.Length, userId, null));
+            {
+                IUser? mentionedUser = channel?.GetUserAsync(userId, CacheMode.CacheOnly).GetAwaiter().GetResult()
+                    ?? userMentions.FirstOrDefault(x => x.Id == userId);
+                tags.Add(new Tag<uint, IUser>(TagType.UserMention, index, content.Length, userId, mentionedUser));
+            }
             else if (MentionUtils.TryParseRole(content, out ulong roleId))
-                tags.Add(new Tag<ulong, IRole>(TagType.RoleMention, index, content.Length, roleId, null));
+            {
+                IRole? role = room?.GetRole(roleId);
+                tags.Add(new Tag<ulong, IRole>(TagType.RoleMention, index, content.Length, roleId, role));
+            }
             else if (MentionUtils.TryParseChannel(content, out ulong channelId))
-                tags.Add(new Tag<ulong, IChannel>(TagType.ChannelMention, index, content.Length, channelId, null));
+            {
+                IRoomChannel? mentionedChannel = room?.GetChannelAsync(channelId).GetAwaiter().GetResult();
+                tags.Add(new Tag<ulong, IChannel>(TagType.ChannelMention, index, content.Length, channelId, mentionedChannel));
+            }
             else if (IEmote.TryParse(content, out IEmote? emoji))
                 tags.Add(new Tag<string, IEmote>(TagType.Emoji, index, content.Length, emoji.Id, emoji));
             else //Bad Tag
@@ -169,7 +180,7 @@ internal class MessageHelper
             ImageFileInfos = message.ImageFileInfos is not null ? [..message.ImageFileInfos] : null
         };
         func(properties);
-        ImmutableArray<ITag> tags = ParseTags(properties.Content, roomChannel.Room);
+        ImmutableArray<ITag> tags = ParseTags(properties.Content, message.Channel, roomChannel.Room, []);
         bool hasMention = tags.Any(x => x.Type
             is TagType.UserMention or TagType.ChannelMention
             or TagType.RoleMention or TagType.EveryoneMention or TagType.HereMention);

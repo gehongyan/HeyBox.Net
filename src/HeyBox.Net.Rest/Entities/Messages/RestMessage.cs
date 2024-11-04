@@ -53,7 +53,7 @@ public abstract class RestMessage : RestEntity<ulong>, IMessage
         Reference = args.ReplyId.HasValue ? new MessageReference(args.ReplyId.Value) : null;
 
         IRoom? room = (Channel as IRoomChannel)?.Room;
-        _tags = MessageHelper.ParseTags(args.Message, room);
+        _tags = MessageHelper.ParseTags(args.Message, Channel, room, []);
     }
 
     internal virtual void Update(IReadOnlyCollection<FileAttachment>? imageFileInfos)

@@ -25,6 +25,19 @@ public class SocketTextChannel : SocketRoomChannel, ITextChannel, ISocketMessage
         return entity;
     }
 
+    #region Users
+
+    /// <inheritdoc />
+    public override SocketRoomUser? GetUser(ulong id)
+    {
+        if (Room.GetUser(id) is not { } user) return null;
+        ulong roomPerms = Permissions.ResolveRoom(Room, user);
+        ulong channelPerms = Permissions.ResolveChannel(Room, user, this, roomPerms);
+        return Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel) ? user : null;
+    }
+
+    #endregion
+
     /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.String,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
     public Task<IUserMessage> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,

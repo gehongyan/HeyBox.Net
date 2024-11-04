@@ -42,6 +42,15 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
         IsPopulated = true;
     }
 
+    /// <summary>
+    ///     获取此频道中的一个频道用户。
+    /// </summary>
+    /// <param name="id"> 要获取的服务器用户的 ID。 </param>
+    /// <returns> 如果找到了具有指定 ID 的服务器用户，则返回该用户；否则返回 <c>null</c>。 </returns>
+    public new virtual SocketRoomUser? GetUser(ulong id) => null;
+
+    internal override SocketUser? GetUserInternal(ulong id) => GetUser(id);
+
     #region IRoomChannel
 
     /// <inheritdoc />
@@ -49,6 +58,10 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
 
     /// <inheritdoc />
     ulong IRoomChannel.RoomId => Room.Id;
+
+    /// <inheritdoc />
+    Task<IUser?> IChannel.GetUserAsync(uint id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(GetUser(id)); //Overridden in Text/Voice
 
     #endregion
 }

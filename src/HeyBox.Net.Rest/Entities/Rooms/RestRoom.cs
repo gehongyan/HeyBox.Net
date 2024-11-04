@@ -43,6 +43,15 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     #region Channels
 
     /// <summary>
+    ///     获取此房间内的频道。
+    /// </summary>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    public async Task<RestRoomChannel> GetChannelAsync(ulong id, RequestOptions? options = null) =>
+        await RoomHelper.GetChannelAsync(this, Client, id, options);
+
+    /// <summary>
     ///     获取此房间内指定具有文字聊天能力的频道。
     /// </summary>
     /// <param name="id"> 要获取的频道的 ID。 </param>
@@ -168,6 +177,10 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     /// <inheritdoc />
     async Task<IRole> IRoom.CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options) =>
         await CreateRoleAsync(func, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IRoomChannel?> IRoom.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        mode == CacheMode.AllowDownload ? await GetChannelAsync(id, options).ConfigureAwait(false) : null;
 
     /// <inheritdoc />
     async Task<ITextChannel?> IRoom.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>

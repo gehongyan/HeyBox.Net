@@ -92,7 +92,7 @@ internal static class ChannelHelper
     public static async Task<IUserMessage> SendTextAsync(ITextChannel channel, BaseHeyBoxClient client,
         string text, IEnumerable<FileAttachment>? imageFileInfos, IMessageReference? messageReference, RequestOptions? options)
     {
-        ImmutableArray<ITag> tags = MessageHelper.ParseTags(text, channel.Room);
+        ImmutableArray<ITag> tags = MessageHelper.ParseTags(text, channel, channel.Room, []);
         bool hasMention = tags.Any(x => x.Type
             is TagType.UserMention or TagType.ChannelMention
             or TagType.RoleMention or TagType.EveryoneMention or TagType.HereMention);

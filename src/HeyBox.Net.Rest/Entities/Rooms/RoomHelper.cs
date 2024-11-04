@@ -10,6 +10,10 @@ internal class RoomHelper
         room.Update(roles);
     }
 
+    public static Task<RestRoomChannel> GetChannelAsync(IRoom room, BaseHeyBoxClient client,
+        ulong id, RequestOptions? options) =>
+        Task.FromResult(new RestRoomChannel(client, room, id));
+
     public static Task<RestTextChannel> GetTextChannelAsync(IRoom room, BaseHeyBoxClient client,
         ulong id, RequestOptions? options) =>
         Task.FromResult(new RestTextChannel(client, room, id));

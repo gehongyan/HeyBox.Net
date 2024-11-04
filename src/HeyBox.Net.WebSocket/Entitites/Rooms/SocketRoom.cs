@@ -126,6 +126,14 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     #region Channels
 
     /// <summary>
+    ///     获取此房间内的频道。
+    /// </summary>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    public SocketRoomChannel GetChannel(ulong id) =>
+        Client.State.GetChannel(id) as SocketRoomChannel ?? new SocketRoomChannel(Client, id, this);
+
+    /// <summary>
     ///     获取此房间内指定具有文字聊天能力的频道。
     /// </summary>
     /// <param name="id"> 要获取的频道的 ID。 </param>
@@ -333,6 +341,10 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     /// <inheritdoc />
     Task<ITextChannel?> IRoom.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
         Task.FromResult<ITextChannel?>(GetTextChannel(id));
+
+    /// <inheritdoc />
+    Task<IRoomChannel?> IRoom.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IRoomChannel?>(GetChannel(id));
 
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IRoom.Roles => Roles;
