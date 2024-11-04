@@ -180,7 +180,10 @@ public partial class HeyBoxSocketClient
                     ?? SocketRoomUser.Create(room, State, memberEvent.UserInfo);
                 // room.MemberCount--;
                 if (memberEvent.UserInfo.UserId == CurrentUser?.Id)
-                    await TimedInvokeAsync(_leftRoomEvent, nameof(LeftRoom), room).ConfigureAwait(false);
+                {
+                    SocketRoom? roomLeft = State.RemoveRoom(room.Id);
+                    await TimedInvokeAsync(_leftRoomEvent, nameof(LeftRoom), roomLeft ?? room).ConfigureAwait(false);
+                }
                 else
                     await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), user).ConfigureAwait(false);
                 return;
