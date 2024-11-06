@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HeyBox.Interactions;
 
@@ -21,13 +22,13 @@ internal static class ReflectionUtils<T>
 
         return (services) =>
         {
-            object[] args = new object[parameters.Length];
-            for (int i = 0; i < parameters.Length; i++)
-                args[i] = GetMember(commandService, services, parameters[i].ParameterType, typeInfo);
+            object[] args = parameters
+                .Select(x => GetMember(commandService, services, x.ParameterType, typeInfo, x.GetCustomAttributes()))
+                .ToArray();
 
             T obj = InvokeConstructor(constructor, args, typeInfo);
             foreach (PropertyInfo property in properties)
-                property.SetValue(obj, GetMember(commandService, services, property.PropertyType, typeInfo));
+                property.SetValue(obj, GetMember(commandService, services, property.PropertyType, typeInfo, null));
             return obj;
         };
     }
@@ -67,15 +68,14 @@ internal static class ReflectionUtils<T>
         }
         return result.ToArray();
     }
-    private static object GetMember(InteractionService commandService, IServiceProvider? services, Type memberType, TypeInfo ownerType)
+    private static object GetMember(InteractionService commandService, IServiceProvider? services, Type memberType, TypeInfo ownerType, IEnumerable<object>? attributes)
     {
-        if (memberType == typeof(InteractionService))
-            return commandService;
-        if (services is not null && (memberType == typeof(IServiceProvider) || memberType == services.GetType()))
-            return services;
-        object? service = services?.GetService(memberType);
-        if (service != null)
-            return service;
+        if (memberType == typeof(InteractionService)) return commandService;
+        if (services is not null && (memberType == typeof(IServiceProvider) || memberType == services.GetType())) return services;
+        object? service = attributes?.FirstOrDefault(x => x.GetType() == typeof(FromKeyedServicesAttribute)) is { } keyedAttribute
+            ? services?.GetKeyedServices(memberType, ((FromKeyedServicesAttribute)keyedAttribute).Key).First()
+            : services?.GetService(memberType);
+        if (service != null) return service;
         throw new InvalidOperationException($"Failed to create \"{ownerType.FullName}\", dependency \"{memberType.Name}\" was not found.");
     }
 
@@ -117,17 +117,13 @@ internal static class ReflectionUtils<T>
 
         return (services) =>
         {
-            object[] args = new object[parameters.Length];
-            object[] props = new object[properties.Length];
-
-            for (int i = 0; i < parameters.Length; i++)
-                args[i] = GetMember(commandService, services, parameters[i].ParameterType, typeInfo);
-
-            for (int i = 0; i < properties.Length; i++)
-                props[i] = GetMember(commandService, services, properties[i].PropertyType, typeInfo);
-
+            object[] args = parameters
+                .Select(x => GetMember(commandService, services, x.ParameterType, typeInfo, x.GetCustomAttributes()))
+                .ToArray();
+            object[] props = properties
+                .Select(x => GetMember(commandService, services, x.PropertyType, typeInfo, null))
+                .ToArray();
             T instance = lambda(args, props);
-
             return instance;
         };
     }
