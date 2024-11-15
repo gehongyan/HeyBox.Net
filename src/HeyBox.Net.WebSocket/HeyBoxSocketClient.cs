@@ -236,7 +236,7 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
                     }
                     _lastSeq = jsonFrame.Sequence;
                     await MessageQueue
-                        .EnqueueAsync(jsonFrame.Type, jsonFrame.Data, jsonFrame.Sequence, jsonFrame.Timestamp)
+                        .EnqueueAsync(jsonFrame.Sequence, jsonFrame.Type, jsonFrame.Data, jsonFrame.Timestamp)
                         .ConfigureAwait(false);
                     break;
                 default:
@@ -251,31 +251,27 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
         }
     }
 
-    internal async Task ProcessGatewayEventAsync(string type, JsonElement payload)
+    internal async Task ProcessGatewayEventAsync(ulong sequence, string type, JsonElement payload)
     {
-        if (!Enum.TryParse(type, out GatewayEventType eventType))
+        switch (type)
         {
-            await _gatewayLogger
-                .WarningAsync($"Unknown Event Type. Payload: {SerializePayload(payload)}")
-                .ConfigureAwait(false);
-            return;
-        }
-
-        switch (eventType)
-        {
-            case GatewayEventType.SlashCommand:
+            // 斜线命令
+            case "50":
                 await HandleSlashCommand(payload).ConfigureAwait(false);
                 break;
-            case GatewayEventType.JoinedExitedRoom:
+            case "3001":
                 await HandleJoinedLeftRoom(payload).ConfigureAwait(false);
                 break;
-            case GatewayEventType.AddedRemovedReaction:
+            case "5003":
                 await HandleAddedRemovedReaction(payload).ConfigureAwait(false);
+                break;
+            case "card_message_btn_click":
+                await HandleCardMessageButtonClick(sequence, payload).ConfigureAwait(false);
                 break;
             default:
             {
                 await _gatewayLogger
-                    .WarningAsync($"Unknown Event Type ({eventType}). Payload: {SerializePayload(payload)}")
+                    .WarningAsync($"Unknown Event Type ({type}). Payload: {SerializePayload(payload)}")
                     .ConfigureAwait(false);
             }
                 break;

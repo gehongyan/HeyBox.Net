@@ -7,22 +7,22 @@ namespace HeyBox.Net.Queue.SynchronousImmediate;
 /// </summary>
 /// <remarks>
 ///     此消息队列会在接收到网关事件后调用
-///     <see cref="HeyBox.Net.Queue.SynchronousImmediate.SynchronousImmediateMessageQueue.EnqueueAsync(System.String,System.Text.Json.JsonElement,System.UInt64,System.DateTimeOffset,System.Threading.CancellationToken)"/>
+///     <see cref="HeyBox.Net.Queue.SynchronousImmediate.SynchronousImmediateMessageQueue.EnqueueAsync(System.UInt64,System.String,System.Text.Json.JsonElement,System.DateTimeOffset,System.Threading.CancellationToken)"/>
 ///     时立即使用构造函数中传入的 <c>eventHandler</c> 委托同步进行处理，处理完成后，该方法才会返回。
 /// </remarks>
 public class SynchronousImmediateMessageQueue : BaseMessageQueue
 {
     /// <inheritdoc />
-    public SynchronousImmediateMessageQueue(Func<string, JsonElement, Task> eventHandler)
+    public SynchronousImmediateMessageQueue(Func<ulong, string, JsonElement, Task> eventHandler)
         : base(eventHandler)
     {
     }
 
     /// <inheritdoc />
-    public override async Task EnqueueAsync(string type, JsonElement payload, ulong sequence,
+    public override async Task EnqueueAsync(ulong sequence, string type, JsonElement payload,
         DateTimeOffset timestamp, CancellationToken cancellationToken = default)
     {
-        await EventHandler(type, payload).ConfigureAwait(false);
+        await EventHandler(sequence, type, payload).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

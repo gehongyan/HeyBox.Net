@@ -1,5 +1,4 @@
 ﻿namespace HeyBox.WebSocket;
-using Model = API.Gateway.CommandInfo;
 
 /// <summary>
 ///     表示一个通过网关接收的交互。
@@ -26,7 +25,7 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
     public ulong MessageId { get; private set; }
 
     /// <inheritdoc />
-    public InteractionType Type { get; private set; }
+    public InteractionType Type { get; protected set; }
 
     /// <inheritdoc />
     public IHeyBoxInteractionData Data { get; protected set; }
@@ -46,12 +45,17 @@ public abstract class SocketInteraction : SocketEntity<ulong>, IHeyBoxInteractio
         Data = SocketInteractionData.Instance;
     }
 
-    internal static SocketInteraction Create(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
+    internal static SocketInteraction Create(HeyBoxSocketClient client, API.Gateway.CommandInfo model, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
     {
         if (model.Type == ApplicationCommandType.Slash)
             return SocketSlashCommand.Create(client, model, channel, user, messageId);
 
         throw new InvalidOperationException("Unknown interaction type.");
+    }
+
+    internal static SocketInteraction Create(HeyBoxSocketClient client, API.Gateway.CardMessageButtonClickEvent model, SocketTextChannel channel, SocketRoomUser user, ulong sequence)
+    {
+        return SocketButtonClick.Create(client, model, channel, user, sequence);
     }
 
     #region IHeyBoxInteraction

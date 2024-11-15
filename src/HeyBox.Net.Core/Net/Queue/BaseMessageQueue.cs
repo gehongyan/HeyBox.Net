@@ -11,7 +11,7 @@ public abstract class BaseMessageQueue : IMessageQueue
     ///     初始化一个 <see cref="BaseMessageQueue"/> 类的新实例。
     /// </summary>
     /// <param name="eventHandler"> 用于处理消息的事件处理程序。 </param>
-    protected BaseMessageQueue(Func<string, JsonElement, Task> eventHandler)
+    protected BaseMessageQueue(Func<ulong, string, JsonElement, Task> eventHandler)
     {
         EventHandler = eventHandler;
     }
@@ -19,7 +19,7 @@ public abstract class BaseMessageQueue : IMessageQueue
     /// <summary>
     ///     获取消息队列的事件处理程序。
     /// </summary>
-    protected Func<string, JsonElement, Task> EventHandler { get; }
+    protected Func<ulong, string, JsonElement, Task> EventHandler { get; }
 
     /// <summary>
     ///     启动消息队列的处理。
@@ -36,6 +36,7 @@ public abstract class BaseMessageQueue : IMessageQueue
     public abstract Task StopAsync(CancellationToken cancellationToken = default);
 
     /// <inheritdoc />
-    public abstract Task EnqueueAsync(string type, JsonElement payload, ulong sequence,
+    public abstract Task EnqueueAsync(ulong sequence,
+        string type, JsonElement payload,
         DateTimeOffset timestamp, CancellationToken cancellationToken = default);
 }

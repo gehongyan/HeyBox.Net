@@ -40,14 +40,3 @@ public interface IHeyBoxInteraction : IEntity<ulong>
     /// </summary>
     ulong MessageId { get; }
 }
-
-/// <summary>
-///     表示 HeyBox 交互的类型。
-/// </summary>
-public enum InteractionType
-{
-    /// <summary>
-    ///     斜线命令。
-    /// </summary>
-    SlashCommand = 50
-}

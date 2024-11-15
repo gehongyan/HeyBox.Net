@@ -29,8 +29,7 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
     /// <remarks>
     ///     如果 <paramref name="event"/> 设置为 <see cref="HeyBox.ButtonEvent.LinkTo"/>，
     ///     则在用户点击按钮时，黑盒语音会将用户重定向到 <paramref name="value" /> 指定的 URL。<br />
-    ///     如果 <paramref name="event"/> 设置为 <see cref="HeyBox.ButtonEvent.Server"/>，
-    ///     则在用户点击按钮时，黑盒语音会通过网关下发按钮点击事件，并携带 <paramref name="value" /> 的值。
+    ///     无论 <paramref name="event"/> 设置为何值，用户点击按钮时，黑盒语音都会通过网关下发按钮点击事件，并携带所有按钮的属性值。
     /// </remarks>
     public ButtonNodeBuilder(string text, ButtonEvent @event, string value, ButtonTheme theme = ButtonTheme.Default)
     {
@@ -54,8 +53,7 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
     /// <remarks>
     ///     如果 <see name="HeyBox.ButtonNodeBuilder.Event"/> 设置为 <see cref="HeyBox.ButtonEvent.LinkTo"/>，
     ///     则在用户点击按钮时，黑盒语音会将用户重定向到此属性值指定的 URL。<br />
-    ///     如果 <see name="HeyBox.ButtonNodeBuilder.Event"/> 设置为 <see cref="HeyBox.ButtonEvent.Server"/>，
-    ///     则在用户点击按钮时，黑盒语音会通过网关下发按钮点击事件，并携带此属性的值。
+    ///     无论设置为何值，用户点击按钮时，黑盒语音都会通过网关下发按钮点击事件，并携带所有按钮的属性值。
     /// </remarks>
     public string? Value { get; set; }
 
@@ -65,8 +63,7 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
     /// <remarks>
     ///     如果此属性的值设置为 <see cref="HeyBox.ButtonEvent.LinkTo"/>，
     ///     则在用户点击按钮时，黑盒语音会将用户重定向到 <paramref name="value" /> 指定的 URL。<br />
-    ///     如果此属性的值设置为 <see cref="HeyBox.ButtonEvent.Server"/>，
-    ///     则在用户点击按钮时，黑盒语音会通过网关下发按钮点击事件，并携带 <paramref name="value" /> 的值。
+    ///     无论此设置为何值，用户点击按钮时，黑盒语音都会通过网关下发按钮点击事件，并携带所有按钮的属性值。
     /// </remarks>
     public ButtonEvent Event { get; set; }
 

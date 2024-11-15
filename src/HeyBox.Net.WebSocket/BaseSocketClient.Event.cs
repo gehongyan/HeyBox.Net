@@ -157,10 +157,20 @@ public abstract partial class BaseSocketClient
     /// </summary>
     public event Func<SocketSlashCommand, Task> SlashCommandExecuted
     {
-        add => _slashCommandExecuted.Add(value);
-        remove => _slashCommandExecuted.Remove(value);
+        add => _slashCommandExecutedEvent.Add(value);
+        remove => _slashCommandExecutedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketSlashCommand, Task>> _slashCommandExecuted = new();
+    internal readonly AsyncEvent<Func<SocketSlashCommand, Task>> _slashCommandExecutedEvent = new();
+
+    /// <summary>
+    ///     当用户点击按钮时引发。
+    /// </summary>
+    public event Func<SocketButtonClick, Task> ButtonClicked
+    {
+        add => _buttonClickedEvent.Add(value);
+        remove => _buttonClickedEvent.Remove(value);
+    }
+    internal readonly AsyncEvent<Func<SocketButtonClick, Task>> _buttonClickedEvent = new();
 
     #endregion
 }

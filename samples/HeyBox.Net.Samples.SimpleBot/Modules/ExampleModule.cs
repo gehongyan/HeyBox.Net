@@ -73,7 +73,7 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
                 .AddNode(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/4.png")))
             .AddModule<ButtonGroupModuleBuilder>(x => x
                 .AddNode(new ButtonNodeBuilder("Primary", ButtonEvent.Server, "primary", ButtonTheme.Primary))
-                .AddNode(new ButtonNodeBuilder("Danger", ButtonEvent.Server, "danger", ButtonTheme.Danger))
+                .AddNode(new ButtonNodeBuilder("Link", ButtonEvent.LinkTo, "https://www.baidu.com", ButtonTheme.Danger))
                 .AddNode(new ButtonNodeBuilder("Success", ButtonEvent.Server, "success", ButtonTheme.Success)))
             .AddModule<CountdownModuleBuilder>(x => x
                 .WithMode(CountdownMode.Default)

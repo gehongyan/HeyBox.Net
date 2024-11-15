@@ -253,9 +253,26 @@ public partial class HeyBoxSocketClient
         switch (interaction)
         {
             case SocketSlashCommand slashCommand:
-                await TimedInvokeAsync(_slashCommandExecuted, nameof(SlashCommandExecuted), slashCommand).ConfigureAwait(false);
+                await TimedInvokeAsync(_slashCommandExecutedEvent, nameof(SlashCommandExecuted), slashCommand).ConfigureAwait(false);
                 break;
         }
+    }
+
+    private async Task HandleCardMessageButtonClick(ulong sequence, JsonElement payload)
+    {
+        if (DeserializePayload<CardMessageButtonClickEvent>(payload) is not { } clickEvent) return;
+        SocketRoom room = await GetOrCreateRoomAsync(State, clickEvent.RoomBaseInfo.RoomId, clickEvent.RoomBaseInfo);
+        if (room.AddOrUpdateChannel(clickEvent.ChannelBaseInfo) is not SocketTextChannel channel)
+        {
+            await _gatewayLogger.WarningAsync("Received a command event for a non-text channel").ConfigureAwait(false);
+            return;
+        }
+        SocketRoomUser user = room.AddOrUpdateUser(clickEvent.SenderInfo);
+        SocketInteraction interaction = SocketInteraction.Create(this, clickEvent, channel, user, sequence);
+
+        await TimedInvokeAsync(_interactionCreatedEvent, nameof(InteractionCreated), interaction).ConfigureAwait(false);
+        if (interaction is SocketButtonClick buttonClicked)
+            await TimedInvokeAsync(_buttonClickedEvent, nameof(ButtonClicked), buttonClicked).ConfigureAwait(false);
     }
 
     #endregion

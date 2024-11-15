@@ -1,10 +1,11 @@
-﻿namespace HeyBox.WebSocket;
-using Model = API.Gateway.CommandInfo;
+﻿using Model = HeyBox.API.Gateway.CommandInfo;
+
+namespace HeyBox.WebSocket;
 
 /// <summary>
 ///     表示一个通过网关接收的斜线命令。
 /// </summary>
-public class SocketSlashCommand : SocketInteraction, ISlashCommandInteraction, IHeyBoxInteraction
+public class SocketSlashCommand : SocketInteraction, ISlashCommandInteraction
 {
     /// <inheritdoc cref="HeyBox.IHeyBoxInteraction.Data" />
     public new SocketSlashCommandData Data { get; }
@@ -12,6 +13,7 @@ public class SocketSlashCommand : SocketInteraction, ISlashCommandInteraction, I
     internal SocketSlashCommand(HeyBoxSocketClient client, Model model, SocketTextChannel channel, SocketRoomUser user, ulong messageId)
         : base(client, model.Id, channel, user, messageId)
     {
+        Type = InteractionType.SlashCommand;
         Data = SocketSlashCommandData.Create(client, model, channel.Room);
     }
 
