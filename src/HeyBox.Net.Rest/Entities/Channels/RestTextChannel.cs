@@ -43,5 +43,15 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
         IEnumerable<FileAttachment>? imageFileInfos = null, IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendTextAsync(this, Client, text, imageFileInfos, messageReference, options);
 
+    /// <inheritdoc />
+    public Task<IUserMessage> SendCardAsync(ICard card,
+        IMessageReference? messageReference = null, RequestOptions? options = null) =>
+        ChannelHelper.SendCardAsync(this, Client, card, messageReference, options);
+
+    /// <inheritdoc />
+    public Task<IUserMessage> SendCardsAsync(IEnumerable<ICard> cards,
+        IMessageReference? messageReference = null, RequestOptions? options = null) =>
+        ChannelHelper.SendCardsAsync(this, Client, cards, messageReference, options);
+
     #endregion
 }

@@ -18,5 +18,10 @@ public enum MessageType
     /// <summary>
     ///     表示带有提及成员的 Markdown 消息。
     /// </summary>
-    MarkdownWithMention = 10
+    MarkdownWithMention = 10,
+
+    /// <summary>
+    ///     表示卡片消息。
+    /// </summary>
+    Card = 20
 }

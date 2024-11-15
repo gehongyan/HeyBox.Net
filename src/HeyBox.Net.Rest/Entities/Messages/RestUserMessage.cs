@@ -1,4 +1,5 @@
-﻿using HeyBox.API.Rest;
+﻿using System.Collections.Immutable;
+using HeyBox.API.Rest;
 
 namespace HeyBox.Rest;
 
@@ -7,6 +8,11 @@ namespace HeyBox.Rest;
 /// </summary>
 public class RestUserMessage : RestMessage, IUserMessage
 {
+    private ImmutableArray<ICard> _cards = [];
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<ICard> Cards => _cards;
+
     internal RestUserMessage(BaseHeyBoxClient client, ulong id, MessageType messageType,
         IMessageChannel channel, IUser author, MessageSource source)
         : base(client, id, messageType, channel, author, source)
@@ -20,6 +26,17 @@ public class RestUserMessage : RestMessage, IUserMessage
         RestUserMessage entity = new(client, model.MessageId, args.MessageType, channel, author, MessageSource.User);
         entity.Update(args, model);
         return entity;
+    }
+
+    /// <inheritdoc />
+    internal override void Update(SendChannelMessageParams args, SendChannelMessageResponse model)
+    {
+        base.Update(args, model);
+
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(args.Message);
+        }
     }
 
     /// <summary>

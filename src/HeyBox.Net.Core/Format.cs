@@ -184,7 +184,7 @@ public static class Format
         .Aggregate((current, next) => $"{current}\n{next}");
 
     /// <summary>
-    ///     返回一个使用代码格式的 KMarkdown 格式化字符串。
+    ///     返回一个使用代码格式的 Markdown 格式化字符串。
     /// </summary>
     /// <param name="text"> 要格式化的文本。 </param>
     /// <param name="language"> 代码块的语言。 </param>
@@ -205,7 +205,7 @@ public static class Format
     }
 
     /// <summary>
-    ///     返回一个使用代码块格式的 KMarkdown 格式化字符串。
+    ///     返回一个使用代码块格式的 Markdown 格式化字符串。
     /// </summary>
     /// <param name="text"> 要格式化的文本。 </param>
     /// <param name="language"> 代码块的语言。 </param>
@@ -244,7 +244,7 @@ public static class Format
     /// <param name="text"> 要移除 Markdown 格式字符的文本。 </param>
     /// <returns> 获取移除 Markdown 格式字符后的文本。 </returns>
     /// <remarks>
-    ///     此方法不会过多地分析 Markdown 的复杂格式，只会简单地移除 KMarkdown 中的以下字符：<br />
+    ///     此方法不会过多地分析 Markdown 的复杂格式，只会简单地移除 Markdown 中的以下字符：<br />
     ///     <c>&lt;sup&gt;</c>、<c>&lt;/sup&gt;</c>、<c>&lt;sub&gt;</c>、<c>&lt;/sub&gt;</c>、
     ///     <c>#</c>、<c>*</c>、<c>`</c>、<c>~</c>、<c>&lt;</c>、<c>&gt;</c>、<c>\</c>。
     /// </remarks>

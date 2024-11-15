@@ -53,4 +53,24 @@ public interface IMessageChannel : IChannel
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
     Task<IUserMessage> SendTextAsync(string text,
         IEnumerable<FileAttachment>? imageFileInfos = null, IMessageReference? messageReference = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     发送卡片消息到此消息频道。
+    /// </summary>
+    /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="messageReference"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
+    Task<IUserMessage> SendCardAsync(ICard card,
+        IMessageReference? messageReference = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     发送卡片消息到此消息频道。
+    /// </summary>
+    /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="messageReference"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
+    Task<IUserMessage> SendCardsAsync(IEnumerable<ICard> cards,
+        IMessageReference? messageReference = null, RequestOptions? options = null);
 }

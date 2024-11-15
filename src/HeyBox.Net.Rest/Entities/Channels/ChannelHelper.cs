@@ -118,6 +118,30 @@ internal static class ChannelHelper
         return CreateMessageEntity(client, channel, args, model, images);
     }
 
+    public static Task<IUserMessage> SendCardAsync(ITextChannel channel, BaseHeyBoxClient client,
+        ICard card, IMessageReference? messageReference, RequestOptions? options) =>
+        SendCardsAsync(channel, client, [card], messageReference, options);
+
+    public static async Task<IUserMessage> SendCardsAsync(ITextChannel channel, BaseHeyBoxClient client,
+        IEnumerable<ICard> cards, IMessageReference? messageReference, RequestOptions? options)
+    {
+        SendChannelMessageParams args = new()
+        {
+            RoomId = channel.RoomId,
+            ChannelType = channel.Type,
+            ChannelId = channel.Id,
+            MessageType = MessageType.Card,
+            Message = MessageHelper.SerializeCards(cards),
+            ReplyId = messageReference?.MessageId,
+            Addition = "{}",
+            AtUserId = [],
+            AtRoleId = [],
+            MentionChannelId = []
+        };
+        SendChannelMessageResponse model = await client.ApiClient.SendChannelMessageAsync(args, options);
+        return CreateMessageEntity(client, channel, args, model, null);
+    }
+
     internal static ImageFileInfo CreateImageFileInfo(FileAttachment attachment) =>
         new()
         {

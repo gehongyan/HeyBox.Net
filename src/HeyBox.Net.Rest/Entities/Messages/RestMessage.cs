@@ -37,6 +37,9 @@ public abstract class RestMessage : RestEntity<ulong>, IMessage
     internal IReadOnlyCollection<FileAttachment>? ImageFileInfos { get; private set; }
 
     /// <inheritdoc />
+    public virtual IReadOnlyCollection<ICard> Cards => [];
+
+    /// <inheritdoc />
     protected RestMessage(BaseHeyBoxClient client, ulong id, MessageType messageType,
         IMessageChannel channel, IUser author, MessageSource source)
         : base(client, id)

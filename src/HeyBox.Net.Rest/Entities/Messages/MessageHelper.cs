@@ -3,7 +3,9 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using HeyBox.API;
 using HeyBox.API.Rest;
+using HeyBox.Net.Converters;
 
 namespace HeyBox.Rest;
 
@@ -215,6 +217,35 @@ internal class MessageHelper
             MessageId = message.Id
         };
         await client.ApiClient.DeleteChannelMessageAsync(args, options);
+    }
+
+    private static readonly JsonSerializerOptions CardJsonSerializerOptions = new()
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        Converters = { CardConverterFactory.Instance },
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
+    public static ImmutableArray<ICard> ParseCards(string json)
+    {
+        CardMessage? cardMessage = JsonSerializer.Deserialize<CardMessage>(json, CardJsonSerializerOptions);
+        if (cardMessage is null)
+            throw new InvalidOperationException("Failed to parse cards from the provided JSON.");
+        return [..cardMessage.Data.Select(x => x.ToEntity())];
+    }
+
+    public static string SerializeCards(IEnumerable<ICard> cards)
+    {
+        const int maxCardCount = 3;
+        IEnumerable<ICard> enumerable = cards as ICard[] ?? cards.ToArray();
+        Preconditions.AtMost(enumerable.Count(), maxCardCount, nameof(cards),
+            $"A max of {maxCardCount} cards can be included in a card message.");
+        API.CardMessage message = new()
+        {
+            Data = [..enumerable.Select(c => c.ToModel())]
+        };
+        return JsonSerializer.Serialize(message, CardJsonSerializerOptions);
     }
 
     #region Reactions

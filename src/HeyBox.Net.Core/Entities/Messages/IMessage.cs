@@ -40,7 +40,7 @@ public interface IMessage : IEntity<ulong>
     ///     此属性会对 <see cref="Content"/> 的内容进行两步操作： <br />
     ///     1. 使用 <see cref="HeyBox.IUserMessage.Resolve(HeyBox.TagHandling,HeyBox.TagHandling,HeyBox.TagHandling,HeyBox.TagHandling,HeyBox.TagHandling)"/>
     ///     方法解析所有标签的完整名称； <br />
-    ///     2. 使用 <see cref="HeyBox.Format.StripMarkdown(System.String)"/> 清理所有 KMarkdown 格式字符。
+    ///     2. 使用 <see cref="HeyBox.Format.StripMarkdown(System.String)"/> 清理所有 Markdown 格式字符。
     /// </returns>
     /// <seealso cref="HeyBox.IUserMessage.Resolve(HeyBox.TagHandling,HeyBox.TagHandling,HeyBox.TagHandling,HeyBox.TagHandling,HeyBox.TagHandling)"/>
     /// <seealso cref="HeyBox.Format.StripMarkdown(System.String)"/>
