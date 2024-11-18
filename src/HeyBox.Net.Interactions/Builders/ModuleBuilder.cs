@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HeyBox.Interactions.Builders;
 
@@ -155,6 +156,10 @@ public class ModuleBuilder
     {
         if (TypeInfo is not null && ModuleClassBuilder.IsValidModuleDefinition(TypeInfo))
         {
+            using IServiceScope? scope = services.CreateScope();
+            if (interactionService._autoServiceScopes)
+                services = scope?.ServiceProvider ?? EmptyServiceProvider.Instance;
+
             IInteractionModuleBase instance = ReflectionUtils<IInteractionModuleBase>.CreateObject(TypeInfo, interactionService, services);
 
             try
