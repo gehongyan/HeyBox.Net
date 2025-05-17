@@ -9,7 +9,7 @@ internal class RoomUser
     public required string Avatar { get; set; }
 
     [JsonPropertyName("avatar_decoration")]
-    public required AvatarDecoration? AvatarDecoration { get; set; }
+    public AvatarDecoration? AvatarDecoration { get; set; }
 
     [JsonPropertyName("bot")]
     public bool Bot { get; set; }
@@ -27,7 +27,7 @@ internal class RoomUser
     public ulong[]? Roles { get; set; }
 
     [JsonPropertyName("room_nickname")]
-    public required string? RoomNickname { get; set; }
+    public string? RoomNickname { get; set; }
 
     [JsonPropertyName("tag")]
     public JsonElement Tag { get; set; }
