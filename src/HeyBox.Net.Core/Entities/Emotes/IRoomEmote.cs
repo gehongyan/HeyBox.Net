@@ -18,7 +18,7 @@ public interface IRoomEmote : IEmote
     /// <summary>
     ///     获取此表情符号的扩展名。
     /// </summary>
-    string Extension { get; }
+    string? Extension { get; }
 
     /// <summary>
     ///     获取此表情符号的创建时间。
@@ -38,5 +38,5 @@ public interface IRoomEmote : IEmote
     /// <summary>
     ///     获取此表情符号的路径。
     /// </summary>
-    ulong Path { get; }
+    ulong? Path { get; }
 }

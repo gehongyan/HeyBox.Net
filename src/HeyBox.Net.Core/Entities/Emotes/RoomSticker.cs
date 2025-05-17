@@ -15,7 +15,7 @@ public class RoomSticker : Emote, IRoomEmote
     public ulong RoomId { get; }
 
     /// <inheritdoc />
-    public string Extension { get; }
+    public string? Extension { get; }
 
     /// <inheritdoc />
     public DateTimeOffset? CreatedAt { get; }
@@ -27,7 +27,7 @@ public class RoomSticker : Emote, IRoomEmote
     public ulong? CreatorId { get; }
 
     /// <inheritdoc />
-    public ulong Path { get; }
+    public ulong? Path { get; }
 
     internal RoomSticker(ulong roomId, ulong path, string extension)
         : base("custom", null)
@@ -56,9 +56,9 @@ public class RoomSticker : Emote, IRoomEmote
     ///     返回此表情符号的原始表示。
     /// </summary>
     /// <returns>
-    ///     表示表情符号的原始表示（例如 <c>[custom3358126864697663488_1843946660894564352.png]</c>）。
+    ///     表示表情符号的原始表示（例如 <c>[custom3358126864697663488_demo]</c>）。
     /// </returns>
-    public override string ToString() => $"[custom{RoomId}_{Path}.{Extension}]";
+    public override string ToString() => $"[custom{RoomId}_{Name}]";
 
     /// <inheritdoc />
     string IEmote.Group => "custom";

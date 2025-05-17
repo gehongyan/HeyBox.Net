@@ -28,12 +28,10 @@ client.Log += message =>
 client.ReactionAdded += async (message, channel, user, reaction) =>
 {
     if (reaction.Room is not { } room
-        || reaction.Emote is not RoomEmote roomEmote)
+        || reaction.Emote is not Emote emote)
         return;
-    string newName = $"Emote_{DateTimeOffset.Now.ToUnixTimeMilliseconds()}";
-    await room.ModifyEmoteAsync(roomEmote, x => x.Name = newName);
     if (channel.HasValue)
-        await channel.Value.SendTextAsync($"Changed emote name to {newName}");
+        await channel.Value.SendTextAsync($"You reacted with {emote} in {room.Name}.");
 };
 await app.Services.GetRequiredService<InteractionHandler>().InitializeAsync();
 await client.LoginAsync(TokenType.BotToken, "");

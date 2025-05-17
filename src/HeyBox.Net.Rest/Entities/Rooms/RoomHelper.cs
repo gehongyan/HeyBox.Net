@@ -42,6 +42,8 @@ internal class RoomHelper
     public static async Task ModifyMemeAsync(IRoom room, BaseHeyBoxClient client,
         IRoomEmote emote, Action<EmoteProperties> func, RequestOptions? options)
     {
+        if (!emote.Path.HasValue)
+            throw new InvalidOperationException("Unable to modify an emote that has no path.");
         EmoteProperties properties = new()
         {
             Name = emote.Name
@@ -51,7 +53,7 @@ internal class RoomHelper
         ModifyRoomMemeParams args = new()
         {
             RoomId = room.Id,
-            Path = emote.Path,
+            Path = emote.Path.Value,
             Name = properties.Name
         };
         await client.ApiClient.ModifyRoomMemeAsync(args, options);
@@ -60,10 +62,12 @@ internal class RoomHelper
     public static async Task DeleteMemeAsync(IRoom room, BaseHeyBoxClient client,
         IRoomEmote emote, RequestOptions? options)
     {
+        if (!emote.Path.HasValue)
+            throw new InvalidOperationException("Unable to delete an emote that has no path.");
         DeleteRoomMemeParams args = new()
         {
             RoomId = room.Id,
-            Path = emote.Path
+            Path = emote.Path.Value
         };
         await client.ApiClient.DeleteRoomMemeAsync(args, options);
     }

@@ -98,7 +98,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         {
             SocketRoomUser creator = AddOrUpdateUser(emojiInfo.UserInfo);
             RoomEmote emote = emojiInfo.MemeInfo.ToEmoteEntity(creator);
-            _emotes.TryAdd(emote.Path, emote);
+            _emotes.TryAdd(emojiInfo.MemeInfo.Path, emote);
         }
 
         _stickers.Clear();
@@ -106,7 +106,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         {
             SocketRoomUser creator = AddOrUpdateUser(stickerInfo.UserInfo);
             RoomSticker sticker = stickerInfo.MemeInfo.ToStickerEntity(creator);
-            _stickers.TryAdd(sticker.Path, sticker);
+            _stickers.TryAdd(stickerInfo.MemeInfo.Path, sticker);
         }
     }
 

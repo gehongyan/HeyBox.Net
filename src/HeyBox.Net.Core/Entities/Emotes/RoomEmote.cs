@@ -16,7 +16,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     public ulong RoomId { get; }
 
     /// <inheritdoc />
-    public string Extension { get; }
+    public string? Extension { get; }
 
     /// <inheritdoc />
     public DateTimeOffset? CreatedAt { get; }
@@ -28,10 +28,21 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     public ulong? CreatorId { get; }
 
     /// <inheritdoc />
-    public ulong Path { get; }
+    public ulong? Path { get; }
 
     /// <inheritdoc />
     public bool IsPopulated { get; }
+
+    /// <summary>
+    ///     初始化一个 <see cref="HeyBox.RoomEmote"/> 的新实例。
+    /// </summary>
+    /// <param name="roomId"> 表情符号所在的房间的 ID。 </param>
+    /// <param name="name"> 表情符号的名称。 </param>
+    public RoomEmote(ulong roomId, string name)
+        : base("custom", name)
+    {
+        RoomId = roomId;
+    }
 
     /// <summary>
     ///     初始化一个 <see cref="HeyBox.RoomEmote"/> 的新实例。
@@ -65,14 +76,14 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     ///     尝试从一个表情符号的原始格式中解析出一个 <see cref="HeyBox.RoomEmote"/>。
     /// </summary>
     /// <param name="text">
-    ///     表情符号的原始格式。例如 <c>[custom3358126864697663488_1843946660894564352.png]</c>。
+    ///     表情符号的原始格式。例如 <c>[custom3358126864697663488_demo]</c>。
     /// </param>
     /// <param name="result"> 如果解析成功，则为解析出的 <see cref="HeyBox.RoomEmote"/>；否则为 <c>null</c>。 </param>
     /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     /// <example>
     ///     下面的示例演示了如何解析一个表情符号的原始格式：
     ///     <code language="cs">
-    ///     bool success = Emote.TryParse("[custom3358126864697663488_1843946660894564352.png]", out Emote? emote)
+    ///     bool success = Emote.TryParse("[custom3358126864697663488_demo]", out Emote? emote)
     ///     </code>
     /// </example>
     public static bool TryParse(string text, [NotNullWhen(true)] out RoomEmote? result)
@@ -93,7 +104,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     ///     从一个表情符号的原始格式中解析出一个 <see cref="HeyBox.RoomEmote"/>。
     /// </summary>
     /// <param name="text">
-    ///     表情符号的原始格式。例如 <c>[custom3358126864697663488_1843946660894564352.png]</c>。
+    ///     表情符号的原始格式。例如 <c>[custom3358126864697663488_demo]</c>。
     /// </param>
     /// <returns> 解析出的 <see cref="HeyBox.RoomEmote"/>。 </returns>
     /// <exception cref="ArgumentException">
@@ -102,7 +113,7 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     /// <example>
     ///     下面的示例演示了如何解析一个表情符号的原始格式：
     ///     <code language="cs">
-    ///     RoomEmote emote = RoomEmote.Parse("[custom3358126864697663488_1843946660894564352.png]");
+    ///     RoomEmote emote = RoomEmote.Parse("[custom3358126864697663488_demo]");
     ///     </code>
     /// </example>
     public static RoomEmote Parse(string text)
@@ -110,18 +121,13 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
         ReadOnlySpan<char> textSpan = text.AsSpan();
         if (!textSpan.StartsWith("[custom") || !textSpan.EndsWith("]"))
             throw new FormatException("The input text is not a valid emote format.");
-        int underscoreIndex = textSpan.LastIndexOf('_');
+        int underscoreIndex = textSpan.IndexOf('_');
         if (underscoreIndex == -1)
-            throw new FormatException("The input text is not a valid emote format.");
-        int dotIndex = textSpan.LastIndexOf('.');
-        if (dotIndex == -1)
             throw new FormatException("The input text is not a valid emote format.");
         if (!ulong.TryParse(textSpan[7..underscoreIndex], out ulong roomId))
             throw new FormatException("The input text is not a valid emote format.");
-        if (!ulong.TryParse(textSpan[(underscoreIndex + 1)..dotIndex], out ulong path))
-            throw new FormatException("The input text is not a valid emote format.");
-        string extension = textSpan[(dotIndex + 1)..^1].ToString();
-        return new RoomEmote(roomId, path, extension);
+        string name = textSpan[(underscoreIndex + 1)..^1].ToString();
+        return new RoomEmote(roomId, name);
     }
 
     /// <inheritdoc />
@@ -145,9 +151,9 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     ///     返回此表情符号的原始表示。
     /// </summary>
     /// <returns>
-    ///     表示表情符号的原始表示（例如 <c>[custom3358126864697663488_1843946660894564352.png]</c>）。
+    ///     表示表情符号的原始表示（例如 <c>[custom3358126864697663488_demo]</c>）。
     /// </returns>
-    public override string ToString() => $"[custom{RoomId}_{Path}.{Extension}]";
+    public override string ToString() => $"[custom{RoomId}_{Name}]";
 
     /// <inheritdoc />
     string IEmote.Group => "custom";
