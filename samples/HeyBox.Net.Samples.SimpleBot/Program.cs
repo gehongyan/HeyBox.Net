@@ -32,6 +32,8 @@ client.ReactionAdded += async (message, channel, user, reaction) =>
         return;
     if (channel.HasValue)
         await channel.Value.SendTextAsync($"You reacted with {emote} in {room.Name}.");
+    IReadOnlyCollection<RoomEmote> emotes = await room.GetEmotesAsync();
+    IReadOnlyCollection<RoomSticker> stickers = await room.GetStickersAsync();
 };
 await app.Services.GetRequiredService<InteractionHandler>().InitializeAsync();
 await client.LoginAsync(TokenType.BotToken, "");

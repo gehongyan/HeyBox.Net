@@ -145,8 +145,6 @@ public class RoomEmote : Emote, IRoomEmote, IEquatable<RoomEmote>
     /// <inheritdoc />
     public override int GetHashCode() => HashCode.Combine(RoomId, Path, Extension);
 
-    private string DebuggerDisplay => $"{Name} ({Path}.{Extension})";
-
     /// <summary>
     ///     返回此表情符号的原始表示。
     /// </summary>
