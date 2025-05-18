@@ -56,7 +56,7 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
     public async Task CardAsync()
     {
         ICardBuilder builder = new CardBuilder()
-            .AddModule<HeaderModuleBuilder>(x => x.WithText(Format.Bold("Header"), true))
+            .AddModule<HeaderModuleBuilder>(x => x.WithContent(Format.Bold("Header"), true))
             .AddModule<DividerModuleBuilder>(x => x.WithText("Divider"))
             .AddModule<SectionModuleBuilder>(x => x
                 .AddNode<MarkdownNodeBuilder>(y => y.WithText(Format.Bold("Section")))
@@ -68,13 +68,13 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
                     .WithSize(ImageSize.Medium)
                     .WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/1.png")))
             .AddModule<ImagesModuleBuilder>(x => x
-                .AddNode(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/2.png"))
-                .AddNode(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/3.png"))
-                .AddNode(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/4.png")))
+                .AddImage(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/2.png"))
+                .AddImage(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/3.png"))
+                .AddImage(y => y.WithUrl("https://cdn.max-c.com/stickers/heyboxgirl/4.png")))
             .AddModule<ButtonGroupModuleBuilder>(x => x
-                .AddNode(new ButtonNodeBuilder("Primary", ButtonEvent.Server, "primary", ButtonTheme.Primary))
-                .AddNode(new ButtonNodeBuilder("Link", ButtonEvent.LinkTo, "https://www.baidu.com", ButtonTheme.Danger))
-                .AddNode(new ButtonNodeBuilder("Success", ButtonEvent.Server, "success", ButtonTheme.Success)))
+                .AddButton(new ButtonNodeBuilder("Primary", ButtonEvent.Server, "primary", ButtonTheme.Primary))
+                .AddButton(new ButtonNodeBuilder("Link", ButtonEvent.LinkTo, "https://www.baidu.com", ButtonTheme.Danger))
+                .AddButton(new ButtonNodeBuilder("Success", ButtonEvent.Server, "success", ButtonTheme.Success)))
             .AddModule<CountdownModuleBuilder>(x => x
                 .WithMode(CountdownMode.Default)
                 .WithEndTime(DateTimeOffset.UtcNow.AddDays(1)));

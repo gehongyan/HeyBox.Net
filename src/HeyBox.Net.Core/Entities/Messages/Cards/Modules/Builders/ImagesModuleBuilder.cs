@@ -17,16 +17,16 @@ public class ImagesModuleBuilder : IModuleBuilder, IEquatable<ImagesModuleBuilde
     /// </summary>
     public ImagesModuleBuilder()
     {
-        Nodes = [];
+        Images = [];
     }
 
     /// <summary>
     ///     初始化一个 <see cref="ImagesModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="nodes"> 按钮组模块要包含的按钮元素。 </param>
-    public ImagesModuleBuilder(IList<ImageNodeBuilder> nodes)
+    /// <param name="images"> 按钮组模块要包含的按钮元素。 </param>
+    public ImagesModuleBuilder(IList<ImageNodeBuilder> images)
     {
-        Nodes = nodes;
+        Images = images;
     }
 
     /// <inheritdoc />
@@ -35,16 +35,16 @@ public class ImagesModuleBuilder : IModuleBuilder, IEquatable<ImagesModuleBuilde
     /// <summary>
     ///     获取或设置按钮组模块的按钮元素。
     /// </summary>
-    public IList<ImageNodeBuilder> Nodes { get; set; }
+    public IList<ImageNodeBuilder> Images { get; set; }
 
     /// <summary>
     ///     添加一个按钮元素到按钮组模块。
     /// </summary>
     /// <param name="field"> 要添加的按钮元素。 </param>
     /// <returns> 当前构建器。 </returns>
-    public ImagesModuleBuilder AddNode(ImageNodeBuilder field)
+    public ImagesModuleBuilder AddImage(ImageNodeBuilder field)
     {
-        Nodes.Add(field);
+        Images.Add(field);
         return this;
     }
 
@@ -53,11 +53,11 @@ public class ImagesModuleBuilder : IModuleBuilder, IEquatable<ImagesModuleBuilde
     /// </summary>
     /// <param name="image"> 一个包含对要添加的新创建的按钮元素进行配置的操作的委托。 </param>
     /// <returns> 当前构建器。 </returns>
-    public ImagesModuleBuilder AddNode(Action<ImageNodeBuilder>? image = null)
+    public ImagesModuleBuilder AddImage(Action<ImageNodeBuilder>? image = null)
     {
         ImageNodeBuilder field = new();
         image?.Invoke(field);
-        Nodes.Add(field);
+        Images.Add(field);
         return this;
     }
 
@@ -66,26 +66,26 @@ public class ImagesModuleBuilder : IModuleBuilder, IEquatable<ImagesModuleBuilde
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="ImagesModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     <see cref="Nodes"/> 为 <c>null</c>。
+    ///     <see cref="Images"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Nodes"/> 是一个空列表。
+    ///     <see cref="Images"/> 是一个空列表。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Nodes"/> 的元素数量超过了 <see cref="MaxImageCount"/>。
+    ///     <see cref="Images"/> 的元素数量超过了 <see cref="MaxImageCount"/>。
     /// </exception>
     public ImagesModule Build()
     {
-        if (Nodes == null)
+        if (Images == null)
             throw new ArgumentNullException(
-                nameof(Nodes), "Node cannot be null or empty list.");
-        if (Nodes.Count == 0)
+                nameof(Images), "Images cannot be null or empty list.");
+        if (Images.Count == 0)
             throw new ArgumentException(
-                "Node cannot be null or empty list.", nameof(Nodes));
-        if (Nodes.Count > MaxImageCount)
+                "Images cannot be null or empty list.", nameof(Images));
+        if (Images.Count > MaxImageCount)
             throw new ArgumentException(
-                $"Node count must be less than or equal to {MaxImageCount}.", nameof(Nodes));
-        return new ImagesModule([..Nodes.Select(e => e.Build(this))]);
+                $"Images count must be less than or equal to {MaxImageCount}.", nameof(Images));
+        return new ImagesModule([..Images.Select(e => e.Build(this))]);
     }
 
     /// <inheritdoc />
@@ -115,11 +115,11 @@ public class ImagesModuleBuilder : IModuleBuilder, IEquatable<ImagesModuleBuilde
         if (imagesModuleBuilder is null)
             return false;
 
-        if (Nodes.Count != imagesModuleBuilder.Nodes.Count)
+        if (Images.Count != imagesModuleBuilder.Images.Count)
             return false;
 
-        if (Nodes
-            .Zip(imagesModuleBuilder.Nodes, (x, y) => (x, y))
+        if (Images
+            .Zip(imagesModuleBuilder.Images, (x, y) => (x, y))
             .Any(pair => pair.x != pair.y))
             return false;
 

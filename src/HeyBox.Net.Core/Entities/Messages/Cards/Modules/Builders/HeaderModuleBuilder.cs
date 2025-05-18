@@ -8,7 +8,7 @@ namespace HeyBox;
 public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <summary>
-    ///     标题内容文本的最大长度。
+    ///     标题内容内容的最大长度。
     /// </summary>
     public const int MaxHeaderContentLength = 100;
 
@@ -25,61 +25,61 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <summary>
     ///     初始化一个 <see cref="HeaderModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> 标题文本。 </param>
-    public HeaderModuleBuilder(ITextNodeBuilder text)
+    /// <param name="content"> 标题内容。 </param>
+    public HeaderModuleBuilder(ITextNodeBuilder content)
     {
-        Text = text;
+        Content = content;
     }
 
     /// <summary>
     ///     初始化一个 <see cref="HeaderModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> 标题文本。 </param>
+    /// <param name="text"> 标题内容的文本。 </param>
     /// <param name="isMarkdown"> 是否为 Markdown 格式。 </param>
     public HeaderModuleBuilder(string text, bool isMarkdown = false)
     {
-        Text = isMarkdown ? new MarkdownNodeBuilder(text) : new PlainTextNodeBuilder(text);
+        Content = isMarkdown ? new MarkdownNodeBuilder(text) : new PlainTextNodeBuilder(text);
     }
 
     /// <summary>
-    ///     获取或设置标题文本。
+    ///     获取或设置标题内容。
     /// </summary>
-    public ITextNodeBuilder? Text { get; set; }
+    public ITextNodeBuilder? Content { get; set; }
 
     /// <summary>
-    ///     设置标题文本。
+    ///     设置标题内容。
     /// </summary>
-    /// <param name="text"> 要设置的标题文本。 </param>
+    /// <param name="content"> 要设置的标题内容。 </param>
     /// <returns> 当前构建器。 </returns>
-    public HeaderModuleBuilder WithText(ITextNodeBuilder text)
+    public HeaderModuleBuilder WithContent(ITextNodeBuilder content)
     {
-        Text = text;
+        Content = content;
         return this;
     }
 
     /// <summary>
-    ///     设置标题文本。
+    ///     设置标题内容。
     /// </summary>
-    /// <param name="text"> 要设置的标题文本。 </param>
+    /// <param name="content"> 要设置的标题内容。 </param>
     /// <param name="isMarkdown"> 是否为 Markdown 格式。 </param>
     /// <returns> 当前构建器。 </returns>
-    public HeaderModuleBuilder WithText(string text, bool isMarkdown = false)
+    public HeaderModuleBuilder WithContent(string content, bool isMarkdown = false)
     {
-        Text = isMarkdown ? new MarkdownNodeBuilder(text) : new PlainTextNodeBuilder(text);
+        Content = isMarkdown ? new MarkdownNodeBuilder(content) : new PlainTextNodeBuilder(content);
         return this;
     }
 
     /// <summary>
-    ///     设置标题文本。
+    ///     设置标题内容。
     /// </summary>
-    /// <param name="action"> 一个包含对要设置的标题文本进行配置的操作的委托。 </param>
+    /// <param name="action"> 一个包含对要设置的标题内容进行配置的操作的委托。 </param>
     /// <returns> 当前构建器。 </returns>
-    public HeaderModuleBuilder WithText<T>(Action<T>? action = null)
+    public HeaderModuleBuilder WithContent<T>(Action<T>? action = null)
         where T : ITextNodeBuilder, new()
     {
         T text = new();
         action?.Invoke(text);
-        Text = text;
+        Content = text;
         return this;
     }
 
@@ -88,40 +88,40 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="HeaderModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     <see cref="Text"/> 为 <c>null</c>。
+    ///     <see cref="Content"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Text"/> 的内容为 <c>null</c>。
+    ///     <see cref="Content"/> 的内容为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Text"/> 的内容长度超过了 <see cref="MaxHeaderContentLength"/>。
+    ///     <see cref="Content"/> 的内容长度超过了 <see cref="MaxHeaderContentLength"/>。
     /// </exception>
-    [MemberNotNull(nameof(Text))]
+    [MemberNotNull(nameof(Content))]
     public HeaderModule Build()
     {
-        if (Text is null)
-            throw new ArgumentNullException(nameof(Text), "The header text cannot be null.");
+        if (Content is null)
+            throw new ArgumentNullException(nameof(Content), "The header text cannot be null.");
 
-        if (Text.Text is null)
-            throw new ArgumentException("The content of the header text cannot be null.", nameof(Text));
+        if (Content.Text is null)
+            throw new ArgumentException("The content of the header text cannot be null.", nameof(Content));
 
-        if (Text.Text.Length > MaxHeaderContentLength)
+        if (Content.Text.Length > MaxHeaderContentLength)
             throw new ArgumentException(
                 $"Header content length must be less than or equal to {MaxHeaderContentLength}.",
-                nameof(Text));
+                nameof(Content));
 
-        return new HeaderModule(Text.Build());
+        return new HeaderModule(Content.Build());
     }
 
     /// <summary>
-    ///     使用指定的纯文本文本内容初始化一个新的 <see cref="HeaderModuleBuilder"/> 类的实例。
+    ///     使用指定的纯内容内容内容初始化一个新的 <see cref="HeaderModuleBuilder"/> 类的实例。
     /// </summary>
-    /// <param name="text"> 纯文本文本内容。 </param>
-    /// <returns> 一个使用指定的纯文本文本内容初始化的 <see cref="PlainTextNodeBuilder"/> 类的实例。 </returns>
+    /// <param name="text"> 纯内容内容内容。 </param>
+    /// <returns> 一个使用指定的纯内容内容内容初始化的 <see cref="PlainTextNodeBuilder"/> 类的实例。 </returns>
     public static implicit operator HeaderModuleBuilder(string text) => new(text);
 
     /// <inheritdoc />
-    [MemberNotNull(nameof(Text))]
+    [MemberNotNull(nameof(Content))]
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
@@ -149,7 +149,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
             return false;
 
         return Type == headerModuleBuilder.Type
-            && Text == headerModuleBuilder.Text;
+            && Content == headerModuleBuilder.Content;
     }
 
     /// <inheritdoc />

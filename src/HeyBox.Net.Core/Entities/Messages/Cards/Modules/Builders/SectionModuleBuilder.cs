@@ -95,7 +95,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <summary>
     ///     初始化一个 <see cref="SectionModuleBuilder"/> 类的新实例。
     /// </summary>
-    public IList<INodeBuilder> Paragraph { get; }
+    public IList<INodeBuilder> Paragraph { get; set; }
 
     /// <summary>
     ///     添加一个元素到文本模块。
