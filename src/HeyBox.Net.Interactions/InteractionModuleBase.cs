@@ -125,7 +125,7 @@ public abstract class InteractionModuleBase<T> : IInteractionModuleBase where T 
     /// <param name="reply"> 是否回复原消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
-    public Task<IUserMessage> ReplyCardAsync(IEnumerable<ICard> cards,
+    public Task<IUserMessage> ReplyCardsAsync(IEnumerable<ICard> cards,
         bool reply = false, RequestOptions? options = null)
     {
         IMessageReference? messageReference = reply ? new MessageReference(Context.MessageId) : null;
