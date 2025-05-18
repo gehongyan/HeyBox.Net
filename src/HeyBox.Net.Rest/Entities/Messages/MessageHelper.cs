@@ -206,7 +206,7 @@ internal class MessageHelper
         await client.ApiClient.ModifyChannelMessageAsync(args, options);
     }
 
-    public static async Task DeleteAsync(RestUserMessage message, BaseHeyBoxClient client, RequestOptions? options)
+    public static async Task DeleteAsync(IMessage message, BaseHeyBoxClient client, RequestOptions? options)
     {
         if (message.Channel is not IRoomChannel roomChannel)
             throw new NotSupportedException("Deleting a message from a non-room channel is not supported.");
@@ -215,6 +215,17 @@ internal class MessageHelper
             RoomId = roomChannel.RoomId,
             ChannelId = roomChannel.Id,
             MessageId = message.Id
+        };
+        await client.ApiClient.DeleteChannelMessageAsync(args, options);
+    }
+
+    public static async Task DeleteAsync(ulong messageId, ITextChannel textChannel, BaseHeyBoxClient client, RequestOptions? options)
+    {
+        DeleteChannelMessageParams args = new()
+        {
+            RoomId = textChannel.RoomId,
+            ChannelId = textChannel.Id,
+            MessageId = messageId
         };
         await client.ApiClient.DeleteChannelMessageAsync(args, options);
     }

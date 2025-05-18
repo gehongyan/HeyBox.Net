@@ -7,6 +7,8 @@ namespace HeyBox;
 /// </summary>
 public interface IMessageChannel : IChannel
 {
+    #region Send Messages
+
     /// <summary>
     ///     发送文件到此消息频道。
     /// </summary>
@@ -73,4 +75,24 @@ public interface IMessageChannel : IChannel
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送的消息。 </returns>
     Task<IUserMessage> SendCardsAsync(IEnumerable<ICard> cards,
         IMessageReference? messageReference = null, RequestOptions? options = null);
+
+    #endregion
+
+    #region Delete Messages
+
+    /// <summary>
+    ///     删除一条消息。
+    /// </summary>
+    /// <param name="messageId"> 要删除的消息的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步删除操作的任务。 </returns>
+    Task DeleteMessageAsync(ulong messageId, RequestOptions? options = null);
+
+    /// <summary> 删除一条消息. </summary>
+    /// <param name="message"> 要删除的消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步删除操作的任务。 </returns>
+    Task DeleteMessageAsync(IMessage message, RequestOptions? options = null);
+
+    #endregion
 }

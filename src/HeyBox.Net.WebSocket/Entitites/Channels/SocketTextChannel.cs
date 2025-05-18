@@ -72,4 +72,12 @@ public class SocketTextChannel : SocketRoomChannel, ITextChannel, ISocketMessage
     public Task<IUserMessage> SendCardsAsync(IEnumerable<ICard> cards,
         IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardsAsync(this, Client, cards, messageReference, options);
+
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(IMessage message, RequestOptions? options = null) =>
+        MessageHelper.DeleteAsync(message, Client, options);
+
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(ulong messageId, RequestOptions? options = null) =>
+        MessageHelper.DeleteAsync(messageId, this, Client, options);
 }

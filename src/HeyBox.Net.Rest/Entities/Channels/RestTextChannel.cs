@@ -53,5 +53,13 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
         IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardsAsync(this, Client, cards, messageReference, options);
 
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(IMessage message, RequestOptions? options = null) =>
+        MessageHelper.DeleteAsync(message, Client, options);
+
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(ulong messageId, RequestOptions? options = null) =>
+        MessageHelper.DeleteAsync(messageId, this, Client, options);
+
     #endregion
 }
