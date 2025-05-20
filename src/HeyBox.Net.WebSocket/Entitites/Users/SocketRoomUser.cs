@@ -21,6 +21,9 @@ public class SocketRoomUser : SocketUser, IRoomUser
     public string? Nickname { get; private set; }
 
     /// <inheritdoc />
+    public RoomPermissions RoomPermissions => new(Permissions.ResolveRoom(Room, this));
+
+    /// <inheritdoc />
     public override string? Username
     {
         get => GlobalUser.Username;
@@ -139,6 +142,13 @@ public class SocketRoomUser : SocketUser, IRoomUser
     /// <inheritdoc />
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
         RemoveRolesAsync(roles.Select(x => x.Id), options);
+
+    /// <inheritdoc />
+    public ChannelPermissions GetPermissions(IRoomChannel channel)
+    {
+        RoomPermissions roomPerms = RoomPermissions;
+        return new ChannelPermissions(Permissions.ResolveChannel(Room, this, channel, roomPerms.RawValue));
+    }
 
     #region IRoomUser
 

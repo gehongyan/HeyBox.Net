@@ -21,6 +21,9 @@ public class RestRoomUser : RestUser, IRoomUser
     public ulong RoomId => Room.Id;
 
     /// <inheritdoc />
+    public RoomPermissions RoomPermissions => new(Permissions.ResolveRoom(Room, this));
+
+    /// <inheritdoc />
     internal RestRoomUser(RestRoom room, uint id)
         : base(room.Client, id)
     {
@@ -80,4 +83,10 @@ public class RestRoomUser : RestUser, IRoomUser
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
         RemoveRolesAsync(roles.Select(x => x.Id), options);
 
+    /// <inheritdoc />
+    public ChannelPermissions GetPermissions(IRoomChannel channel)
+    {
+        RoomPermissions roomPerms = RoomPermissions;
+        return new ChannelPermissions(Permissions.ResolveChannel(Room, this, channel, roomPerms.RawValue));
+    }
 }

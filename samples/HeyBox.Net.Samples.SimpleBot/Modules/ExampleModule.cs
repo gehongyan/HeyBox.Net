@@ -1,5 +1,6 @@
 using HeyBox.Interactions;
 using HeyBox.Net.Samples.SimpleBot.Data;
+using HeyBox.WebSocket;
 
 namespace HeyBox.Net.Samples.SimpleBot.Modules;
 
@@ -85,6 +86,14 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
     [RequireUser(12345678)]
     public async Task StopAsync()
     {
+        if (Context.User is not SocketRoomUser roomUser) return;
+        IReadOnlyCollection<SocketRole> roles = roomUser.Room.Roles;
+        IEnumerable<RoomPermissions> permissions = roomUser.Roles.Select(x => x.Permissions);
+        RoomPermissions roomPermissions = roomUser.RoomPermissions;
+        if (Context.Channel is IRoomChannel roomChannel)
+        {
+            ChannelPermissions channelPermissions = roomUser.GetPermissions(roomChannel);
+        }
         await ReplyTextAsync("Goodbye!");
         Environment.Exit(0);
     }

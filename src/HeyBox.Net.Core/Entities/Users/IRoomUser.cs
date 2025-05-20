@@ -36,6 +36,18 @@ public interface IRoomUser : IUser
     /// </summary>
     ulong RoomId { get; }
 
+    /// <summary>
+    ///     获取此用户在该房间内的权限。
+    /// </summary>
+    RoomPermissions RoomPermissions { get; }
+
+    /// <summary>
+    ///     获取此用户在指定频道内所拥有的权限。
+    /// </summary>
+    /// <param name="channel"> 要获取权限的频道。 </param>
+    /// <returns> 一个表示此用户在指定频道内所拥有的频道权限的权限集。 </returns>
+    ChannelPermissions GetPermissions(IRoomChannel channel);
+
     #region Roles
 
     /// <summary>
