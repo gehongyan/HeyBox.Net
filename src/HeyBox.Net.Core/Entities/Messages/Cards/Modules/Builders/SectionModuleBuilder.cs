@@ -10,7 +10,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <summary>
     ///     获取模块的最大段落数量。
     /// </summary>
-    public const int MaxParagraphCount = 3;
+    public const int MaxParagraphCount = 5;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Section;
@@ -157,16 +157,32 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
             [ITextNodeBuilder]
             or [ITextNodeBuilder, ITextNodeBuilder or ButtonNodeBuilder or ImageNodeBuilder]
             or [ITextNodeBuilder, ITextNodeBuilder, ITextNodeBuilder]
+            or [ITextNodeBuilder, ITextNodeBuilder, ITextNodeBuilder, ITextNodeBuilder]
+            or [ITextNodeBuilder, ITextNodeBuilder, ITextNodeBuilder, ITextNodeBuilder, ITextNodeBuilder]
             or [ImageNodeBuilder, ITextNodeBuilder]))
-            throw new InvalidOperationException("""
+            throw new InvalidOperationException($"""
                 The paragraph schema of the section module is invalid. Valid schemas are:
                 - [Text]
                 - [Text, Text or Button or Image]
                 - [Text, Text, Text]
+                - [Text, Text, Text, Text]
+                - [Text, Text, Text, Text, Text]
                 - [Image, Text]
+                Your schema is: [{string.Join(", ", Paragraph.Select(GetSchemaNodeName))}]
                 """);
 
         return new SectionModule([..Paragraph.Select(x => x.Build(this))]);
+
+        static string GetSchemaNodeName(INodeBuilder node)
+        {
+            return node switch
+            {
+                ITextNodeBuilder => "Text",
+                ButtonNodeBuilder => "Button",
+                ImageNodeBuilder => "Image",
+                _ => "<Unknown>"
+            };
+        }
     }
 
     /// <inheritdoc />
