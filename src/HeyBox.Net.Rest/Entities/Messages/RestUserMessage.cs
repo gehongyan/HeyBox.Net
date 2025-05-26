@@ -28,15 +28,31 @@ public class RestUserMessage : RestMessage, IUserMessage
         return entity;
     }
 
+    internal static RestUserMessage Create(BaseHeyBoxClient client,
+        IMessageChannel channel, IUser author,
+        SendUserMessageParams args, SendUserMessageResponse model)
+    {
+        RestUserMessage entity = new(client, model.MessageId, args.MessageType, channel, author, MessageSource.User);
+        entity.Update(args, model);
+        return entity;
+    }
+
     /// <inheritdoc />
     internal override void Update(SendChannelMessageParams args, SendChannelMessageResponse model)
     {
         base.Update(args, model);
 
         if (Type == MessageType.Card)
-        {
             _cards = MessageHelper.ParseCards(args.Message);
-        }
+    }
+
+    /// <inheritdoc />
+    internal override void Update(SendUserMessageParams args, SendUserMessageResponse model)
+    {
+        base.Update(args, model);
+
+        if (Type == MessageType.Card)
+            _cards = MessageHelper.ParseCards(args.Message);
     }
 
     /// <summary>

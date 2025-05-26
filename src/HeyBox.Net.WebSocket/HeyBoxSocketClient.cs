@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -47,6 +48,15 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     internal int? HandlerTimeout { get; private set; }
     internal new HeyBoxSocketApiClient ApiClient => base.ApiClient;
 
+    /// <summary>
+    ///     获取在此会话中存在的所有私聊频道。
+    /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         此属性不会包含在当前会话之外创建的私聊会话的私聊频道实体，如果此 Bot 刚刚启动，此属性可能会返回一个空集合。
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<SocketDMChannel> DMChannels => State.DMChannels.ToImmutableArray();
 
     /// <summary>
     ///     初始化一个 <see cref="HeyBoxSocketClient" /> 类的新实例。
@@ -70,7 +80,7 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
         WebSocketProvider = config.WebSocketProvider;
         MessageQueue = config.MessageQueueProvider(ProcessGatewayEventAsync);
         HandlerTimeout = config.HandlerTimeout;
-        State = new ClientState(0);
+        State = new ClientState(0, 0);
         Rest = new HeyBoxSocketRestClient(config, ApiClient);
         _heartbeatTimes = new ConcurrentQueue<long>();
 
@@ -184,6 +194,15 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
 
     /// <inheritdoc />
     public override SocketChannel? GetChannel(ulong id) => State.GetChannel(id);
+
+    /// <inheritdoc />
+    public override SocketDMChannel? GetDMChannel(uint userId) => State.GetDMChannel(userId);
+
+    /// <summary>
+    ///     创建一个用于与指定用户收发私信的频道。
+    /// </summary>
+    /// <returns> 与指定用户相关的私信频道。 </returns>
+    public SocketDMChannel CreateDMChannel(uint userId) => SocketUserHelper.CreateDMChannel(userId, this);
 
     /// <inheritdoc />
     public override SocketUser? GetUser(uint id) => State.GetUser(id);
@@ -440,6 +459,22 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
             _ => JsonSerializer.Serialize(payload, _serializerOptions)
         };
     }
+
+    #endregion
+
+    #region IHeyBoxClient
+
+    /// <inheritdoc />
+    Task<IRoom?> IHeyBoxClient.GetRoomAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IRoom?>(GetRoom(id));
+
+    /// <inheritdoc />
+    Task<IChannel?> IHeyBoxClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IChannel?>(GetChannel(id));
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IDMChannel>> IHeyBoxClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IDMChannel>>(DMChannels);
 
     #endregion
 }

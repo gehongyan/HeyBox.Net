@@ -1,5 +1,4 @@
 namespace HeyBox.WebSocket;
-using Model = API.Gateway.ChannelBaseInfo;
 
 /// <summary>
 ///     表示一个基于网关的频道。
@@ -12,8 +11,6 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel
         : base(client, id)
     {
     }
-
-    internal abstract void Update(ClientState state, Model model);
 
     /// <summary>
     ///     获取此频道中的一个用户。

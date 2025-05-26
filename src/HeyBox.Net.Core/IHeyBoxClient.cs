@@ -96,5 +96,27 @@ public interface IHeyBoxClient : IDisposable
     /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的频道；若指定 ID 的频道不存在，则为 <c>null</c>。 </returns>
     Task<IChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
+    /// <summary>
+    ///     获取一个私聊频道。
+    /// </summary>
+    /// <param name="userId"> 私聊频道中另一位用户的 ID。 </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定聊天代码的私聊频道；若指定聊天代码的私聊频道不存在，则为 <c>null</c>。 </returns>
+    Task<IDMChannel?> GetDMChannelAsync(uint userId, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    /// <summary>
+    ///     获取当前会话中已创建的所有私聊频道。
+    /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         此方法不会返回当前会话之外已创建的私聊频道。如果客户端刚刚启动，这可能会返回一个空集合。
+    ///     </note>
+    /// </remarks>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前会话中已创建的所有私聊频道。 </returns>
+    Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
     #endregion
 }

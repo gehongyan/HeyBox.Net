@@ -34,4 +34,10 @@ public interface IUser : IEntity<uint>, IMentionable
     ///     获取此用户的等级。
     /// </summary>
     int? Level { get; }
+
+    /// <summary>
+    ///     创建一个用于与此用户收发私信的频道。
+    /// </summary>
+    /// <returns> 与此用户相关的私信频道。 </returns>
+    IDMChannel CreateDMChannel();
 }

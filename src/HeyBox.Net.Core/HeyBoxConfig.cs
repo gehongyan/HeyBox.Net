@@ -68,6 +68,11 @@ public class HeyBoxConfig
     public const int DefaultRequestTimeout = 6000;
 
     /// <summary>
+    ///     获取黑盒语音允许在每个请求中获取的最大房间数量。
+    /// </summary>
+    public const int MaxRoomsPerBatchByDefault = 20;
+
+    /// <summary>
     ///     获取或设置请求在出现错误时的默认行为。
     /// </summary>
     /// <seealso cref="HeyBox.RequestOptions.RetryMode"/>

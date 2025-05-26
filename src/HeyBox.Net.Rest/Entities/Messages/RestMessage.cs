@@ -59,6 +59,12 @@ public abstract class RestMessage : RestEntity<ulong>, IMessage
         _tags = MessageHelper.ParseTags(args.Message, Channel, room, []);
     }
 
+    internal virtual void Update(SendUserMessageParams args, SendUserMessageResponse model)
+    {
+        Content = args.Message;
+        _tags = MessageHelper.ParseTags(args.Message, Channel, null, []);
+    }
+
     internal virtual void Update(IReadOnlyCollection<FileAttachment>? imageFileInfos)
     {
         ImageFileInfos = imageFileInfos;

@@ -229,6 +229,14 @@ public abstract class BaseHeyBoxClient : IHeyBoxClient
         Task.FromResult<IChannel?>(null);
 
     /// <inheritdoc />
+    Task<IDMChannel?> IHeyBoxClient.GetDMChannelAsync(uint userId, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IDMChannel?>(null);
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IDMChannel>> IHeyBoxClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IDMChannel>>([]);
+
+    /// <inheritdoc />
     Task<IUser?> IHeyBoxClient.GetUserAsync(uint id, CacheMode mode, RequestOptions? options) =>
         Task.FromResult<IUser?>(null);
 

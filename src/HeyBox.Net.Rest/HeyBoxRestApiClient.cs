@@ -332,6 +332,47 @@ internal class HeyBoxRestApiClient : IDisposable
         return responseStream;
     }
 
+    private async IAsyncEnumerable<IReadOnlyCollection<TItem>> SendPagedAsync<TResponse, TItem>(
+        HttpMethod method, Expression<Func<int, int, string>> endpointExpr,
+        int offset, int limit, Func<TResponse, IEnumerable<TItem>> selector,
+        BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
+        RequestOptions? options = null)
+        where TResponse : PagedResponseBase
+    {
+        int currentOffset = offset;
+        int total = int.MaxValue;
+
+        while (currentOffset < total)
+        {
+            TResponse? response = await SendAsync<TResponse, int, int>(
+                    method, endpointExpr, currentOffset, limit, ids, clientBucket, false, options)
+                .ConfigureAwait(false);
+            if (response == null)
+                yield break;
+            IReadOnlyCollection<TItem> items = [..selector(response)];
+            yield return items;
+            currentOffset += items.Count;
+            total = response.Total;
+            if (items.Count == 0 || currentOffset >= total)
+                yield break;
+        }
+    }
+
+    #endregion
+
+    #region Rooms
+
+    public IAsyncEnumerable<IReadOnlyCollection<Room>> GetJoinedRoomsAsync(
+        int limit = HeyBoxConfig.MaxRoomsPerBatchByDefault, int fromOffset = 0,
+        RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new();
+        return SendPagedAsync<GetRoomsResponse, Room>(HttpMethod.Get,
+            (o, l) => $"chatroom/v2/room/joined?offset={o}&limit={l}&{HeyBoxConfig.CommonQueryString}",
+            fromOffset, limit, x => x.Rooms, ids, options: options);
+    }
+
     #endregion
 
     #region Room Roles
@@ -343,7 +384,8 @@ internal class HeyBoxRestApiClient : IDisposable
 
         BucketIds ids = new(roomId);
         return await SendAsync<GetRoomRolesResponse>(HttpMethod.Get,
-                () => $"chatroom/v2/room_role/roles?room_id={roomId}&{HeyBoxConfig.CommonQueryString}", ids, options: options)
+                () => $"chatroom/v2/room_role/roles?room_id={roomId}&{HeyBoxConfig.CommonQueryString}", ids,
+                options: options)
             .ConfigureAwait(false);
     }
 
@@ -423,7 +465,8 @@ internal class HeyBoxRestApiClient : IDisposable
 
     #region Messages
 
-    public async Task<SendChannelMessageResponse> SendChannelMessageAsync(SendChannelMessageParams args, RequestOptions? options = null)
+    public async Task<SendChannelMessageResponse> SendChannelMessageAsync(SendChannelMessageParams args,
+        RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
@@ -436,7 +479,8 @@ internal class HeyBoxRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<ModifyChannelMessageResponse> ModifyChannelMessageAsync(ModifyChannelMessageParams args, RequestOptions? options = null)
+    public async Task<ModifyChannelMessageResponse> ModifyChannelMessageAsync(ModifyChannelMessageParams args,
+        RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
@@ -459,6 +503,16 @@ internal class HeyBoxRestApiClient : IDisposable
         BucketIds ids = new(args.RoomId, args.ChannelId);
         await SendJsonAsync(HttpMethod.Post,
                 () => $"chatroom/v2/channel_msg/delete?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<SendUserMessageResponse> SendUserMessageAsync(SendUserMessageParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+
+        BucketIds ids = new();
+        return await SendJsonAsync<SendUserMessageResponse>(HttpMethod.Post,
+                () => $"chatroom/v3/msg/user?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
             .ConfigureAwait(false);
     }
 

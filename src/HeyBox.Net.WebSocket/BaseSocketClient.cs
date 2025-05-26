@@ -61,6 +61,13 @@ public abstract partial class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
     public abstract SocketChannel? GetChannel(ulong id);
 
     /// <summary>
+    ///     获取一个私聊频道。
+    /// </summary>
+    /// <param name="userId"> 私聊频道中另一位用户的 ID。 </param>
+    /// <returns> 另一位用户具有指定用户 ID 的私聊频道；如果未找到，则返回 <c>null</c>。 </returns>
+    public abstract SocketDMChannel? GetDMChannel(uint userId);
+
+    /// <summary>
     ///     获取一个房间。
     /// </summary>
     /// <param name="id"> 要获取的房间的 ID。 </param>
@@ -78,6 +85,9 @@ public abstract partial class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
     /// <inheritdoc />
     Task<IChannel?> IHeyBoxClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
         Task.FromResult<IChannel?>(GetChannel(id));
+
+    Task<IDMChannel?> IHeyBoxClient.GetDMChannelAsync(uint userId, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IDMChannel?>(GetDMChannel(userId));
 
     /// <inheritdoc />
     Task<IUser?> IHeyBoxClient.GetUserAsync(uint id, CacheMode mode, RequestOptions? options) =>

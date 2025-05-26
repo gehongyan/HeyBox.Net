@@ -1,4 +1,5 @@
 ﻿using HeyBox.API.Rest;
+using HeyBox.WebSocket;
 
 namespace HeyBox.WebSocket;
 
@@ -38,5 +39,13 @@ internal static class SocketUserHelper
             await client.ApiClient.RemoveRoleAsync(arg, options).ConfigureAwait(false);
             user.RemoveRole(arg.RoleId);
         }
+    }
+
+    public static SocketDMChannel CreateDMChannel(SocketUser user, HeyBoxSocketClient client) => new(client, user);
+
+    public static SocketDMChannel CreateDMChannel(uint userId, HeyBoxSocketClient client)
+    {
+        SocketUser user = client.GetUser(userId) ?? new SocketGlobalUser(client, userId);
+        return CreateDMChannel(user, client);
     }
 }

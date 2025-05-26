@@ -51,10 +51,10 @@ internal static class UrlValidation
     {
         if (string.IsNullOrEmpty(url)) return false;
 
-        if (!Regex.IsMatch(url,
-                @"^https?://(chat\.max-c\.com)/(attachments)/\d{4}(-\d{2}){2}/\d+_\w+(\.\w+)$",
-                RegexOptions.Compiled | RegexOptions.IgnoreCase))
-            throw new InvalidOperationException($"The url {url} must be a valid HeyBox asset URL");
+        // if (!Regex.IsMatch(url,
+        //         @"^https?://(chat\.max-c\.com)/(attachments)/\d{4}(-\d{2}){2}/\d+_\w+(\.\w+)$",
+        //         RegexOptions.Compiled | RegexOptions.IgnoreCase))
+        //     throw new InvalidOperationException($"The url {url} must be a valid HeyBox asset URL");
 
         return true;
     }

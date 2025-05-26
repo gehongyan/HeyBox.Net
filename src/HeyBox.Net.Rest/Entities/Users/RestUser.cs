@@ -48,4 +48,14 @@ public class RestUser : RestEntity<uint>, IUser
 
         IsPopulated = true;
     }
+
+    /// <inheritdoc cref="HeyBox.IUser.CreateDMChannel()" />
+    public RestDMChannel CreateDMChannel() => UserHelper.CreateDMChannel(this, Client);
+
+    #region IUser
+
+    /// <inheritdoc />
+    IDMChannel IUser.CreateDMChannel() => CreateDMChannel();
+
+    #endregion
 }

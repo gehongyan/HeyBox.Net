@@ -90,6 +90,16 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
 
     #endregion
 
+    #region Channels
+
+    /// <summary>
+    ///     创建一个用于与指定用户收发私信的频道。
+    /// </summary>
+    /// <returns> 与指定用户相关的私信频道。 </returns>
+    public RestDMChannel CreateDMChannel(uint userId) => UserHelper.CreateDMChannel(userId, this);
+
+    #endregion
+
     #region Reactions
 
     /// <summary>
@@ -127,6 +137,14 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
             return await GetRoomAsync(id, options).ConfigureAwait(false);
         return null;
     }
+
+    /// <inheritdoc />
+    Task<IChannel?> IHeyBoxClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IChannel?>(null);
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IDMChannel>> IHeyBoxClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IDMChannel>>([]);
 
     #endregion
 

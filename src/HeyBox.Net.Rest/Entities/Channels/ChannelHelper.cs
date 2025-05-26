@@ -15,6 +15,8 @@ internal static class ChannelHelper
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
 
+    #region ITextChannel
+
     public static async Task<IUserMessage> SendFileAsync(ITextChannel channel,
         BaseHeyBoxClient client, string path, string filename, AttachmentType type, Size? imageSize, IMessageReference? messageReference, RequestOptions? options)
     {
@@ -142,14 +144,6 @@ internal static class ChannelHelper
         return CreateMessageEntity(client, channel, args, model, null);
     }
 
-    internal static ImageFileInfo CreateImageFileInfo(FileAttachment attachment) =>
-        new()
-        {
-            Url = attachment.Uri?.OriginalString,
-            Width = attachment.ImageSize?.Width,
-            Height = attachment.ImageSize?.Height
-        };
-
     private static RestUserMessage CreateMessageEntity(BaseHeyBoxClient client, IMessageChannel channel,
         SendChannelMessageParams args, SendChannelMessageResponse model, IReadOnlyCollection<FileAttachment>? imageFileInfos)
     {
@@ -159,5 +153,134 @@ internal static class ChannelHelper
         message.Update(imageFileInfos);
         return message;
     }
+
+    #endregion
+
+    #region IDMChannel
+
+    public static async Task<IUserMessage> SendFileAsync(IDMChannel channel,
+        BaseHeyBoxClient client, string path, string filename, AttachmentType type, Size? imageSize, RequestOptions? options)
+    {
+        using FileAttachment file = new(path, filename, type, imageSize);
+        return await SendFileAsync(channel, client, file, options);
+    }
+
+    public static async Task<IUserMessage> SendFileAsync(IDMChannel channel,
+        BaseHeyBoxClient client, Stream stream, string filename, AttachmentType type, Size? imageSize, RequestOptions? options)
+    {
+        using FileAttachment file = new(stream, filename, type, imageSize);
+        return await SendFileAsync(channel, client, file, options);
+    }
+
+    public static async Task<IUserMessage> SendFileAsync(IDMChannel channel,
+        BaseHeyBoxClient client, FileAttachment attachment, RequestOptions? options)
+    {
+        switch (attachment.Mode)
+        {
+            case CreateAttachmentMode.FilePath:
+            case CreateAttachmentMode.Stream:
+            {
+                if (attachment.Uri is not null) break;
+                if (attachment.Stream is null)
+                    throw new ArgumentNullException(nameof(attachment.Stream), "The stream cannot be null.");
+                CreateAssetParams createAssetParams = new()
+                {
+                    File = attachment.Stream,
+                    FileName = attachment.Filename
+                };
+                CreateAssetResponse assetResponse = await client.ApiClient
+                    .CreateAssetAsync(createAssetParams, options).ConfigureAwait(false);
+                attachment.Uri = assetResponse.Url;
+                attachment.Dispose();
+            }
+                break;
+            case CreateAttachmentMode.AssetUri:
+                if (attachment.Uri is null || !UrlValidation.ValidateHeyBoxAssetUrl(attachment.Uri.OriginalString))
+                    throw new ArgumentException("The uri cannot be blank.", nameof(attachment.Uri));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(attachment.Mode), attachment.Mode, "Unknown attachment mode");
+        }
+
+        return attachment.Type switch
+        {
+            AttachmentType.Image => await SendAttachmentAsync(MessageType.Image).ConfigureAwait(false),
+            _ => throw new ArgumentOutOfRangeException(nameof(attachment.Type), attachment.Type, "Unknown attachment type")
+        };
+
+        async Task<IUserMessage> SendAttachmentAsync(MessageType messageType)
+        {
+            ImageFilesInfo imageFilesInfo = new()
+            {
+                FilesInfo = [CreateImageFileInfo(attachment)]
+            };
+            SendUserMessageParams args = new()
+            {
+                MessageType = messageType,
+                Message = attachment.Uri.OriginalString,
+                Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
+                ToUserId = channel.Id
+            };
+            SendUserMessageResponse model = await client.ApiClient.SendUserMessageAsync(args, options);
+            return CreateMessageEntity(client, channel, args, model, [attachment]);
+        }
+    }
+
+    public static async Task<IUserMessage> SendTextAsync(IDMChannel channel, BaseHeyBoxClient client,
+        string text, IEnumerable<FileAttachment>? imageFileInfos, RequestOptions? options)
+    {
+        IReadOnlyCollection<FileAttachment>? images = imageFileInfos is not null ? [..imageFileInfos] : null;
+        ImageFilesInfo imageFilesInfo = new()
+        {
+            FilesInfo = images?.Select(CreateImageFileInfo)?.ToArray() ?? []
+        };
+        SendUserMessageParams args = new()
+        {
+            Message = text,
+            MessageType = MessageType.Markdown,
+            Addition = JsonSerializer.Serialize(imageFilesInfo, _serializerOptions),
+            ToUserId = channel.Id
+        };
+        SendUserMessageResponse model = await client.ApiClient.SendUserMessageAsync(args, options);
+        return CreateMessageEntity(client, channel, args, model, images);
+    }
+
+    public static Task<IUserMessage> SendCardAsync(IDMChannel channel, BaseHeyBoxClient client,
+        ICard card, RequestOptions? options) =>
+        SendCardsAsync(channel, client, [card], options);
+
+    public static async Task<IUserMessage> SendCardsAsync(IDMChannel channel, BaseHeyBoxClient client,
+        IEnumerable<ICard> cards,  RequestOptions? options)
+    {
+        SendUserMessageParams args = new()
+        {
+            MessageType = MessageType.Card,
+            Message = MessageHelper.SerializeCards(cards),
+            Addition = "{}",
+            ToUserId = channel.Id
+        };
+        SendUserMessageResponse model = await client.ApiClient.SendUserMessageAsync(args, options);
+        return CreateMessageEntity(client, channel, args, model, null);
+    }
+
+    private static RestUserMessage CreateMessageEntity(BaseHeyBoxClient client, IDMChannel channel,
+        SendUserMessageParams args, SendUserMessageResponse model, IReadOnlyCollection<FileAttachment>? imageFileInfos)
+    {
+        if (client.CurrentUser is null)
+            throw new InvalidOperationException("The client must have a current user.");
+        RestUserMessage message = RestUserMessage.Create(client, channel, client.CurrentUser, args, model);
+        message.Update(imageFileInfos);
+        return message;
+    }
+
+    #endregion
+
+    internal static ImageFileInfo CreateImageFileInfo(FileAttachment attachment) =>
+        new()
+        {
+            Url = attachment.Uri?.OriginalString,
+            Width = attachment.ImageSize?.Width,
+            Height = attachment.ImageSize?.Height
+        };
 
 }

@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using HeyBox.Rest.Converters;
+using HeyBox.Net.Converters;
 
 namespace HeyBox.API.Rest;
 
@@ -13,7 +13,7 @@ internal class ReplyReactionParams
     public required string Emoji { get; init; }
 
     [JsonPropertyName("is_add")]
-    [NumberBooleanConverter(WriteType = NumberBooleanConverter.EnumWriteType.Number)]
+    [BooleanJsonConverter(Format = BooleanFormat.Number)]
     public required bool IsAdd { get; init; }
 
     [JsonPropertyName("channel_id")]

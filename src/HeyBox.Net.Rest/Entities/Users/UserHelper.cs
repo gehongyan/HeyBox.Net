@@ -39,4 +39,9 @@ internal static class UserHelper
             user.RemoveRole(arg.RoleId);
         }
     }
+
+    public static RestDMChannel CreateDMChannel(RestUser user, BaseHeyBoxClient client) => new(client, user);
+
+    public static RestDMChannel CreateDMChannel(uint userId, BaseHeyBoxClient client) =>
+        CreateDMChannel(RestUser.Create(client, userId), client);
 }

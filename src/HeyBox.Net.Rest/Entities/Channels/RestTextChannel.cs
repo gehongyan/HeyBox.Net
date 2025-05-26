@@ -18,7 +18,7 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
         Type = ChannelType.Text;
     }
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.String,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
+    /// <inheritdoc />
     public Task<IUserMessage> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,
         RequestOptions? options = null)
@@ -27,18 +27,18 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
         return ChannelHelper.SendFileAsync(this, Client, path, name, type, imageSize, messageReference, options);
     }
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,HeyBox.AttachmentType,System.Nullable{System.Drawing.Size},IMessageReference,HeyBox.RequestOptions)"/>
+    /// <inheritdoc />
     public Task<IUserMessage> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.Image, Size? imageSize = null, IMessageReference? messageReference = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Client, stream, filename, type, imageSize, messageReference, options);
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendFileAsync(HeyBox.FileAttachment,IMessageReference,HeyBox.RequestOptions)"/>
+    /// <inheritdoc />
     public Task<IUserMessage> SendFileAsync(FileAttachment attachment,
         IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Client, attachment, messageReference, options);
 
-    /// <inheritdoc cref="HeyBox.IMessageChannel.SendTextAsync(System.String,System.Collections.Generic.IEnumerable{HeyBox.FileAttachment},IMessageReference,HeyBox.RequestOptions)"/>
+    /// <inheritdoc />
     public Task<IUserMessage> SendTextAsync(string text,
         IEnumerable<FileAttachment>? imageFileInfos = null, IMessageReference? messageReference = null, RequestOptions? options = null) =>
         ChannelHelper.SendTextAsync(this, Client, text, imageFileInfos, messageReference, options);

@@ -1,4 +1,5 @@
 using HeyBox.API.Gateway;
+using HeyBox.WebSocket;
 
 namespace HeyBox.WebSocket;
 
@@ -47,4 +48,13 @@ public abstract class SocketUser : SocketEntity<uint>, IUser
         IsPopulated = true;
     }
 
+    /// <inheritdoc cref="HeyBox.IUser.CreateDMChannel()" />
+    public SocketDMChannel CreateDMChannel() => SocketUserHelper.CreateDMChannel(this, Client);
+
+    #region IUser
+
+    /// <inheritdoc />
+    IDMChannel IUser.CreateDMChannel() => CreateDMChannel();
+
+    #endregion
 }

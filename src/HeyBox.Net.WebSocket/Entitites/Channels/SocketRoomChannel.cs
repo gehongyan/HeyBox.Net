@@ -35,10 +35,9 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
             _ => new SocketRoomChannel(room.Client, model.ChannelId, room)
         };
 
-    internal override void Update(ClientState state, Model model)
+    internal void Update(ClientState state, Model model)
     {
         Name = model.ChannelName;
-
         IsPopulated = true;
     }
 
