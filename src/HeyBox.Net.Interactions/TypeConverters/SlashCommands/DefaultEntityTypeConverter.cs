@@ -12,6 +12,11 @@ namespace HeyBox.Interactions
         }
     }
 
+    internal class DefaultAttachmentConverter<T> : DefaultEntityTypeConverter<T> where T : class, IAttachment
+    {
+        public override SlashCommandOptionType GetHeyBoxType() => SlashCommandOptionType.File;
+    }
+
     internal class DefaultRoleConverter<T> : DefaultEntityTypeConverter<T> where T : class, IRole
     {
         public override SlashCommandOptionType GetHeyBoxType() => SlashCommandOptionType.Role;

@@ -7,6 +7,12 @@ internal class CommandInfo
     [JsonPropertyName("id")]
     public required ulong Id { get; set; }
 
+    [JsonPropertyName("files")]
+    public CommandFileInfo[]? Files { get; set; }
+
+    [JsonPropertyName("images")]
+    public CommandImageInfo[]? Images { get; set; }
+
     [JsonPropertyName("name")]
     public required string Name { get; set; }
 

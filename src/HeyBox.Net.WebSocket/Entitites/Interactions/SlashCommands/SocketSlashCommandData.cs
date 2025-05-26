@@ -19,17 +19,17 @@ public class SocketSlashCommandData : SocketEntity<ulong>, ISlashCommandInteract
 
     internal SocketResolvableData ResolvableData { get; }
 
-    internal SocketSlashCommandData(HeyBoxSocketClient client, ulong id, SocketRoom room)
-        : base(client, id)
+    internal SocketSlashCommandData(HeyBoxSocketClient client, CommandInfo model, SocketRoom room)
+        : base(client, model.Id)
     {
         Name = string.Empty;
         Options = [];
-        ResolvableData = new SocketResolvableData(room);
+        ResolvableData = new SocketResolvableData(room, model);
     }
 
     internal static SocketSlashCommandData Create(HeyBoxSocketClient client, CommandInfo model, SocketRoom room)
     {
-        SocketSlashCommandData entity = new(client, model.Id, room);
+        SocketSlashCommandData entity = new(client, model, room);
         entity.Update(model);
         return entity;
     }
@@ -38,7 +38,7 @@ public class SocketSlashCommandData : SocketEntity<ulong>, ISlashCommandInteract
     {
         Name = model.Name.TrimStart('/');
         if (model.Options is { } options)
-            Options = [..options.Select(x => new SocketSlashCommandDataOption(this, x))];
+            Options = [..options.Select((x, index) => new SocketSlashCommandDataOption(this, x, index))];
 
         IsPopulated = true;
     }

@@ -19,20 +19,37 @@ public class SocketSlashCommandDataOption : ISlashCommandInteractionDataOption
     /// <inheritdoc />
     public SlashCommandOptionType Type { get; private set; }
 
-    internal SocketSlashCommandDataOption(SocketSlashCommandData data, Model model)
+    internal SocketSlashCommandDataOption(SocketSlashCommandData data, Model model, int index)
     {
         Name = model.Name;
         RawValue = model.Value;
         Type = model.Type;
-        Value = Type switch
+        switch (Type)
         {
-            SlashCommandOptionType.String or SlashCommandOptionType.Selection => model.Value,
-            SlashCommandOptionType.Integer when long.TryParse(model.Value, out long integer) => integer,
-            SlashCommandOptionType.Boolean when bool.TryParse(model.Value, out bool boolean) => boolean,
-            SlashCommandOptionType.User when uint.TryParse(model.Value, out uint userId) => data.ResolvableData.ResolveUser(userId),
-            SlashCommandOptionType.Channel when ulong.TryParse(model.Value, out ulong channelId) => data.ResolvableData.ResolveChannel(channelId),
-            SlashCommandOptionType.Role when ulong.TryParse(model.Value, out ulong roleId) => data.ResolvableData.ResolveRole(roleId),
-            _ => throw new NotSupportedException($"Unsupported option type: {Type}")
-        };
+            case SlashCommandOptionType.String or SlashCommandOptionType.Selection:
+                Value = model.Value;
+                break;
+            case SlashCommandOptionType.Integer when long.TryParse(model.Value, out long integer):
+                Value = integer;
+                break;
+            case SlashCommandOptionType.Boolean when bool.TryParse(model.Value, out bool boolean):
+                Value = boolean;
+                break;
+            case SlashCommandOptionType.User when uint.TryParse(model.Value, out uint userId):
+                Value = data.ResolvableData.ResolveUser(userId);
+                break;
+            case SlashCommandOptionType.Channel when ulong.TryParse(model.Value, out ulong channelId):
+                Value = data.ResolvableData.ResolveChannel(channelId);
+                break;
+            case SlashCommandOptionType.Role when ulong.TryParse(model.Value, out ulong roleId):
+                Value = data.ResolvableData.ResolveRole(roleId);
+                break;
+            case SlashCommandOptionType.Image:
+            case SlashCommandOptionType.File:
+                Value = data.ResolvableData.ResolveAttachment(model.Value, index);
+                break;
+            default:
+                throw new NotSupportedException($"Unsupported option type: {Type}");
+        }
     }
 }

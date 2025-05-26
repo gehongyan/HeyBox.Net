@@ -38,5 +38,15 @@ public enum SlashCommandOptionType
     /// <summary>
     ///     选择项。
     /// </summary>
-    Selection = 9
+    Selection = 9,
+
+    /// <summary>
+    ///     图片。
+    /// </summary>
+    Image = 11,
+
+    /// <summary>
+    ///     文件。
+    /// </summary>
+    File = 12,
 }

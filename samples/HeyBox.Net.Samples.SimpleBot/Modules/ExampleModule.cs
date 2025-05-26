@@ -28,11 +28,29 @@ public class ExampleModule : InteractionModuleBase<SocketInteractionContext>
         [Summary("整数")] int integer,
         [Summary("布尔值")] bool boolean) =>
         await ReplyTextAsync(
-            $"文本: {text}\n" +
-            $"单选: {selection}\n" +
-            $"用户: {user.Mention}\n" +
-            $"整数: {integer}\n" +
-            $"布尔值: {boolean}");
+            $"""
+            文本: {text}
+            单选: {selection}
+            用户: {user.Mention}
+            整数: {integer}
+            布尔值: {boolean}
+            """);
+
+    [SlashCommand("attachment")]
+    public async Task AttachmentAsync(
+        [Summary("图片1")] IAttachment image1,
+        [Summary("图片2")] IAttachment image2,
+        [Summary("文件1")] IAttachment file1,
+        [Summary("文件2")] IAttachment file2)
+    {
+        await ReplyTextAsync(
+            $"""
+            图片1: {image1.Url}
+            图片2: {image2.Url}
+            文件1: {file1.Url}
+            文件2: {file2.Url}
+            """);
+    }
 
     [SlashCommand("echo", runMode: RunMode.Async)]
     public async Task Echo(
