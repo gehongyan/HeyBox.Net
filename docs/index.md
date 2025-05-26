@@ -22,8 +22,8 @@ _layout: landing
 
 HeyBox.Net 是一个对 [黑盒语音 API] 进行功能封装的类库，以 C# 编写，编译所采用的目标框架包括
 
+- [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 
 > [!TIP]
 > 除 .NET 8.0 外的其他目标框架未经完全测试。
