@@ -18,16 +18,55 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <summary>
     ///     初始化一个 <see cref="CardBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="color"> 卡片侧边的颜色。 </param>
+    /// <param name="size"> 卡片的大小。 </param>
     /// <param name="modules"> 卡片的模块。 </param>
-    public CardBuilder(IList<IModuleBuilder>? modules = null)
+    public CardBuilder(CssColor? color = null, CardSize size = CardSize.Medium, IList<IModuleBuilder>? modules = null)
     {
+        Color = color;
+        Size = size;
         Modules = modules ?? [];
     }
+
+    /// <summary>
+    ///     获取或设置卡片左侧边的 CSS 颜色。
+    /// </summary>
+    /// <remarks>
+    ///     未设置时等效于 <see cref="HeyBox.CssColor.Default"/>。
+    /// </remarks>
+    public CssColor? Color { get; set; }
+
+    /// <summary>
+    ///     获取或设置卡片的大小。
+    /// </summary>
+    public CardSize Size { get; set; }
 
     /// <summary>
     ///     获取或设置卡片的模块。
     /// </summary>
     public IList<IModuleBuilder> Modules { get; set; }
+
+    /// <summary>
+    ///     设置卡片侧边的颜色。
+    /// </summary>
+    /// <param name="color"> 卡片侧边的颜色。 </param>
+    /// <returns> 当前构建器。 </returns>
+    public CardBuilder WithColor(CssColor? color)
+    {
+        Color = color;
+        return this;
+    }
+
+    /// <summary>
+    ///     设置卡片的大小。
+    /// </summary>
+    /// <param name="size"> 卡片的大小。 </param>
+    /// <returns> 当前构建器。 </returns>
+    public CardBuilder WithSize(CardSize size)
+    {
+        Size = size;
+        return this;
+    }
 
     /// <summary>
     ///     添加一个模块到卡片。
@@ -75,7 +114,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
             throw new ArgumentException("The modules of the card cannot be empty.", nameof(Modules));
         if (Modules.Count > MaxModuleCount)
             throw new ArgumentException($"The modules of the card cannot exceed {MaxModuleCount}.", nameof(Modules));
-        return new Card([..Modules.Select(m => m.Build())]);
+        return new Card(Color, Size, [..Modules.Select(m => m.Build())]);
     }
 
     /// <inheritdoc />

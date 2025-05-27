@@ -9,4 +9,9 @@ public interface INode
     ///     获取节点的类型。
     /// </summary>
     NodeType Type { get; }
+
+    /// <summary>
+    ///     获取节点的宽度。
+    /// </summary>
+    NodeWidth? Width { get; }
 }

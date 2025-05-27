@@ -23,9 +23,11 @@ public class MarkdownNodeBuilder : ITextNodeBuilder, IEquatable<MarkdownNodeBuil
     ///     初始化一个 <see cref="MarkdownNodeBuilder"/> 类的新实例。
     /// </summary>
     /// <param name="text"> Markdown 文本内容。 </param>
-    public MarkdownNodeBuilder(string? text)
+    /// <param name="width"> 节点的宽度。 </param>
+    public MarkdownNodeBuilder(string? text, NodeWidth? width = null)
     {
         Text = text;
+        Width = width;
     }
 
     /// <inheritdoc />
@@ -33,6 +35,9 @@ public class MarkdownNodeBuilder : ITextNodeBuilder, IEquatable<MarkdownNodeBuil
 
     /// <inheritdoc />
     public string? Text { get; set; }
+
+    /// <inheritdoc />
+    public NodeWidth? Width { get; set; }
 
     /// <summary>
     ///     设置 Markdown 的文本内容，值将被设置到 <see cref="Text"/> 属性上。
@@ -42,6 +47,17 @@ public class MarkdownNodeBuilder : ITextNodeBuilder, IEquatable<MarkdownNodeBuil
     public MarkdownNodeBuilder WithText(string text)
     {
         Text = text;
+        return this;
+    }
+
+    /// <summary>
+    ///     设置节点的宽度，值将被设置到 <see cref="Width"/> 属性上。
+    /// </summary>
+    /// <param name="width"> 节点的宽度。 </param>
+    /// <returns> 当前构建器。 </returns>
+    public MarkdownNodeBuilder WithWidth(NodeWidth width)
+    {
+        Width = width;
         return this;
     }
 
@@ -66,7 +82,7 @@ public class MarkdownNodeBuilder : ITextNodeBuilder, IEquatable<MarkdownNodeBuil
                 $"Markdown length must be less than or equal to {MaxMarkdownLength}.",
                 nameof(Text));
 
-        return new MarkdownNode(Text);
+        return new MarkdownNode(Text, Width);
     }
 
     /// <summary>
@@ -108,7 +124,8 @@ public class MarkdownNodeBuilder : ITextNodeBuilder, IEquatable<MarkdownNodeBuil
         if (markdownNodeBuilder is null)
             return false;
         return Type == markdownNodeBuilder.Type
-            && Text == markdownNodeBuilder.Text;
+            && Text == markdownNodeBuilder.Text
+            && Width == markdownNodeBuilder.Width;
     }
 
     /// <inheritdoc />

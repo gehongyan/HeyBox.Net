@@ -27,7 +27,11 @@ public static class CardExtensions
     /// </summary>
     public static PlainTextNodeBuilder ToBuilder(this PlainTextNode entity)
     {
-        return new PlainTextNodeBuilder { Text = entity.Text };
+        return new PlainTextNodeBuilder
+        {
+            Text = entity.Text,
+            Width = entity.Width
+        };
     }
 
     /// <summary>
@@ -35,7 +39,11 @@ public static class CardExtensions
     /// </summary>
     public static MarkdownNodeBuilder ToBuilder(this MarkdownNode entity)
     {
-        return new MarkdownNodeBuilder { Text = entity.Text };
+        return new MarkdownNodeBuilder
+        {
+            Text = entity.Text,
+            Width = entity.Width
+        };
     }
 
     /// <summary>
@@ -48,7 +56,8 @@ public static class CardExtensions
             Theme = entity.Theme,
             Event = entity.Event,
             Value = entity.Value,
-            Text = entity.Text
+            Text = entity.Text,
+            Width = entity.Width
         };
     }
 
@@ -60,7 +69,8 @@ public static class CardExtensions
         return new ImageNodeBuilder
         {
             Url = entity.Url,
-            Size = entity.Size
+            Size = entity.Size,
+            Width = entity.Width
         };
     }
 
@@ -172,6 +182,8 @@ public static class CardExtensions
     {
         return new CardBuilder
         {
+            Color = entity.Color,
+            Size = entity.Size,
             Modules = entity.Modules.Select(m => m.ToBuilder()).ToList()
         };
     }

@@ -12,16 +12,20 @@ public class ImageNode : INode, IEquatable<ImageNode>, IEquatable<INode>
     /// <inheritdoc />
     public NodeType Type => NodeType.Image;
 
-    internal ImageNode(string url, ImageSize? size)
+    internal ImageNode(string url, ImageSize? size, NodeWidth? width)
     {
         Url = url;
         Size = size;
+        Width = width;
     }
 
     /// <summary>
     ///     获取图片的 URL。
     /// </summary>
     public string Url { get; }
+
+    /// <inheritdoc />
+    public NodeWidth? Width { get; }
 
     /// <summary>
     ///     获取图片的尺寸。

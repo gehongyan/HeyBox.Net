@@ -12,13 +12,17 @@ public class PlainTextNode : ITextNode, IEquatable<PlainTextNode>, IEquatable<IN
     /// <inheritdoc />
     public NodeType Type => NodeType.PlainText;
 
-    internal PlainTextNode(string text)
+    internal PlainTextNode(string text, NodeWidth? width)
     {
         Text = text;
+        Width = width;
     }
 
     /// <inheritdoc />
     public string Text { get; }
+
+    /// <inheritdoc />
+    public NodeWidth? Width { get; }
 
     /// <inheritdoc />
     public override string ToString() => Text;

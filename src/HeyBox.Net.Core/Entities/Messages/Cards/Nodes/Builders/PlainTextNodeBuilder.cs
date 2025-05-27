@@ -23,9 +23,11 @@ public class PlainTextNodeBuilder : ITextNodeBuilder, IEquatable<PlainTextNodeBu
     ///     初始化一个 <see cref="PlainTextNodeBuilder"/> 类的新实例。
     /// </summary>
     /// <param name="text"> 纯文本文本内容。 </param>
-    public PlainTextNodeBuilder(string? text)
+    /// <param name="width"> 节点的宽度。 </param>
+    public PlainTextNodeBuilder(string? text, NodeWidth? width = null)
     {
         Text = text;
+        Width = width;
     }
 
     /// <inheritdoc />
@@ -33,6 +35,9 @@ public class PlainTextNodeBuilder : ITextNodeBuilder, IEquatable<PlainTextNodeBu
 
     /// <inheritdoc />
     public string? Text { get; set; }
+
+    /// <inheritdoc />
+    public NodeWidth? Width { get; set; }
 
     /// <summary>
     ///     设置纯文本的文本内容，值将被设置到 <see cref="Text"/> 属性上。
@@ -42,6 +47,17 @@ public class PlainTextNodeBuilder : ITextNodeBuilder, IEquatable<PlainTextNodeBu
     public PlainTextNodeBuilder WithText(string text)
     {
         Text = text;
+        return this;
+    }
+
+    /// <summary>
+    ///     设置节点的宽度，值将被设置到 <see cref="Width"/> 属性上。
+    /// </summary>
+    /// <param name="width"> 节点的宽度。 </param>
+    /// <returns> 当前构建器。 </returns>
+    public PlainTextNodeBuilder WithWidth(NodeWidth width)
+    {
+        Width = width;
         return this;
     }
 
@@ -66,7 +82,7 @@ public class PlainTextNodeBuilder : ITextNodeBuilder, IEquatable<PlainTextNodeBu
                 $"PlainText length must be less than or equal to {MaxPlainTextLength}.",
                 nameof(Text));
 
-        return new PlainTextNode(Text);
+        return new PlainTextNode(Text, Width);
     }
 
     /// <summary>
@@ -108,7 +124,8 @@ public class PlainTextNodeBuilder : ITextNodeBuilder, IEquatable<PlainTextNodeBu
         if (plainTextNodeBuilder is null)
             return false;
         return Type == plainTextNodeBuilder.Type
-            && Text == plainTextNodeBuilder.Text;
+            && Text == plainTextNodeBuilder.Text
+            && Width == plainTextNodeBuilder.Width;
     }
 
     /// <inheritdoc />

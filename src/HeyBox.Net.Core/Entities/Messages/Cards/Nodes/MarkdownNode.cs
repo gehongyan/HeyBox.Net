@@ -12,13 +12,17 @@ public class MarkdownNode : ITextNode, IEquatable<MarkdownNode>, IEquatable<INod
     /// <inheritdoc />
     public NodeType Type => NodeType.Markdown;
 
-    internal MarkdownNode(string text)
+    internal MarkdownNode(string text, NodeWidth? width)
     {
         Text = text;
+        Width = width;
     }
 
     /// <inheritdoc />
     public string Text { get; }
+
+    /// <inheritdoc />
+    public NodeWidth? Width { get; }
 
     /// <inheritdoc />
     public override string ToString() => Text;

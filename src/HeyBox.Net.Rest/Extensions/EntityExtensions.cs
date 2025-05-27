@@ -26,14 +26,18 @@ internal static class EntityExtensions
         };
     }
 
-    public static PlainTextNode ToEntity(this API.PlainTextNode model) => new(model.Text);
+    public static PlainTextNode ToEntity(this API.PlainTextNode model) => new(
+        model.Text, !string.IsNullOrWhiteSpace(model.Width) ? NodeWidth.FromValue(model.Width) : null);
 
-    public static MarkdownNode ToEntity(this API.MarkdownNode model) => new(model.Text);
+    public static MarkdownNode ToEntity(this API.MarkdownNode model) => new(
+        model.Text, !string.IsNullOrWhiteSpace(model.Width) ? NodeWidth.FromValue(model.Width) : null);
 
-    public static ImageNode ToEntity(this API.ImageNode model) => new(model.Url, model.Size);
+    public static ImageNode ToEntity(this API.ImageNode model) => new(model.Url, model.Size,
+        !string.IsNullOrWhiteSpace(model.Width) ? NodeWidth.FromValue(model.Width) : null);
 
-    public static ButtonNode ToEntity(this API.ButtonNode model) =>
-        new(model.Text, model.Event, model.Value, model.Theme);
+    public static ButtonNode ToEntity(this API.ButtonNode model) => new(
+        model.Text, model.Event, model.Value, model.Theme,
+        !string.IsNullOrWhiteSpace(model.Width) ? NodeWidth.FromValue(model.Width) : null);
 
     public static API.NodeBase ToModel(this INode entity)
     {
@@ -50,20 +54,23 @@ internal static class EntityExtensions
     public static API.PlainTextNode ToModel(this PlainTextNode entity) => new()
     {
         Type = entity.Type,
-        Text = entity.Text
+        Text = entity.Text,
+        Width = entity.Width?.Value
     };
 
     public static API.MarkdownNode ToModel(this MarkdownNode entity) => new()
     {
         Type = entity.Type,
-        Text = entity.Text
+        Text = entity.Text,
+        Width = entity.Width?.Value
     };
 
     public static API.ImageNode ToModel(this ImageNode entity) => new()
     {
         Type = entity.Type,
         Url = entity.Url,
-        Size = entity.Size
+        Size = entity.Size,
+        Width = entity.Width?.Value
     };
 
     public static API.ButtonNode ToModel(this ButtonNode entity) => new()
@@ -72,7 +79,8 @@ internal static class EntityExtensions
         Theme = entity.Theme,
         Value = entity.Value,
         Event = entity.Event,
-        Text = entity.Text
+        Text = entity.Text,
+        Width = entity.Width?.Value
     };
 
     #endregion
@@ -172,7 +180,10 @@ internal static class EntityExtensions
         _ => throw new ArgumentOutOfRangeException(nameof(model))
     };
 
-    public static Card ToEntity(this API.Card model) => new([..model.Modules.Select(m => m.ToEntity())]);
+    public static Card ToEntity(this API.Card model) => new(
+        !string.IsNullOrWhiteSpace(model.BorderColor) ? CssColor.FromValue(model.BorderColor) : null,
+        model.Size ?? CardSize.Medium,
+        [..model.Modules.Select(m => m.ToEntity())]);
 
     public static API.CardBase ToModel(this ICard entity) => entity switch
     {
@@ -183,6 +194,8 @@ internal static class EntityExtensions
     public static API.Card ToModel(this Card entity) => new()
     {
         Type = entity.Type,
+        BorderColor = entity.Color?.Value,
+        Size = entity.Size,
         Modules = [..entity.Modules.Select(m => m.ToModel())]
     };
 

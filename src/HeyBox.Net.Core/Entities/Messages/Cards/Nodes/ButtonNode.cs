@@ -12,13 +12,19 @@ public class ButtonNode : INode, IEquatable<ButtonNode>, IEquatable<INode>
     /// <inheritdoc />
     public NodeType Type => NodeType.Button;
 
-    internal ButtonNode(string text, ButtonEvent @event, string value, ButtonTheme theme)
+    internal ButtonNode(string text, ButtonEvent @event, string value, ButtonTheme theme, NodeWidth? width)
     {
         Theme = theme;
+        Width = width;
         Value = value;
         Event = @event;
         Text = text;
     }
+
+    /// <summary>
+    ///     获取按钮节点的文本。
+    /// </summary>
+    public string Text { get; }
 
     /// <summary>
     ///     获取按钮节点的主题。
@@ -35,10 +41,8 @@ public class ButtonNode : INode, IEquatable<ButtonNode>, IEquatable<INode>
     /// </summary>
     public ButtonEvent Event { get; }
 
-    /// <summary>
-    ///     获取按钮节点的文本。
-    /// </summary>
-    public string Text { get; }
+    /// <inheritdoc />
+    public NodeWidth? Width { get; }
 
     private string DebuggerDisplay => $"{Type}: {Text} ({Event}, {Value}, {Theme})";
 

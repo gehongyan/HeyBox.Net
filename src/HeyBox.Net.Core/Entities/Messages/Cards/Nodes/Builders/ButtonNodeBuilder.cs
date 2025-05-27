@@ -26,21 +26,29 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
     /// <param name="event"> 按钮的点击事件类型。 </param>
     /// <param name="value"> 按钮的值。 </param>
     /// <param name="theme"> 按钮的主题。 </param>
+    /// <param name="width"> 节点的宽度。 </param>
     /// <remarks>
     ///     如果 <paramref name="event"/> 设置为 <see cref="HeyBox.ButtonEvent.LinkTo"/>，
     ///     则在用户点击按钮时，黑盒语音会将用户重定向到 <paramref name="value" /> 指定的 URL。<br />
     ///     无论 <paramref name="event"/> 设置为何值，用户点击按钮时，黑盒语音都会通过网关下发按钮点击事件，并携带所有按钮的属性值。
     /// </remarks>
-    public ButtonNodeBuilder(string text, ButtonEvent @event, string value, ButtonTheme theme = ButtonTheme.Default)
+    public ButtonNodeBuilder(string text, ButtonEvent @event, string value,
+        ButtonTheme theme = ButtonTheme.Default, NodeWidth? width = null)
     {
         Text = text;
         Event = @event;
         Value = value;
         Theme = theme;
+        Width = width;
     }
 
     /// <inheritdoc />
     public NodeType Type => NodeType.Button;
+
+    /// <summary>
+    ///     获取或设置按钮的文本元素。
+    /// </summary>
+    public string? Text { get; set; }
 
     /// <summary>
     ///     获取或设置按钮的主题。
@@ -67,10 +75,8 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
     /// </remarks>
     public ButtonEvent Event { get; set; }
 
-    /// <summary>
-    ///     获取或设置按钮的文本元素。
-    /// </summary>
-    public string? Text { get; set; }
+    /// <inheritdoc />
+    public NodeWidth? Width { get; set; }
 
     /// <summary>
     ///     设置按钮的主题，值将被设置到 <see cref="Theme"/> 属性上。
@@ -113,6 +119,17 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
     public ButtonNodeBuilder WithText(string text)
     {
         Text = text;
+        return this;
+    }
+
+    /// <summary>
+    ///     设置节点的宽度，值将被设置到 <see cref="Width"/> 属性上。
+    /// </summary>
+    /// <param name="width"> 节点的宽度。 </param>
+    /// <returns> 当前构建器。 </returns>
+    public ButtonNodeBuilder WithWidth(NodeWidth width)
+    {
+        Width = width;
         return this;
     }
 
@@ -163,7 +180,7 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
         if (Event == ButtonEvent.LinkTo)
             UrlValidation.Validate(Value);
 
-        return new ButtonNode(Text, Event, Value, Theme);
+        return new ButtonNode(Text, Event, Value, Theme, Width);
     }
 
     /// <inheritdoc />
@@ -198,7 +215,8 @@ public class ButtonNodeBuilder : INodeBuilder, IEquatable<ButtonNodeBuilder>, IE
             && Theme == buttonNodeBuilder.Theme
             && Value == buttonNodeBuilder.Value
             && Event == buttonNodeBuilder.Event
-            && Text == buttonNodeBuilder.Text;
+            && Text == buttonNodeBuilder.Text
+            && Width == buttonNodeBuilder.Width;
     }
 
     /// <inheritdoc />

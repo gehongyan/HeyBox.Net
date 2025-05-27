@@ -13,10 +13,22 @@ public class Card : ICard, IEquatable<Card>, IEquatable<ICard>
     /// <inheritdoc />
     public CardType Type => CardType.Card;
 
-    internal Card(ImmutableArray<IModule> modules)
+    internal Card(CssColor? color, CardSize size, ImmutableArray<IModule> modules)
     {
+        Color = color;
+        Size = size;
         Modules = modules;
     }
+
+    /// <summary>
+    ///     获取卡片侧边的颜色。
+    /// </summary>
+    public CssColor? Color { get; }
+
+    /// <summary>
+    ///     获取卡片的大小。
+    /// </summary>
+    public CardSize Size { get; }
 
     /// <summary>
     ///     获取卡片的模块。

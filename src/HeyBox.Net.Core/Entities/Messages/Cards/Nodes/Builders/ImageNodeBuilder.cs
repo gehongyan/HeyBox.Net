@@ -19,13 +19,15 @@ public class ImageNodeBuilder : INodeBuilder, IEquatable<ImageNodeBuilder>, IEqu
     /// </summary>
     /// <param name="url"> 图片的源。 </param>
     /// <param name="size"> 图片的大小。 </param>
+    /// <param name="width"> 节点的宽度。 </param>
     /// <remarks>
     ///     <paramref name="size"/> 仅在 <see cref="SectionModuleBuilder"/> 中生效且必需，<see cref="ImagesModuleBuilder"/> 中不生效。
     /// </remarks>
-    public ImageNodeBuilder(string url, ImageSize? size = null)
+    public ImageNodeBuilder(string url, ImageSize? size = null, NodeWidth? width = null)
     {
         Url = url;
         Size = size;
+        Width = width;
     }
 
     /// <inheritdoc />
@@ -46,6 +48,9 @@ public class ImageNodeBuilder : INodeBuilder, IEquatable<ImageNodeBuilder>, IEqu
     ///     当前属性仅在 <see cref="SectionModuleBuilder"/> 中生效且必需，<see cref="ImagesModuleBuilder"/> 中不生效。
     /// </remarks>
     public ImageSize? Size { get; set; }
+
+    /// <inheritdoc />
+    public NodeWidth? Width { get; set; }
 
     /// <summary>
     ///     设置图片的源，值将被设置到 <see cref="Url"/> 属性上。
@@ -76,6 +81,17 @@ public class ImageNodeBuilder : INodeBuilder, IEquatable<ImageNodeBuilder>, IEqu
     }
 
     /// <summary>
+    ///     设置节点的宽度，值将被设置到 <see cref="Width"/> 属性上。
+    /// </summary>
+    /// <param name="width"> 节点的宽度。 </param>
+    /// <returns> 当前构建器。 </returns>
+    public ImageNodeBuilder WithWidth(NodeWidth width)
+    {
+        Width = width;
+        return this;
+    }
+
+    /// <summary>
     ///     构建当前构建器为一个 <see cref="ImageNode"/>。
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="ImageNode"/> 对象。 </returns>
@@ -98,7 +114,7 @@ public class ImageNodeBuilder : INodeBuilder, IEquatable<ImageNodeBuilder>, IEqu
 
         UrlValidation.Validate(Url);
 
-        return new ImageNode(Url, Size);
+        return new ImageNode(Url, Size, Width);
     }
 
     internal ImageNode Build(IModuleBuilder parent)
@@ -144,7 +160,8 @@ public class ImageNodeBuilder : INodeBuilder, IEquatable<ImageNodeBuilder>, IEqu
 
         return Type == imageNodeBuilder.Type
             && Url == imageNodeBuilder.Url
-            && Size == imageNodeBuilder.Size;
+            && Size == imageNodeBuilder.Size
+            && Width == imageNodeBuilder.Width;
     }
 
     /// <inheritdoc />
