@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using HeyBox.API;
 using HeyBox.API.Rest;
+using Model = HeyBox.API.Room;
 using RoleModel = HeyBox.API.Role;
 
 namespace HeyBox.Rest;
@@ -12,11 +13,29 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 {
     private ImmutableDictionary<ulong, RestRole> _roles;
 
-    internal RestRoom(BaseHeyBoxClient client, ulong id)
-        : base(client, id)
-    {
-        _roles = ImmutableDictionary<ulong, RestRole>.Empty;
-    }
+    /// <inheritdoc />
+    public string Name { get; private set; }
+
+    /// <inheritdoc />
+    public uint CreatorId { get; private set; }
+
+    /// <inheritdoc />
+    public string Icon { get; private set; }
+
+    /// <inheritdoc />
+    public string Banner { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsPublic { get; private set; }
+
+    /// <inheritdoc />
+    public uint? PublicId { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsHot { get; private set; }
+
+    /// <inheritdoc />
+    public DateTimeOffset JoinedAt { get; private set; }
 
     /// <inheritdoc cref="HeyBox.IRoom.Roles" />
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
@@ -24,6 +43,34 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     /// <inheritdoc cref="HeyBox.IRoom.EveryoneRole" />
     public RestRole EveryoneRole => _roles.Values.SingleOrDefault(x => x.Type is RoleType.Everyone)
         ?? new RestRole(Client, this, 0) { Type = RoleType.Everyone };
+
+    internal RestRoom(BaseHeyBoxClient client, ulong id)
+        : base(client, id)
+    {
+        _roles = ImmutableDictionary<ulong, RestRole>.Empty;
+        Name = string.Empty;
+        Icon = string.Empty;
+        Banner = string.Empty;
+    }
+
+    internal static RestRoom Create(BaseHeyBoxClient client, Model model)
+    {
+        RestRoom entity = new(client, model.RoomId);
+        entity.Update(model);
+        return entity;
+    }
+
+    internal void Update(Model model)
+    {
+        Name = model.RoomName;
+        Icon = model.RoomAvatar;
+        CreatorId = model.CreateBy;
+        Banner = model.RoomPic;
+        IsPublic = model.IsPublic;
+        PublicId = model.IsPublic ? uint.Parse(model.PublicId) : null;
+        IsHot = model.IsHot;
+        JoinedAt = model.JoinTime;
+    }
 
     internal void Update(GetRoomRolesResponse model)
     {
@@ -152,12 +199,6 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     #endregion
 
     #region IRoom
-
-    /// <inheritdoc />
-    string? IRoom.Name => null;
-
-    /// <inheritdoc />
-    string? IRoom.Icon => null;
 
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IRoom.Roles => Roles;

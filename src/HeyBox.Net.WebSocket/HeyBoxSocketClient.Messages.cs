@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using HeyBox.API;
 using HeyBox.API.Gateway;
 using HeyBox.Rest;
 
@@ -45,34 +46,33 @@ public partial class HeyBoxSocketClient
         // Download room data
         try
         {
-            // RequestOptions requestOptions = new();
-            // List<Room> models = [..await SocketClientHelper.GetRoomsAsync(this, null, requestOptions).FlattenAsync().ConfigureAwait(false)];
+            List<Room> rooms = (await ApiClient.GetJoinedRoomsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
             // StartupCacheFetchMode = BaseConfig.StartupCacheFetchMode;
             // if (StartupCacheFetchMode is StartupCacheFetchMode.Auto)
             // {
-            //     if (models.Count >= LargeNumberOfRoomsThreshold)
+            //     if (rooms.Count >= LargeNumberOfRoomsThreshold)
             //         StartupCacheFetchMode = StartupCacheFetchMode.Lazy;
-            //     else if (models.Count >= SmallNumberOfRoomsThreshold)
+            //     else if (rooms.Count >= SmallNumberOfRoomsThreshold)
             //         StartupCacheFetchMode = StartupCacheFetchMode.Asynchronous;
             //     else
             //         StartupCacheFetchMode = StartupCacheFetchMode.Synchronous;
             // }
-            //
-            // ClientState state = new(models.Count);
-            // foreach (Room room in models)
-            // {
-            //     SocketRoom socketRoom = AddRoom(room, state);
-            //     if (StartupCacheFetchMode is StartupCacheFetchMode.Lazy)
-            //     {
-            //         if (socketRoom.IsAvailable)
-            //             await RoomAvailableAsync(socketRoom).ConfigureAwait(false);
-            //         else
-            //             await RoomUnavailableAsync(socketRoom).ConfigureAwait(false);
-            //     }
-            // }
-            //
-            // State = state;
-            //
+
+            ClientState state = new(rooms.Count, 0);
+            foreach (Room room in rooms)
+            {
+                SocketRoom socketRoom = AddRoom(room, state);
+                // if (StartupCacheFetchMode is StartupCacheFetchMode.Lazy)
+                // {
+                //     if (socketRoom.IsAvailable)
+                //         await RoomAvailableAsync(socketRoom).ConfigureAwait(false);
+                //     else
+                //         await RoomUnavailableAsync(socketRoom).ConfigureAwait(false);
+                // }
+            }
+
+            State = state;
+
             // if (StartupCacheFetchMode is StartupCacheFetchMode.Synchronous
             //     && state.Rooms.Count > LargeNumberOfRoomsThreshold)
             // {
@@ -82,7 +82,7 @@ public partial class HeyBoxSocketClient
             //             + "which may result in a timeout or socket disconnection. "
             //             + "Consider using asynchronous mode or lazy mode.").ConfigureAwait(false);
             // }
-            //
+
             // _roomDownloadTask = StartupCacheFetchMode is not StartupCacheFetchMode.Lazy
             //     ? DownloadRoomDataAsync(state.Rooms, Connection.CancellationToken)
             //     : Task.CompletedTask;
@@ -160,11 +160,11 @@ public partial class HeyBoxSocketClient
 
     private async Task HandleJoinedLeftRoom(JsonElement payload)
     {
-        if (DeserializePayload<GuildMemberJoinLeftEvent>(payload) is not { } memberEvent) return;
+        if (DeserializePayload<RoomMemberJoinLeftEvent>(payload) is not { } memberEvent) return;
         SocketRoom room = await GetOrCreateRoomAsync(State, memberEvent.RoomBaseInfo.RoomId, memberEvent.RoomBaseInfo);
         switch (memberEvent.State)
         {
-            case GuildMemberAction.Join:
+            case RoomMemberAction.Join:
             {
                 SocketRoomUser user = room.AddOrUpdateUser(memberEvent.UserInfo);
                 // room.MemberCount++;
@@ -174,7 +174,7 @@ public partial class HeyBoxSocketClient
                     await TimedInvokeAsync(_userJoinedEvent, nameof(UserJoined), user).ConfigureAwait(false);
                 return;
             }
-            case GuildMemberAction.Left:
+            case RoomMemberAction.Left:
             {
                 SocketRoomUser user = room.RemoveUser(memberEvent.UserInfo.UserId)
                     ?? SocketRoomUser.Create(room, State, memberEvent.UserInfo);

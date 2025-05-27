@@ -10,6 +10,7 @@ using HeyBox.Logging;
 using HeyBox.Net;
 using HeyBox.Net.Queue;
 using HeyBox.Net.WebSockets;
+using HeyBox.Rest;
 
 namespace HeyBox.WebSocket;
 
@@ -47,6 +48,9 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     internal BaseMessageQueue MessageQueue { get; private set; }
     internal int? HandlerTimeout { get; private set; }
     internal new HeyBoxSocketApiClient ApiClient => base.ApiClient;
+
+    /// <inheritdoc />
+    public override IReadOnlyCollection<SocketRoom> Rooms => State.Rooms;
 
     /// <summary>
     ///     获取在此会话中存在的所有私聊频道。
@@ -180,7 +184,14 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     }
 
     /// <inheritdoc />
-    public override SocketRoom GetRoom(ulong id) => State.GetOrAddRoom(id, x => new SocketRoom(this, x));
+    public override SocketRoom? GetRoom(ulong id) => State.GetRoom(id);
+
+    internal SocketRoom AddRoom(Room model, ClientState state)
+    {
+        SocketRoom room = SocketRoom.Create(this, state, model);
+        state.AddRoom(room);
+        return room;
+    }
 
     internal async Task<SocketRoom> GetOrCreateRoomAsync(ClientState state, ulong roomId, RoomBaseInfo? model)
     {
@@ -465,8 +476,12 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     #region IHeyBoxClient
 
     /// <inheritdoc />
-    Task<IRoom?> IHeyBoxClient.GetRoomAsync(ulong id, CacheMode mode, RequestOptions? options) =>
-        Task.FromResult<IRoom?>(GetRoom(id));
+    async Task<IRoom?> IHeyBoxClient.GetRoomAsync(ulong id, CacheMode mode, RequestOptions? options)
+    {
+        if (mode is not CacheMode.AllowDownload)
+            return GetRoom(id);
+        return await Rest.GetRoomAsync(id, options);
+    }
 
     /// <inheritdoc />
     Task<IChannel?> IHeyBoxClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>

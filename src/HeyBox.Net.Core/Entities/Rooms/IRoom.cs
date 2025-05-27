@@ -11,9 +11,43 @@ public interface IRoom : IEntity<ulong>
     string? Name { get; }
 
     /// <summary>
+    ///     获取此房间所有者的用户 ID。
+    /// </summary>
+    uint CreatorId { get; }
+
+    /// <summary>
     ///     获取此房间图标的 URL。
     /// </summary>
     string? Icon { get; }
+
+    /// <summary>
+    ///     获取此房间横幅图像的 URL。
+    /// </summary>
+    string Banner { get; }
+
+    /// <summary>
+    ///     获取此房间是否为公开房间。
+    /// </summary>
+    bool IsPublic { get; }
+
+    /// <summary>
+    ///     获取此房间的公开 ID。
+    /// </summary>
+    /// <remarks>
+    ///     当 <see cref="IsPublic"/> 为 <c>true</c> 时，此属性应该返回一个有效的公开房间 ID；
+    ///     如果 <see cref="IsPublic"/> 为 <c>false</c>，则此属性应该返回 <c>null</c>。
+    /// </remarks>
+    uint? PublicId { get; }
+
+    /// <summary>
+    ///     获取此房间是否热门。
+    /// </summary>
+    bool IsHot { get; }
+
+    /// <summary>
+    ///     获取加入到此房间的时间。
+    /// </summary>
+    DateTimeOffset JoinedAt { get; }
 
     /// <summary>
     ///     获取此房间内指定的频道。
@@ -72,19 +106,19 @@ public interface IRoom : IEntity<ulong>
     #region Emotes
 
     /// <summary>
-    ///     获取此服务器的所有自定义表情。
+    ///     获取此房间的所有自定义表情。
     /// </summary>
     IReadOnlyCollection<RoomEmote> Emotes { get; }
 
     /// <summary>
-    ///     获取此服务器的所有自定义小表情。
+    ///     获取此房间的所有自定义小表情。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义小表情。 </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此房间的所有自定义小表情。 </returns>
     Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     获取此服务器的指定自定义小表情。
+    ///     获取此房间的指定自定义小表情。
     /// </summary>
     /// <param name="id"> 要获取的自定义表情的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -92,7 +126,7 @@ public interface IRoom : IEntity<ulong>
     Task<RoomEmote?> GetEmoteAsync(ulong id, RequestOptions? options = null);
 
     /// <summary>
-    ///     修改此服务器内的现有自定义小表情。
+    ///     修改此房间内的现有自定义小表情。
     /// </summary>
     /// <param name="emote"> 要修改的自定义小表情。 </param>
     /// <param name="func"> 一个用于设置自定义表情属性的委托。 </param>
@@ -101,7 +135,7 @@ public interface IRoom : IEntity<ulong>
     Task ModifyEmoteAsync(RoomEmote emote, Action<EmoteProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     删除此服务器内的现有自定义小表情。
+    ///     删除此房间内的现有自定义小表情。
     /// </summary>
     /// <param name="emote"> 要删除的自定义小表情。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -113,19 +147,19 @@ public interface IRoom : IEntity<ulong>
     #region Stickers
 
     /// <summary>
-    ///     获取此服务器的所有自定义大表情。
+    ///     获取此房间的所有自定义大表情。
     /// </summary>
     IReadOnlyCollection<RoomSticker> Stickers { get; }
 
     /// <summary>
-    ///     获取此服务器的所有自定义大表情。
+    ///     获取此房间的所有自定义大表情。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义大表情。 </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此房间的所有自定义大表情。 </returns>
     Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     获取此服务器的指定自定义大表情。
+    ///     获取此房间的指定自定义大表情。
     /// </summary>
     /// <param name="id"> 要获取的自定义表情的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -133,7 +167,7 @@ public interface IRoom : IEntity<ulong>
     Task<RoomSticker?> GetStickerAsync(ulong id, RequestOptions? options = null);
 
     /// <summary>
-    ///     修改此服务器内的现有自定义大表情。
+    ///     修改此房间内的现有自定义大表情。
     /// </summary>
     /// <param name="sticker"> 要修改的自定义大表情。 </param>
     /// <param name="func"> 一个用于设置自定义表情属性的委托。 </param>
@@ -142,7 +176,7 @@ public interface IRoom : IEntity<ulong>
     Task ModifyStickerAsync(RoomSticker sticker, Action<EmoteProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     删除此服务器内的现有自定义大表情。
+    ///     删除此房间内的现有自定义大表情。
     /// </summary>
     /// <param name="sticker"> 要删除的自定义大表情。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>

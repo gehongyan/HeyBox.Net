@@ -2,8 +2,8 @@
 
 namespace HeyBox.API.Rest;
 
-internal class GetRoomsResponse : PagedResponseBase
+internal class GetRoomsResponse
 {
     [JsonPropertyName("rooms")]
-    public required Room[] Rooms { get; set; }
+    public required GetRoomsPagedResponse Rooms { get; set; }
 }

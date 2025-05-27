@@ -29,6 +29,11 @@ public abstract partial class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
     internal new HeyBoxSocketApiClient ApiClient => base.ApiClient as HeyBoxSocketApiClient
         ?? throw new InvalidOperationException("The API client is not a WebSocket-based client.");
 
+    /// <summary>
+    ///     获取当前用户所在的所有房间。
+    /// </summary>
+    public abstract IReadOnlyCollection<SocketRoom> Rooms { get; }
+
     /// <inheritdoc cref="HeyBox.Rest.BaseHeyBoxClient.CurrentUser" />
     public new virtual SocketSelfUser? CurrentUser
     {
@@ -72,7 +77,7 @@ public abstract partial class BaseSocketClient : BaseHeyBoxClient, IHeyBoxClient
     /// </summary>
     /// <param name="id"> 要获取的房间的 ID。 </param>
     /// <returns> 与指定的 <paramref name="id"/> 关联的实体；如果缓存中不存在指定的房间，则返回一个用于后续调用但不包含其他有效信息的房间实体。 </returns>
-    public abstract SocketRoom GetRoom(ulong id);
+    public abstract SocketRoom? GetRoom(ulong id);
 
     /// <inheritdoc />
     public abstract Task StartAsync();

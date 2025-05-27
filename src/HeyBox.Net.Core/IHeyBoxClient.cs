@@ -70,6 +70,14 @@ public interface IHeyBoxClient : IDisposable
     /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间；若指定 ID 的房间不存在，则为 <c>null</c>。 </returns>
     Task<IRoom?> GetRoomAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
+    /// <summary>
+    ///     获取当前用户所在的所有房间。
+    /// </summary>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前用户所在的所有房间。 </returns>
+    Task<IReadOnlyCollection<IRoom>> GetRoomsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
     #endregion
 
     #region Users

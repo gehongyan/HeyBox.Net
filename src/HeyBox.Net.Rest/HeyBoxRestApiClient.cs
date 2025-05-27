@@ -332,12 +332,13 @@ internal class HeyBoxRestApiClient : IDisposable
         return responseStream;
     }
 
-    private async IAsyncEnumerable<IReadOnlyCollection<TItem>> SendPagedAsync<TResponse, TItem>(
-        HttpMethod method, Expression<Func<int, int, string>> endpointExpr,
-        int offset, int limit, Func<TResponse, IEnumerable<TItem>> selector,
+    private async IAsyncEnumerable<IReadOnlyCollection<TItem>> SendPagedAsync<TResponse, TPaged, TItem>(
+        HttpMethod method, Expression<Func<int, int, string>> endpointExpr, int offset, int limit,
+        Func<TResponse, TPaged> pagedSelector, Func<TPaged, IEnumerable<TItem>> itemsSelector,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         RequestOptions? options = null)
-        where TResponse : PagedResponseBase
+        where TResponse : class
+        where TPaged : PagedResponseBase
     {
         int currentOffset = offset;
         int total = int.MaxValue;
@@ -349,10 +350,11 @@ internal class HeyBoxRestApiClient : IDisposable
                 .ConfigureAwait(false);
             if (response == null)
                 yield break;
-            IReadOnlyCollection<TItem> items = [..selector(response)];
+            TPaged pagedResponse = pagedSelector(response);
+            IReadOnlyCollection<TItem> items = [..itemsSelector(pagedResponse)];
             yield return items;
             currentOffset += items.Count;
-            total = response.Total;
+            total = pagedResponse.Total;
             if (items.Count == 0 || currentOffset >= total)
                 yield break;
         }
@@ -368,9 +370,9 @@ internal class HeyBoxRestApiClient : IDisposable
     {
         options = RequestOptions.CreateOrClone(options);
         BucketIds ids = new();
-        return SendPagedAsync<GetRoomsResponse, Room>(HttpMethod.Get,
+        return SendPagedAsync<GetRoomsResponse, GetRoomsPagedResponse, Room>(HttpMethod.Get,
             (o, l) => $"chatroom/v2/room/joined?offset={o}&limit={l}&{HeyBoxConfig.CommonQueryString}",
-            fromOffset, limit, x => x.Rooms, ids, options: options);
+            fromOffset, limit, x => x.Rooms, x => x.Rooms, ids, options: options);
     }
 
     #endregion

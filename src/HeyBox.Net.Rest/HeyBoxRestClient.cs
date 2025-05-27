@@ -1,6 +1,8 @@
-﻿using System.Text.Encodings.Web;
+﻿using System.Collections.Immutable;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HeyBox.API;
 
 namespace HeyBox.Rest;
 
@@ -84,9 +86,21 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
     /// </summary>
     /// <param name="id"> 房间的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间；若指定 ID 的房间不存在，则为 <c>null</c>。 </returns>
-    public Task<RestRoom> GetRoomAsync(ulong id, RequestOptions? options = null) =>
-        ClientHelper.GetRoomAsync(this, id, options);
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间。若指定 ID 的房间不存在，则为 <c>null</c>。 </returns>
+    public async Task<RestRoom?> GetRoomAsync(ulong id, RequestOptions? options = null)
+    {
+        Room? model = await ClientHelper.GetRoomAsync(this, id, options);
+        if (model == null) return null;
+        return RestRoom.Create(this, model);
+    }
+
+    /// <summary>
+    ///     获取当前用户所在的所有房间。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前用户所在的所有房间。 </returns>
+    public Task<IReadOnlyCollection<RestRoom>> GetRoomsAsync(RequestOptions? options = null) =>
+        ClientHelper.GetRoomsAsync(this, options);
 
     #endregion
 
@@ -136,6 +150,14 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
         if (mode == CacheMode.AllowDownload)
             return await GetRoomAsync(id, options).ConfigureAwait(false);
         return null;
+    }
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IRoom>> IHeyBoxClient.GetRoomsAsync(CacheMode mode, RequestOptions? options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetRoomsAsync(options).ConfigureAwait(false);
+        return ImmutableArray.Create<IRoom>();
     }
 
     /// <inheritdoc />

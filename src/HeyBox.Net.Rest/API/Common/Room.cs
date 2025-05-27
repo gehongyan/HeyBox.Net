@@ -6,7 +6,7 @@ namespace HeyBox.API;
 internal class Room
 {
     [JsonPropertyName("room_id")]
-    public required string RoomId { get; set; }
+    public required ulong RoomId { get; set; }
 
     [JsonPropertyName("room_name")]
     public required string RoomName { get; set; }
@@ -15,7 +15,7 @@ internal class Room
     public required string RoomAvatar { get; set; }
 
     [JsonPropertyName("create_by")]
-    public required int CreateBy { get; set; }
+    public required uint CreateBy { get; set; }
 
     [JsonPropertyName("room_pic")]
     public required string RoomPic { get; set; }

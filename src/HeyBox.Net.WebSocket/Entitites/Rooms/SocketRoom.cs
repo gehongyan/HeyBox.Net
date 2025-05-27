@@ -2,7 +2,8 @@
 using System.Diagnostics;
 using HeyBox.API.Rest;
 using HeyBox.Rest;
-using Model = HeyBox.API.Gateway.RoomBaseInfo;
+using Model = HeyBox.API.Room;
+using BaseModel = HeyBox.API.Gateway.RoomBaseInfo;
 using ChannelModel = HeyBox.API.Gateway.ChannelBaseInfo;
 using RoleModel = HeyBox.API.Role;
 
@@ -21,10 +22,28 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     private readonly ConcurrentDictionary<ulong, RoomSticker> _stickers;
 
     /// <inheritdoc />
-    public string? Name { get; private set; }
+    public string Name { get; private set; }
 
     /// <inheritdoc />
-    public string? Icon { get; private set; }
+    public uint CreatorId { get; private set; }
+
+    /// <inheritdoc />
+    public string Icon { get; private set; }
+
+    /// <inheritdoc />
+    public string Banner { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsPublic { get; private set; }
+
+    /// <inheritdoc />
+    public uint? PublicId { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsHot { get; private set; }
+
+    /// <inheritdoc />
+    public DateTimeOffset JoinedAt { get; private set; }
 
     /// <summary>
     ///     获取此房间内已缓存的成员数量。
@@ -61,6 +80,9 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     internal SocketRoom(HeyBoxSocketClient client, ulong id)
         : base(client, id)
     {
+        Name = string.Empty;
+        Icon = string.Empty;
+        Banner = string.Empty;
         _channels = [];
         _members = [];
         _roles = [];
@@ -75,13 +97,32 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         return entity;
     }
 
-    internal void Update(ClientState state, Model model)
+    internal static SocketRoom Create(HeyBoxSocketClient client, ClientState state, BaseModel model)
+    {
+        SocketRoom entity = new(client, model.RoomId);
+        entity.Update(state, model);
+        return entity;
+    }
+
+    internal void Update(ClientState state, BaseModel model)
     {
         Name = model.RoomName;
         Icon = model.RoomAvatar;
     }
 
-    internal void Update(ClientState state, API.Rest.GetRoomRolesResponse model)
+    internal void Update(ClientState state, Model model)
+    {
+        Name = model.RoomName;
+        Icon = model.RoomAvatar;
+        CreatorId = model.CreateBy;
+        Banner = model.RoomPic;
+        IsPublic = model.IsPublic;
+        PublicId = model.IsPublic ? uint.Parse(model.PublicId) : null;
+        IsHot = model.IsHot;
+        JoinedAt = model.JoinTime;
+    }
+
+    internal void Update(ClientState state, GetRoomRolesResponse model)
     {
         _roles.Clear();
         foreach (RoleModel roleModel in model.Roles)
@@ -119,7 +160,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     }
 
     /// <inheritdoc cref="HeyBox.WebSocket.SocketRoom.Name" />
-    public override string? ToString() => Name;
+    public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";
 
