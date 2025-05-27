@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using HeyBox.API;
 using HeyBox.API.Rest;
 using Model = HeyBox.API.Room;
@@ -9,6 +10,7 @@ namespace HeyBox.Rest;
 /// <summary>
 ///     表示一个基于 REST 的房间。
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 {
     private ImmutableDictionary<ulong, RestRole> _roles;
@@ -197,6 +199,11 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
         RoomHelper.DeleteMemeAsync(this, Client, sticker, options);
 
     #endregion
+
+    /// <inheritdoc cref="HeyBox.Rest.RestRoom.Name" />
+    public override string ToString() => Name;
+
+    private string DebuggerDisplay => $"{Name} ({Id})";
 
     #region IRoom
 
