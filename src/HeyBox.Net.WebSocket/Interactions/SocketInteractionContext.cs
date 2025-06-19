@@ -3,57 +3,41 @@ using System.Collections.Immutable;
 
 namespace HeyBox.Interactions;
 
-/// <summary>
-///     Represents a Web-Socket based context of an <see cref="IHeyBoxInteraction"/>.
-/// </summary>
+/// <summary> 表示基于 WebSocket 的 <see cref="IHeyBoxInteraction"/> 上下文。 </summary>
 public class SocketInteractionContext<TInteraction> : IInteractionContext, IRouteMatchContainer
     where TInteraction : SocketInteraction
 {
-    /// <summary>
-    ///     Gets the <see cref="HeyBoxSocketClient"/> that the command will be executed with.
-    /// </summary>
+    /// <summary> 获取用于执行命令的 <see cref="HeyBoxSocketClient"/>。 </summary>
     public HeyBoxSocketClient Client { get; }
 
     /// <inheritdoc />
     public ulong? RoomId { get; }
 
-    /// <summary>
-    ///     Gets the <see cref="SocketRoom"/> the command originated from.
-    /// </summary>
-    /// <remarks>
-    ///     Will be null if the command is from a DM Channel.
-    /// </remarks>
+    /// <summary> 获取命令来源的 <see cref="SocketRoom"/>。 </summary>
+    /// <remarks> 如果命令来源为私聊频道，则为 <see langword="null"/>。 </remarks>
     public SocketRoom? Room { get; }
 
-    /// <summary>
-    ///     Gets the <see cref="ISocketMessageChannel"/> the command originated from.
-    /// </summary>
+    /// <summary> 获取命令来源的 <see cref="ISocketMessageChannel"/>。 </summary>
     public ISocketMessageChannel Channel { get; }
 
     /// <inheritdoc />
     public uint UserId { get; }
 
-    /// <summary>
-    ///     Gets the <see cref="SocketUser"/> who executed the command.
-    /// </summary>
+    /// <summary> 获取执行命令的 <see cref="SocketUser"/>。 </summary>
     public SocketUser? User { get; }
 
     /// <inheritdoc />
     public ulong MessageId { get; }
 
-    /// <summary>
-    ///     Gets the <see cref="SocketInteraction"/> the command was received with.
-    /// </summary>
+    /// <summary> 获取接收到命令的 <see cref="SocketInteraction"/>。 </summary>
     public TInteraction Interaction { get; }
 
     /// <inheritdoc cref="IRouteMatchContainer.SegmentMatches"/>
     public IReadOnlyCollection<IRouteSegmentMatch> SegmentMatches { get; private set; } = [];
 
-    /// <summary>
-    ///     Initializes a new <see cref="SocketInteractionContext{TInteraction}"/>.
-    /// </summary>
-    /// <param name="client">The underlying client.</param>
-    /// <param name="interaction">The underlying interaction.</param>
+    /// <summary> 初始化 <see cref="SocketInteractionContext{TInteraction}"/>。 </summary>
+    /// <param name="client"> 底层客户端。 </param>
+    /// <param name="interaction"> 底层交互对象。 </param>
     public SocketInteractionContext(HeyBoxSocketClient client, TInteraction interaction)
     {
         Client = client;
@@ -90,16 +74,12 @@ public class SocketInteractionContext<TInteraction> : IInteractionContext, IRout
     IHeyBoxInteraction IInteractionContext.Interaction => Interaction;
 }
 
-/// <summary>
-///     Represents a Web-Socket based context of an <see cref="IHeyBoxInteraction"/>
-/// </summary>
+/// <summary> 表示基于 WebSocket 的 <see cref="IHeyBoxInteraction"/> 上下文。 </summary>
 public class SocketInteractionContext : SocketInteractionContext<SocketInteraction>
 {
-    /// <summary>
-    ///     Initializes a new <see cref="SocketInteractionContext"/>
-    /// </summary>
-    /// <param name="client">The underlying client</param>
-    /// <param name="interaction">The underlying interaction</param>
+    /// <summary> 初始化 <see cref="SocketInteractionContext"/>。 </summary>
+    /// <param name="client"> 底层客户端。 </param>
+    /// <param name="interaction"> 底层交互对象。 </param>
     public SocketInteractionContext(HeyBoxSocketClient client, SocketInteraction interaction)
         : base(client, interaction) { }
 }

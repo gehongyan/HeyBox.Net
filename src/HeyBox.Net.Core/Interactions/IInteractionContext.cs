@@ -1,50 +1,30 @@
 namespace HeyBox;
 
-/// <summary>
-///     Represents the context of an Interaction.
-/// </summary>
+/// <summary> 表示一次交互的上下文。 </summary>
 public interface IInteractionContext
 {
-    /// <summary>
-    ///     Gets the client that will be used to handle this interaction.
-    /// </summary>
+    /// <summary> 获取用于处理本次交互的客户端。 </summary>
     IHeyBoxClient Client { get; }
 
-    /// <summary>
-    ///     Gets the application command info that was used to handle this interaction.
-    /// </summary>
+    /// <summary> 获取用于处理本次交互的应用命令信息。 </summary>
     ulong? RoomId { get; }
 
-    /// <summary>
-    ///     Gets the guild the interaction originated from.
-    /// </summary>
-    /// <remarks>
-    ///     Will be <see langword="null"/> if the interaction originated from a DM channel or the interaction was a Context Command interaction.
-    /// </remarks>
+    /// <summary> 获取本次交互来源的群组。 </summary>
+    /// <remarks> 如果交互来源为私聊频道或为上下文命令交互，则为 <see langword="null"/>。 </remarks>
     IRoom? Room { get; }
 
-    /// <summary>
-    ///     Gets the channel the interaction originated from.
-    /// </summary>
+    /// <summary> 获取本次交互来源的频道。 </summary>
     IMessageChannel Channel { get; }
 
-    /// <summary>
-    ///     Gets the user ID who invoked the interaction.
-    /// </summary>
+    /// <summary> 获取触发本次交互的用户 ID。 </summary>
     uint UserId { get; }
 
-    /// <summary>
-    ///     Gets the user who invoked the interaction event.
-    /// </summary>
+    /// <summary> 获取触发本次交互事件的用户。 </summary>
     IUser? User { get; }
 
-    /// <summary>
-    ///     Gets the message ID the interaction originated from.
-    /// </summary>
+    /// <summary> 获取本次交互来源的消息 ID。 </summary>
     ulong MessageId { get; }
 
-    /// <summary>
-    ///     Gets the underlying interaction.
-    /// </summary>
+    /// <summary> 获取底层交互对象。 </summary>
     IHeyBoxInteraction Interaction { get; }
 }

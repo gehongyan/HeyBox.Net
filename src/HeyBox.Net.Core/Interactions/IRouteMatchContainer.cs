@@ -1,21 +1,13 @@
 namespace HeyBox;
 
-/// <summary>
-///     Represents a container for temporarily storing CustomId wild card matches of a component.
-/// </summary>
+/// <summary> 表示用于临时存储组件 CustomId 通配符匹配的容器。 </summary>
 public interface IRouteMatchContainer
 {
-    /// <summary>
-    ///     Gets the collection of captured route segments in this container.
-    /// </summary>
-    /// <returns>
-    ///    A collection of captured route segments.
-    ///</returns>
+    /// <summary> 获取此容器中捕获的路由片段集合。 </summary>
+    /// <returns> 捕获的路由片段集合。 </returns>
     IEnumerable<IRouteSegmentMatch> SegmentMatches { get; }
 
-    /// <summary>
-    ///     Sets the <see cref="SegmentMatches"/> property of this container.
-    /// </summary>
-    /// <param name="segmentMatches">The collection of captured route segments.</param>
+    /// <summary> 设置此容器的 <see cref="SegmentMatches"/> 属性。 </summary>
+    /// <param name="segmentMatches"> 捕获的路由片段集合。 </param>
     void SetSegmentMatches(IEnumerable<IRouteSegmentMatch> segmentMatches);
 }
