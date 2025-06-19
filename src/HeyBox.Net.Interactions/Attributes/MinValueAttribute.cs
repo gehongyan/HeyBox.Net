@@ -1,20 +1,20 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Set the minimum value permitted for a number type parameter.
+///     设置数字类型参数允许的最小值。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public sealed class MinValueAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the minimum value permitted.
+    ///     获取允许的最小值。
     /// </summary>
     public double Value { get; }
 
     /// <summary>
-    ///     Set the minimum value permitted for a number type parameter.
+    ///     设置数字类型参数允许的最小值。
     /// </summary>
-    /// <param name="value">The minimum value permitted.</param>
+    /// <param name="value"> 允许的最小值。 </param>
     public MinValueAttribute(double value)
     {
         Value = value;

@@ -1,36 +1,26 @@
 namespace HeyBox.Interactions;
 
-/// <summary>
-///     Base class for creating TypeConverters. <see cref="InteractionService"/> uses TypeConverters to interface with Slash Command parameters.
-/// </summary>
+/// <summary> 类型转换器基类。<see cref="InteractionService"/> 使用 TypeConverter 处理斜线命令参数。 </summary>
 public abstract class TypeConverter : ITypeConverter<ISlashCommandInteractionDataOption>
 {
-    /// <summary>
-    ///     Will be used to search for alternative TypeConverters whenever the Command Service encounters an unknown parameter type.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
+    /// <summary> 当命令服务遇到未知参数类型时，将用于查找可用的 TypeConverter。 </summary>
+    /// <param name="type"> 参数类型。 </param>
+    /// <returns> 是否可以转换。 </returns>
     public abstract bool CanConvertTo(Type type);
 
-    /// <summary>
-    ///     Will be used to get the Application Command Option type.
-    /// </summary>
-    /// <returns>The option type.</returns>
+    /// <summary> 获取应用命令选项类型。 </summary>
+    /// <returns> 选项类型。 </returns>
     public abstract SlashCommandOptionType GetHeyBoxType();
 
-    /// <summary>
-    ///     Will be used to read the incoming payload before executing the method body.
-    /// </summary>
-    /// <param name="context">Command execution context.</param>
-    /// <param name="option">Received option payload.</param>
-    /// <param name="services">Service provider that will be used to initialize the command module.</param>
-    /// <returns>The result of the read process.</returns>
+    /// <summary> 在执行方法体前读取传入的参数。 </summary>
+    /// <param name="context"> 命令执行上下文。 </param>
+    /// <param name="option"> 接收到的选项参数。 </param>
+    /// <param name="services"> 用于初始化命令模块的服务提供器。 </param>
+    /// <returns> 读取过程的结果。 </returns>
     public abstract Task<TypeConverterResult> ReadAsync(IInteractionContext context,
         ISlashCommandInteractionDataOption option, IServiceProvider? services);
 
-    /// <summary>
-    ///     Will be used to manipulate the outgoing command option, before the command gets registered to HeyBox.
-    /// </summary>
+    /// <summary> 在命令注册到 HeyBox 前，用于操作输出的命令选项。 </summary>
     public virtual void Write(SlashCommandOptionProperties properties, IParameterInfo parameter) { }
 }
 

@@ -1,20 +1,20 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Sets the minimum length allowed for a string type parameter.
+///     设置字符串类型参数允许的最小长度。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public class MinLengthAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the minimum length allowed for a string type parameter.
+    ///     获取字符串类型参数允许的最小长度。
     /// </summary>
     public int Length { get; }
 
     /// <summary>
-    ///     Sets the minimum length allowed for a string type parameter.
+    ///     设置字符串类型参数允许的最小长度。
     /// </summary>
-    /// <param name="length">Minimum string length allowed.</param>
+    /// <param name="length"> 允许的最小字符串长度。 </param>
     public MinLengthAttribute(int length)
     {
         Length = length;

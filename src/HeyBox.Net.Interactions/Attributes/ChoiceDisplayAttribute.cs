@@ -1,20 +1,20 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Customize the displayed value of a slash command choice enum. Only works with the default enum type converter.
+///     自定义斜线命令选项枚举的显示值。仅适用于默认枚举类型转换器。
 /// </summary>
 [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
 public class ChoiceDisplayAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the name of the parameter.
+    ///     获取参数名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Modify the default name and description values of a Slash Command parameter.
+    ///     修改斜线命令参数的默认名称和描述。
     /// </summary>
-    /// <param name="name">Name of the parameter.</param>
+    /// <param name="name"> 参数名称。 </param>
     public ChoiceDisplayAttribute(string name)
     {
         Name = name;

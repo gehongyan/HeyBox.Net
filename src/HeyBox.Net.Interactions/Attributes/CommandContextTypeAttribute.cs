@@ -3,20 +3,20 @@ using System.Collections.Immutable;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Specifies context types this command can be executed in.
+///     指定此命令可在哪些上下文类型中执行。
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 public class CommandContextTypeAttribute : Attribute
 {
     /// <summary>
-    ///     Gets context types this command can be executed in.
+    ///     获取此命令可执行的上下文类型。
     /// </summary>
     public IReadOnlyCollection<InteractionContextType> ContextTypes { get; }
 
     /// <summary>
-    ///     Sets the <see cref="IApplicationCommandInfo.ContextTypes"/> property of an application command or module.
+    ///     设置应用命令或模块的 <see cref="IApplicationCommandInfo.ContextTypes"/> 属性。
     /// </summary>
-    /// <param name="contextTypes">Context types set for the command.</param>
+    /// <param name="contextTypes"> 为命令设置的上下文类型。 </param>
     public CommandContextTypeAttribute(params InteractionContextType[] contextTypes)
     {
         ContextTypes = contextTypes.Distinct().ToImmutableArray();

@@ -1,19 +1,19 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Requires the user invoking the command to have a specified user.
+///     要求调用命令的用户为指定用户。
 /// </summary>
 public class RequireUserAttribute : PreconditionAttribute
 {
     /// <summary>
-    ///     Gets the specified User ID of the precondition.
+    ///     获取此先决条件指定的用户 ID。
     /// </summary>
     public uint UserId { get; }
 
     /// <summary>
-    ///     Requires that the user invoking the command to have a specific Role.
+    ///     要求调用命令的用户为特定用户。
     /// </summary>
-    /// <param name="userId">Id of the role that the user must have.</param>
+    /// <param name="userId"> 需要用户拥有的用户 ID。 </param>
     public RequireUserAttribute(uint userId)
     {
         UserId = userId;

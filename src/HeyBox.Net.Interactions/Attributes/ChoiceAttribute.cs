@@ -1,23 +1,23 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Add a pre-determined argument value to a command parameter.
+///     为命令参数添加预设值。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true, Inherited = true)]
 public class ChoiceAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the name of the choice.
+    ///     获取选项名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets the type of this choice.
+    ///     获取此选项的类型。
     /// </summary>
     public SlashCommandChoiceType Type { get; }
 
     /// <summary>
-    ///     Gets the value that will be used whenever this choice is selected.
+    ///     获取当选择此选项时将被使用的值。
     /// </summary>
     public object? Value { get; }
 
@@ -27,10 +27,10 @@ public class ChoiceAttribute : Attribute
     }
 
     /// <summary>
-    ///     Create a parameter choice with type <see cref="SlashCommandChoiceType.String"/>.
+    ///     创建一个类型为 <see cref="SlashCommandChoiceType.String"/> 的参数选项。
     /// </summary>
-    /// <param name="name">Name of the choice.</param>
-    /// <param name="value">Predefined value of the choice.</param>
+    /// <param name="name"> 选项名称。 </param>
+    /// <param name="value"> 选项的预设值。 </param>
     public ChoiceAttribute(string name, string value) : this(name)
     {
         Type = SlashCommandChoiceType.String;
@@ -38,10 +38,10 @@ public class ChoiceAttribute : Attribute
     }
 
     /// <summary>
-    ///     Create a parameter choice with type <see cref="SlashCommandChoiceType.Integer"/>.
+    ///     创建一个类型为 <see cref="SlashCommandChoiceType.Integer"/> 的参数选项。
     /// </summary>
-    /// <param name="name">Name of the choice.</param>
-    /// <param name="value">Predefined value of the choice.</param>
+    /// <param name="name"> 选项名称。 </param>
+    /// <param name="value"> 选项的预设值。 </param>
     public ChoiceAttribute(string name, int value) : this(name)
     {
         Type = SlashCommandChoiceType.Integer;
@@ -49,10 +49,10 @@ public class ChoiceAttribute : Attribute
     }
 
     /// <summary>
-    ///     Create a parameter choice with type <see cref="SlashCommandChoiceType.Number"/>.
+    ///     创建一个类型为 <see cref="SlashCommandChoiceType.Number"/> 的参数选项。
     /// </summary>
-    /// <param name="name">Name of the choice.</param>
-    /// <param name="value">Predefined value of the choice.</param>
+    /// <param name="name"> 选项名称。 </param>
+    /// <param name="value"> 选项的预设值。 </param>
     public ChoiceAttribute(string name, double value) : this(name)
     {
         Type = SlashCommandChoiceType.Number;

@@ -1,22 +1,22 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents a <see cref="InteractionService"/> command that can be registered to HeyBox.
+///     表示可注册到黑盒语音的 <see cref="InteractionService"/> 命令。
 /// </summary>
 public interface IApplicationCommandInfo
 {
     /// <summary>
-    ///     Gets the name of this command.
+    ///     获取此命令的名称。
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the type of this command.
+    ///     获取此命令的类型。
     /// </summary>
     ApplicationCommandType CommandType { get; }
 
     /// <summary>
-    ///     Gets the context types this command can be executed in.
+    ///     获取此命令可执行的上下文类型。
     /// </summary>
     public IReadOnlyCollection<InteractionContextType> ContextTypes { get; }
 }

@@ -1,7 +1,7 @@
 namespace HeyBox.Net;
 
 /// <summary>
-///     表示一个由 HeyBox 限制请求频率时引发的异常。
+///     表示一个由黑盒语音限制请求频率时引发的异常。
 /// </summary>
 public class RateLimitedException : TimeoutException
 {

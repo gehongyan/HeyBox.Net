@@ -1,32 +1,32 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Create an Slash Application Command.
+///     创建一个斜线应用命令。
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class SlashCommandAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the name of the Slash Command.
+    ///     获取斜线命令的名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets the description of the Slash Command.
+    ///     获取斜线命令的描述。
     /// </summary>
     public string? Description { get; }
 
     /// <summary>
-    ///     Gets the run mode this command gets executed with.
+    ///     获取此命令执行时的运行模式。
     /// </summary>
     public RunMode RunMode { get; }
 
     /// <summary>
-    ///     Register a method as a Slash Command.
+    ///     注册一个方法为斜线命令。
     /// </summary>
-    /// <param name="name">Name of the command.</param>
-    /// <param name="description">Description of the command.</param>
-    /// <param name="runMode">Set the run mode of the command.</param>
+    /// <param name="name"> 命令名称。 </param>
+    /// <param name="description"> 命令描述。 </param>
+    /// <param name="runMode"> 设置命令的运行模式。 </param>
     public SlashCommandAttribute(string name, string? description = null, RunMode runMode = RunMode.Default)
     {
         Name = name;

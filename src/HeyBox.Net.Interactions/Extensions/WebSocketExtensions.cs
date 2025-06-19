@@ -3,11 +3,11 @@ namespace HeyBox.WebSocket;
 internal static class WebSocketExtensions
 {
     /// <summary>
-    ///     Get the name of the executed command and its parents in hierarchical order.
+    ///     获取被执行命令及其父级的名称（按层级顺序）。
     /// </summary>
-    /// <param name="data"></param>
+    /// <param name="data">斜线命令交互数据。</param>
     /// <returns>
-    ///     The name of the executed command and its parents in hierarchical order.
+    ///     被执行命令及其父级的名称（按层级顺序）。
     /// </returns>
     public static IList<string> GetCommandKeywords(this ISlashCommandInteractionData data) => [data.Name];
 }

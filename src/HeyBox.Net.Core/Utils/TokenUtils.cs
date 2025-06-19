@@ -21,7 +21,7 @@ public static class TokenUtils
     ///     Bot 令牌的标准长度。
     /// </summary>
     /// <remarks>
-    ///     此值是通过与 HeyBox 文档和现有令牌的示例进行比较确定的。
+    ///     此值是通过与黑盒语音文档和现有令牌的示例进行比较确定的。
     /// </remarks>
     internal const int StandardBotTokenLength = 64;
 
@@ -191,7 +191,7 @@ public static class TokenUtils
         {
             case TokenType.BotToken:
                 // bot tokens are assumed to be at least 64 characters in length
-                // this value was determined by referencing examples in the HeyBox documentation, and by comparing with
+                // this value was determined by referencing examples in the黑盒语音documentation, and by comparing with
                 // pre-existing tokens
                 if (token.Length < MinBotTokenLength || token.TrimEnd('=').Length > StandardBotTokenLength)
                     throw new ArgumentException(

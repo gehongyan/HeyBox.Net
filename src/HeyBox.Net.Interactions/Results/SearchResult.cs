@@ -2,25 +2,17 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace HeyBox.Interactions;
 
-/// <summary>
-///     Contains information of a command search.
-/// </summary>
-/// <typeparam name="T">Type of the target command type.</typeparam>
+/// <summary> 包含命令搜索的信息。 </summary>
+/// <typeparam name="T"> 目标命令类型。 </typeparam>
 public struct SearchResult<T> : IResult where T : class, ICommandInfo
 {
-    /// <summary>
-    ///     Gets the input text of the command search.
-    /// </summary>
+    /// <summary> 获取命令搜索的输入文本。 </summary>
     public string? Text { get; }
 
-    /// <summary>
-    ///     Gets the found command, if the search was successful.
-    /// </summary>
+    /// <summary> 获取搜索成功时找到的命令。 </summary>
     public T? Command { get; }
 
-    /// <summary>
-    ///     Gets the Regex groups captured by the wild card pattern.
-    /// </summary>
+    /// <summary> 获取通配符模式捕获的正则分组。 </summary>
     public string[]? RegexCaptureGroups { get; }
 
     /// <inheritdoc/>
@@ -42,50 +34,28 @@ public struct SearchResult<T> : IResult where T : class, ICommandInfo
         ErrorReason = reason;
     }
 
-    /// <summary>
-    ///     Initializes a new <see cref="SearchResult{T}" /> with no error, indicating a successful execution.
-    /// </summary>
-    /// <returns>
-    ///     A <see cref="SearchResult{T}" /> that does not contain any errors.
-    /// </returns>
+    /// <summary> 初始化一个新的 <see cref="SearchResult{T}" />，无错误，表示执行成功。 </summary>
+    /// <returns> 一个不包含任何错误的 <see cref="SearchResult{T}" />。 </returns>
     public static SearchResult<T> FromSuccess(string text, T commandInfo, string[]? wildCardMatch = null) =>
         new SearchResult<T>(text, commandInfo, wildCardMatch, null, null);
 
-    /// <summary>
-    ///     Initializes a new <see cref="SearchResult{T}" /> with a specified <see cref="InteractionCommandError" /> and its
-    ///     reason, indicating an unsuccessful execution.
-    /// </summary>
-    /// <param name="text">The input text of the command search.</param>
-    /// <param name="error">The type of error.</param>
-    /// <param name="reason">The reason behind the error.</param>
-    /// <returns>
-    ///     A <see cref="SearchResult{T}" /> that contains a <see cref="InteractionCommandError" /> and reason.
-    /// </returns>
+    /// <summary> 初始化一个新的 <see cref="SearchResult{T}" />，带有指定的 <see cref="InteractionCommandError" /> 及原因，表示执行失败。 </summary>
+    /// <param name="text"> 命令搜索的输入文本。 </param>
+    /// <param name="error"> 错误类型。 </param>
+    /// <param name="reason"> 错误原因。 </param>
+    /// <returns> 一个包含 <see cref="InteractionCommandError" /> 和原因的 <see cref="SearchResult{T}" />。 </returns>
     public static SearchResult<T> FromError(string text, InteractionCommandError error, string reason) =>
         new SearchResult<T>(text, null, null, error, reason);
 
-    /// <summary>
-    ///     Initializes a new <see cref="SearchResult{T}" /> with a specified exception, indicating an unsuccessful
-    ///     execution.
-    /// </summary>
-    /// <param name="ex">The exception that caused the command execution to fail.</param>
-    /// <returns>
-    ///     A <see cref="SearchResult{T}" /> that contains the exception that caused the unsuccessful execution, along
-    ///     with a <see cref="InteractionCommandError" /> of type <c>Exception</c> as well as the exception message as the
-    ///     reason.
-    /// </returns>
+    /// <summary> 初始化一个新的 <see cref="SearchResult{T}" />，带有指定异常，表示执行失败。 </summary>
+    /// <param name="ex"> 导致命令执行失败的异常。 </param>
+    /// <returns> 一个包含导致执行失败异常的 <see cref="SearchResult{T}" />，以及类型为 <c>Exception</c> 的 <see cref="InteractionCommandError" /> 和异常消息作为原因。 </returns>
     public static SearchResult<T> FromError(Exception ex) =>
         new SearchResult<T>(null, null, null, InteractionCommandError.Exception, ex.Message);
 
-    /// <summary>
-    ///     Initializes a new <see cref="SearchResult{T}" /> with a specified result; this may or may not be an
-    ///     successful depending on the <see cref="IResult.Error" /> and
-    ///     <see cref="IResult.ErrorReason" /> specified.
-    /// </summary>
-    /// <param name="result">The result to inherit from.</param>
-    /// <returns>
-    ///     A <see cref="SearchResult{T}"/> that inherits the <see cref="IResult"/> error type and reason.
-    /// </returns>
+    /// <summary> 初始化一个新的 <see cref="SearchResult{T}" />，带有指定结果，是否成功取决于 <see cref="IResult.Error" /> 和 <see cref="IResult.ErrorReason" />。 </summary>
+    /// <param name="result"> 要继承的结果。 </param>
+    /// <returns> 一个继承了 <see cref="IResult"/> 错误类型和原因的 <see cref="SearchResult{T}"/>。 </returns>
     public static SearchResult<T> FromError(IResult result) =>
         new SearchResult<T>(null, null, null, result.Error, result.ErrorReason);
 

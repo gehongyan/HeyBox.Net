@@ -1,52 +1,52 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents a <see cref="ICommandInfo"/> parameter.
+///     表示 <see cref="ICommandInfo"/> 的参数。
 /// </summary>
 public interface IParameterInfo
 {
     /// <summary>
-    ///     Gets the command that this parameter belongs to.
+    ///     获取此参数所属的命令。
     /// </summary>
     ICommandInfo Command { get; }
 
     /// <summary>
-    ///     Gets the name of this parameter.
+    ///     获取此参数的名称。
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the type of this parameter.
+    ///     获取此参数的类型。
     /// </summary>
     Type ParameterType { get; }
 
     /// <summary>
-    ///     Gets whether this parameter is required.
+    ///     获取此参数是否为必填项。
     /// </summary>
     bool IsRequired { get; }
 
     /// <summary>
-    ///     Gets whether this parameter is marked with a <see langword="params"/> keyword.
+    ///     获取此参数是否被 <see langword="params"/> 关键字标记。
     /// </summary>
     bool IsParameterArray { get; }
 
     /// <summary>
-    ///     Gets the default value of this parameter if the parameter is optional.
+    ///     获取此参数的默认值（如果为可选参数）。
     /// </summary>
     object? DefaultValue { get; }
 
     /// <summary>
-    ///     Gets a list of the attributes this parameter has.
+    ///     获取此参数的特性集合。
     /// </summary>
     IReadOnlyCollection<Attribute> Attributes { get; }
 
     /// <summary>
-    ///     Gets a list of the preconditions this parameter has.
+    ///     获取此参数的先决条件集合。
     /// </summary>
     IReadOnlyCollection<ParameterPreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Check if an execution context meets the parameter precondition requirements.
+    ///     检查执行上下文是否满足参数的先决条件要求。
     /// </summary>
     Task<PreconditionResult> CheckPreconditionsAsync(IInteractionContext context, object? value, IServiceProvider? services);
 }

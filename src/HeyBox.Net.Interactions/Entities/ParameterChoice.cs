@@ -1,17 +1,17 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents a Slash Command parameter choice.
+///     表示斜线命令参数的选项。
 /// </summary>
 public class ParameterChoice
 {
     /// <summary>
-    ///     Gets the name of the choice.
+    ///     获取选项的名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets the value of the choice.
+    ///     获取选项的值。
     /// </summary>
     public object? Value { get; }
 

@@ -15,7 +15,7 @@ using HeyBox.Rest;
 namespace HeyBox.WebSocket;
 
 /// <summary>
-///     表示一个基于网关的 HeyBox 客户端。
+///     表示一个基于网关的黑盒语音客户端。
 /// </summary>
 public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
 {

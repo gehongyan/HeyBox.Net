@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 namespace HeyBox;
 
 /// <summary>
-///     表示一个在执行 API 请求后从 HeyBox 接收到的 JSON 数据中解析出的错误。
+///     表示一个在执行 API 请求后从黑盒语音接收到的 JSON 数据中解析出的错误。
 /// </summary>
 public struct HeyBoxJsonError
 {
@@ -25,7 +25,7 @@ public struct HeyBoxJsonError
 }
 
 /// <summary>
-///     表示一个 HeyBox 返回的错误。
+///     表示一个黑盒语音返回的错误。
 /// </summary>
 public struct HeyBoxError
 {

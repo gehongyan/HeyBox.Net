@@ -1,11 +1,11 @@
 namespace HeyBox.Interactions.Builders;
 
 /// <summary>
-///     Represents the base builder class for creating <see cref="CommandInfo{TParameter}"/>.
+///     表示用于创建 <see cref="CommandInfo{TParameter}"/> 的基础生成器类。
 /// </summary>
-/// <typeparam name="TInfo">The <see cref="CommandInfo{TParameter}"/> this builder yields when built.</typeparam>
-/// <typeparam name="TBuilder">Inherited <see cref="CommandBuilder{TInfo, TBuilder, TParamBuilder}"/> type.</typeparam>
-/// <typeparam name="TParamBuilder">Builder type for this commands parameters.</typeparam>
+/// <typeparam name="TInfo"> 构建后生成的 <see cref="CommandInfo{TParameter}"/> 类型。 </typeparam>
+/// <typeparam name="TBuilder"> 继承的 <see cref="CommandBuilder{TInfo, TBuilder, TParamBuilder}"/> 类型。 </typeparam>
+/// <typeparam name="TParamBuilder"> 此命令参数的生成器类型。 </typeparam>
 public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandBuilder
     where TInfo : class, ICommandInfo
     where TBuilder : CommandBuilder<TInfo, TBuilder, TParamBuilder>
@@ -16,7 +16,7 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     private readonly List<TParamBuilder> _parameters;
 
     /// <summary>
-    ///     Gets the builder instance.
+    ///     获取生成器实例。
     /// </summary>
     protected abstract TBuilder Instance { get; }
 
@@ -41,7 +41,9 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     /// <inheritdoc/>
     public IReadOnlyList<Attribute> Attributes => _attributes;
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     获取此命令的参数生成器列表。
+    /// </summary>
     public IReadOnlyList<TParamBuilder> Parameters => _parameters;
 
     /// <inheritdoc/>
@@ -60,11 +62,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="CommandBuilder{TInfo, TBuilder, TParamBuilder}"/> with the provided <see cref="ModuleBuilder"/>.
+    ///     使用提供的 <see cref="ModuleBuilder"/> 初始化一个新的 <see cref="CommandBuilder{TInfo, TBuilder, TParamBuilder}"/>。
     /// </summary>
-    /// <param name="module"> The <see cref="ModuleBuilder"/> this command belongs to. </param>
-    /// <param name="name"> The name of the command. </param>
-    /// <param name="callback"> The callback to be executed when the command is triggered. </param>
+    /// <param name="module"> 此命令所属的 <see cref="ModuleBuilder"/>。 </param>
+    /// <param name="name"> 命令名称。 </param>
+    /// <param name="callback"> 命令被触发时执行的回调。 </param>
     protected CommandBuilder(ModuleBuilder module, string name, ExecuteCallback callback) : this(module)
     {
         Name = name;
@@ -72,11 +74,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Sets <see cref="Name"/>.
+    ///     设置 <see cref="Name"/>。
     /// </summary>
-    /// <param name="name">New value of the <see cref="Name"/>.</param>
+    /// <param name="name"> <see cref="Name"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder WithName(string name)
     {
@@ -85,11 +87,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Sets <see cref="MethodName"/>.
+    ///     设置 <see cref="MethodName"/>。
     /// </summary>
-    /// <param name="name">New value of the <see cref="MethodName"/>.</param>
+    /// <param name="name"> <see cref="MethodName"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder WithMethodName(string name)
     {
@@ -98,11 +100,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Adds attributes to <see cref="Attributes"/>.
+    ///     向 <see cref="Attributes"/> 添加特性。
     /// </summary>
-    /// <param name="attributes">New attributes to be added to <see cref="Attributes"/>.</param>
+    /// <param name="attributes"> 要添加到 <see cref="Attributes"/> 的新特性。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder WithAttributes(params Attribute[] attributes)
     {
@@ -111,11 +113,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Sets <see cref="RunMode"/>.
+    ///     设置 <see cref="RunMode"/>。
     /// </summary>
-    /// <param name="runMode">New value of the <see cref="RunMode"/>.</param>
+    /// <param name="runMode"> <see cref="RunMode"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder SetRunMode(RunMode runMode)
     {
@@ -124,11 +126,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Sets <see cref="TreatNameAsRegex"/>.
+    ///     设置 <see cref="TreatNameAsRegex"/>。
     /// </summary>
-    /// <param name="value">New value of the <see cref="TreatNameAsRegex"/>.</param>
+    /// <param name="value"> <see cref="TreatNameAsRegex"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder WithNameAsRegex(bool value)
     {
@@ -137,11 +139,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Adds parameter builders to <see cref="Parameters"/>.
+    ///     向 <see cref="Parameters"/> 添加参数生成器。
     /// </summary>
-    /// <param name="parameters">New parameter builders to be added to <see cref="Parameters"/>.</param>
+    /// <param name="parameters"> 要添加到 <see cref="Parameters"/> 的新参数生成器。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder AddParameters(params TParamBuilder[] parameters)
     {
@@ -150,11 +152,11 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Adds preconditions to <see cref="Preconditions"/>.
+    ///     向 <see cref="Preconditions"/> 添加先决条件。
     /// </summary>
-    /// <param name="preconditions">New preconditions to be added to <see cref="Preconditions"/>.</param>
+    /// <param name="preconditions"> 要添加到 <see cref="Preconditions"/> 的新先决条件。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public TBuilder WithPreconditions(params PreconditionAttribute[] preconditions)
     {
@@ -163,10 +165,10 @@ public abstract class CommandBuilder<TInfo, TBuilder, TParamBuilder> : ICommandB
     }
 
     /// <summary>
-    ///     Adds a parameter to the command.
+    ///     向命令添加参数。
     /// </summary>
-    /// <param name="configure"> A delegate that configures the parameter. </param>
-    /// <returns> The builder instance. </returns>
+    /// <param name="configure"> 配置参数的委托。 </param>
+    /// <returns> 生成器实例。 </returns>
     public abstract TBuilder AddParameter(Action<TParamBuilder> configure);
 
     internal abstract TInfo Build(ModuleInfo module, InteractionService commandService);

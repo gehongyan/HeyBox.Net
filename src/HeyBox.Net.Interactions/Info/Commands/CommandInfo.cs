@@ -6,21 +6,21 @@ using System.Runtime.ExceptionServices;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents a cached method execution delegate.
+///     表示缓存的方法执行委托。
 /// </summary>
-/// <param name="context">Execution context that will be injected into the module class.</param>
-/// <param name="args">Method arguments array.</param>
-/// <param name="serviceProvider">Service collection for initializing the module.</param>
-/// <param name="commandInfo">Command info class of the executed method.</param>
+/// <param name="context"> 注入到模块类的执行上下文。 </param>
+/// <param name="args"> 方法参数数组。 </param>
+/// <param name="serviceProvider"> 用于初始化模块的服务集合。 </param>
+/// <param name="commandInfo"> 被执行方法的命令信息类。 </param>
 /// <returns>
-///     A task representing the execution operation.
+///     表示执行操作的任务。
 /// </returns>
 public delegate Task ExecuteCallback(IInteractionContext context, object?[] args, IServiceProvider? serviceProvider, ICommandInfo commandInfo);
 
 /// <summary>
-///     The base information class for <see cref="InteractionService"/> commands.
+///     <see cref="InteractionService"/> 命令的基础信息类。
 /// </summary>
-/// <typeparam name="TParameter">The type of <see cref="IParameterInfo"/> that is used by this command type.</typeparam>
+/// <typeparam name="TParameter"> 此命令类型所用的 <see cref="IParameterInfo"/> 类型。 </typeparam>
 public abstract class CommandInfo<TParameter> : ICommandInfo where TParameter : class, IParameterInfo
 {
     private readonly ExecuteCallback? _action;
@@ -90,11 +90,11 @@ public abstract class CommandInfo<TParameter> : ICommandInfo where TParameter : 
     }
 
     /// <summary>
-    ///     Parses the arguments for this command.
+    ///     解析此命令的参数。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="services"> The service collection used for dependency injection. </param>
-    /// <returns> A task that represents the asynchronous parsing operation. The task result contains the parsed arguments. </returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="services"> 用于依赖注入的服务集合。 </param>
+    /// <returns> 表示异步解析操作的任务。任务结果包含解析后的参数。 </returns>
     protected abstract Task<IResult> ParseArgumentsAsync(IInteractionContext context, IServiceProvider? services);
 
     private async Task<IResult> ExecuteInternalAsync(IInteractionContext context, IServiceProvider? services)
@@ -179,18 +179,18 @@ public abstract class CommandInfo<TParameter> : ICommandInfo where TParameter : 
     }
 
     /// <summary>
-    ///     Invokes the module event for this command.
+    ///     调用此命令的模块事件。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="result"> The result of the command. </param>
-    /// <returns> A task that represents the asynchronous invocation operation. </returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="result"> 命令的执行结果。 </param>
+    /// <returns> 表示异步调用操作的任务。 </returns>
     protected abstract Task InvokeModuleEvent(IInteractionContext context, IResult result);
 
     /// <summary>
-    ///     Gets the log string for this command.
+    ///     获取此命令的日志字符串。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <returns> The log string for this command. </returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <returns> 此命令的日志字符串。 </returns>
     protected abstract string GetLogString(IInteractionContext context);
 
     /// <inheritdoc/>
@@ -231,12 +231,12 @@ public abstract class CommandInfo<TParameter> : ICommandInfo where TParameter : 
     }
 
     /// <summary>
-    ///     Invokes the module event for this command and returns the result.
+    ///     调用此命令的模块事件并返回结果。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="result"> The result of the command. </param>
-    /// <typeparam name="T"> The type of the result. </typeparam>
-    /// <returns> The result of the command. </returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="result"> 命令的执行结果。 </param>
+    /// <typeparam name="T"> 结果的类型。 </typeparam>
+    /// <returns> 命令的执行结果。 </returns>
     protected async Task<T> InvokeEventAndReturn<T>(IInteractionContext context, T result) where T : IResult
     {
         await InvokeModuleEvent(context, result).ConfigureAwait(false);

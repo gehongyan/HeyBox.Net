@@ -1,7 +1,7 @@
 namespace HeyBox;
 
 /// <summary>
-///     表示 HeyBox 交互的类型。
+///     表示黑盒语音交互的类型。
 /// </summary>
 public enum InteractionType
 {

@@ -3,16 +3,16 @@ using System.Collections.Immutable;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents a cached argument constructor delegate.
+///     表示缓存的复杂参数构造委托。
 /// </summary>
-/// <param name="args">Method arguments array.</param>
+/// <param name="args"> 方法参数数组。 </param>
 /// <returns>
-///     Returns the constructed object.
+///     返回构造后的对象。
 /// </returns>
 public delegate object ComplexParameterInitializer(object?[] args);
 
 /// <summary>
-///     Represents the parameter info class for <see cref="SlashCommandInfo"/> commands.
+///     表示 <see cref="SlashCommandInfo"/> 命令的参数信息类。
 /// </summary>
 public class SlashCommandParameterInfo : CommandParameterInfo
 {
@@ -23,58 +23,58 @@ public class SlashCommandParameterInfo : CommandParameterInfo
         ?? throw new InvalidOperationException("Command must be a SlashCommandInfo.");
 
     /// <summary>
-    ///     Gets the description of the Slash Command Parameter.
+    ///     获取斜线命令参数的描述。
     /// </summary>
     public string? Description { get; }
 
     /// <summary>
-    ///     Gets the minimum value permitted for a number type parameter.
+    ///     获取数字类型参数允许的最小值。
     /// </summary>
     public double? MinValue { get; }
 
     /// <summary>
-    ///     Gets the maximum value permitted for a number type parameter.
+    ///     获取数字类型参数允许的最大值。
     /// </summary>
     public double? MaxValue { get; }
 
     /// <summary>
-    ///     Gets the minimum length allowed for a string type parameter.
+    ///     获取字符串类型参数允许的最小长度。
     /// </summary>
     public int? MinLength { get; }
 
     /// <summary>
-    ///     Gets the maximum length allowed for a string type parameter.
+    ///     获取字符串类型参数允许的最大长度。
     /// </summary>
     public int? MaxLength { get; }
 
     /// <summary>
-    ///     Gets the <see cref="TypeConverter{T}"/> that will be used to convert the incoming <see cref="HeyBox.IHeyBoxInteractionData"/> into
-    ///     <see cref="CommandParameterInfo.ParameterType"/>.
+    ///     获取将用于将传入的 <see cref="HeyBox.IHeyBoxInteractionData"/> 转换为
+    ///     <see cref="CommandParameterInfo.ParameterType"/> 的 <see cref="TypeConverter{T}"/>。
     /// </summary>
     public TypeConverter TypeConverter { get; }
 
     /// <summary>
-    ///     Gets whether this type should be treated as a complex parameter.
+    ///     获取此类型是否应被视为复杂参数。
     /// </summary>
     public bool IsComplexParameter { get; }
 
     /// <summary>
-    ///     Gets the HeyBox option type this parameter represents. If the parameter is not a complex parameter.
+    ///     获取此参数所表示的黑盒语音命令选项类型（如果该参数不是复杂参数）。
     /// </summary>
     public SlashCommandOptionType? HeyBoxOptionType => TypeConverter?.GetHeyBoxType();
 
     /// <summary>
-    ///     Gets the parameter choices of this Slash Application Command parameter.
+    ///     获取此斜线应用命令参数的参数选择。
     /// </summary>
     public IReadOnlyCollection<ParameterChoice> Choices { get; }
 
     /// <summary>
-    ///     Gets the allowed channel types for this option.
+    ///     获取此选项允许的频道类型。
     /// </summary>
     public IReadOnlyCollection<ChannelType> ChannelTypes { get; }
 
     /// <summary>
-    ///     Gets the constructor parameters of this parameter, if <see cref="IsComplexParameter"/> is <see langword="true"/>.
+    ///     获取此参数的构造函数参数（如果 <see cref="IsComplexParameter"/> 为 <see langword="true"/>）。
     /// </summary>
     public IReadOnlyCollection<SlashCommandParameterInfo>? ComplexParameterFields { get; }
 

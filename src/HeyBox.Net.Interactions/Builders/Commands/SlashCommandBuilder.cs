@@ -1,7 +1,7 @@
 namespace HeyBox.Interactions.Builders;
 
 /// <summary>
-///     Represents a builder for creating <see cref="SlashCommandInfo"/>.
+///     表示用于创建 <see cref="SlashCommandInfo"/> 的生成器。
 /// </summary>
 public sealed class SlashCommandBuilder : CommandBuilder<SlashCommandInfo, SlashCommandBuilder, SlashCommandParameterBuilder>
 {
@@ -9,12 +9,12 @@ public sealed class SlashCommandBuilder : CommandBuilder<SlashCommandInfo, Slash
     protected override SlashCommandBuilder Instance => this;
 
     /// <summary>
-    ///     Gets and sets the description of this command.
+    ///     获取或设置此命令的描述。
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    ///     Gets or sets the context types this command can be executed in.
+    ///     获取或设置此命令可在哪些上下文类型中执行。
     /// </summary>
     public HashSet<InteractionContextType>? ContextTypes { get; set; }
 
@@ -24,20 +24,20 @@ public sealed class SlashCommandBuilder : CommandBuilder<SlashCommandInfo, Slash
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="SlashCommandBuilder"/>.
+    ///     初始化一个新的 <see cref="SlashCommandBuilder"/>。
     /// </summary>
-    /// <param name="module">Parent module of this command.</param>
-    /// <param name="name">Name of this command.</param>
-    /// <param name="callback">Execution callback of this command.</param>
+    /// <param name="module"> 此命令的父模块。 </param>
+    /// <param name="name"> 此命令的名称。 </param>
+    /// <param name="callback"> 此命令的执行回调。 </param>
     public SlashCommandBuilder(ModuleBuilder module, string name, ExecuteCallback callback)
         : base(module, name, callback) { }
 
     /// <summary>
-    ///     Sets <see cref="Description"/>.
+    ///     设置 <see cref="Description"/>。
     /// </summary>
-    /// <param name="description">New value of the <see cref="Description"/>.</param>
+    /// <param name="description"> <see cref="Description"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public SlashCommandBuilder WithDescription(string description)
     {
@@ -46,11 +46,11 @@ public sealed class SlashCommandBuilder : CommandBuilder<SlashCommandInfo, Slash
     }
 
     /// <summary>
-    ///     Adds a command parameter to the parameters collection.
+    ///     向参数集合添加命令参数。
     /// </summary>
-    /// <param name="configure"><see cref="SlashCommandParameterBuilder"/> factory.</param>
+    /// <param name="configure"> <see cref="SlashCommandParameterBuilder"/> 工厂方法。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public override SlashCommandBuilder AddParameter(Action<SlashCommandParameterBuilder> configure)
     {
@@ -61,10 +61,10 @@ public sealed class SlashCommandBuilder : CommandBuilder<SlashCommandInfo, Slash
     }
 
     /// <summary>
-    ///     Sets the <see cref="ContextTypes"/> on this <see cref="SlashCommandBuilder"/>.
+    ///     设置此 <see cref="SlashCommandBuilder"/> 的 <see cref="ContextTypes"/>。
     /// </summary>
-    /// <param name="contextTypes">Context types the command can be executed in.</param>
-    /// <returns>The builder instance.</returns>
+    /// <param name="contextTypes"> 命令可执行的上下文类型。 </param>
+    /// <returns>生成器实例。</returns>
     public SlashCommandBuilder WithContextTypes(params InteractionContextType[] contextTypes)
     {
         ContextTypes = [..contextTypes];

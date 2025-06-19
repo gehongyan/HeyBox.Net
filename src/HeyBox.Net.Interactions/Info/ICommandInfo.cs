@@ -1,67 +1,67 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represent a command information object that can be executed.
+///     表示可被执行的命令信息对象。
 /// </summary>
 public interface ICommandInfo
 {
     /// <summary>
-    ///     Gets the name of the command.
+    ///     获取命令的名称。
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the name of the command handler method.
+    ///     获取命令处理方法的名称。
     /// </summary>
     string MethodName { get; }
 
     /// <summary>
-    ///     Gets the module that the method belongs to.
+    ///     获取该方法所属的模块。
     /// </summary>
     ModuleInfo Module { get; }
 
     /// <summary>
-    ///     Gets the the underlying command service.
+    ///     获取底层命令服务。
     /// </summary>
     InteractionService CommandService { get; }
 
     /// <summary>
-    ///     Get the run mode this command gets executed with.
+    ///     获取此命令的运行模式。
     /// </summary>
     RunMode RunMode { get; }
 
     /// <summary>
-    ///     Gets a collection of the attributes of this command.
+    ///     获取此命令的特性集合。
     /// </summary>
     IReadOnlyCollection<Attribute> Attributes { get; }
 
     /// <summary>
-    ///     Gets a collection of the preconditions of this command.
+    ///     获取此命令的先决条件集合。
     /// </summary>
     IReadOnlyCollection<PreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Gets a collection of the parameters of this command.
+    ///     获取此命令的参数集合。
     /// </summary>
     IReadOnlyCollection<IParameterInfo> Parameters { get; }
 
     /// <summary>
-    ///     Gets whether the command name should be treated as a regular expression.
+    ///     获取命令名称是否应被视为正则表达式。
     /// </summary>
     bool TreatNameAsRegex { get; }
 
     /// <summary>
-    ///     Executes the command with the provided context.
+    ///     使用提供的上下文执行命令。
     /// </summary>
-    /// <param name="context">The execution context.</param>
-    /// <param name="services">Dependencies that will be used to create the module instance.</param>
+    /// <param name="context"> 执行上下文。 </param>
+    /// <param name="services"> 用于创建模块实例的依赖项。 </param>
     /// <returns>
-    ///     A task representing the execution process. The task result contains the execution result.
+    ///     表示执行过程的任务。任务结果包含执行结果。
     /// </returns>
     Task<IResult> ExecuteAsync(IInteractionContext context, IServiceProvider services);
 
     /// <summary>
-    ///     Check if an execution context meets the command precondition requirements.
+    ///     检查执行上下文是否满足命令的先决条件要求。
     /// </summary>
     Task<PreconditionResult> CheckPreconditionsAsync(IInteractionContext context, IServiceProvider services);
 }

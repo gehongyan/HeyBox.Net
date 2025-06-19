@@ -29,7 +29,7 @@ public sealed class BucketId : IEquatable<BucketId>
     ///     获取此桶的哈希值。
     /// </summary>
     /// <remarks>
-    ///     此哈希值由 HeyBox 提供，用于分组限速。
+    ///     此哈希值由黑盒语音提供，用于分组限速。
     /// </remarks>
     public string? BucketHash { get; }
 
@@ -63,7 +63,7 @@ public sealed class BucketId : IEquatable<BucketId>
     /// <summary>
     ///     基于 <see cref="BucketHash"/> 和之前的 <see cref="BucketId"/> 创建一个新的 <see cref="BucketId"/>。
     /// </summary>
-    /// <param name="hash"> 由 HeyBox 提供的分组限速哈希值。 </param>
+    /// <param name="hash"> 由黑盒语音提供的分组限速哈希值。 </param>
     /// <param name="oldBucket"> 要被升级为哈希分组限速桶的已有限速桶。 </param>
     /// <returns> 一个基于指定的 <see cref="BucketHash"/> 和之前的 <see cref="BucketId"/> 创建的 <see cref="BucketId"/>。 </returns>
     public static BucketId Create(string hash, BucketId oldBucket)

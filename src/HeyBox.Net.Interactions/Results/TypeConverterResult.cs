@@ -2,14 +2,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace HeyBox.Interactions;
 
-/// <summary>
-///     Represents a result type for <see cref="TypeConverter.ReadAsync(IInteractionContext, ISlashCommandInteractionDataOption, IServiceProvider)"/>.
-/// </summary>
+/// <summary> 表示 <see cref="TypeConverter.ReadAsync(IInteractionContext, ISlashCommandInteractionDataOption, IServiceProvider)"/> 的结果类型。 </summary>
 public struct TypeConverterResult : IResult
 {
-    /// <summary>
-    ///     Gets the result of the conversion if the operation was successful.
-    /// </summary>
+    /// <summary> 如果操作成功，获取转换的结果。 </summary>
     public object? Value { get; }
 
     /// <inheritdoc/>
@@ -29,31 +25,23 @@ public struct TypeConverterResult : IResult
         ErrorReason = reason;
     }
 
-    /// <summary>
-    ///     Returns a <see cref="TypeConverterResult" /> with no errors.
-    /// </summary>
+    /// <summary> 返回一个无错误的 <see cref="TypeConverterResult" />。 </summary>
     public static TypeConverterResult FromSuccess(object? value) =>
         new TypeConverterResult(value, null, null);
 
-    /// <summary>
-    ///     Returns a <see cref="TypeConverterResult" /> with <see cref="InteractionCommandError.Exception" /> and the <see cref="Exception.Message"/>.
-    /// </summary>
-    /// <param name="exception">The exception that caused the type conversion to fail.</param>
+    /// <summary> 返回一个带有 <see cref="InteractionCommandError.Exception" /> 和 <see cref="Exception.Message"/> 的 <see cref="TypeConverterResult" />。 </summary>
+    /// <param name="exception"> 导致类型转换失败的异常。 </param>
     public static TypeConverterResult FromError(Exception exception) =>
         new TypeConverterResult(null, InteractionCommandError.Exception, exception.Message);
 
-    /// <summary>
-    ///     Returns a <see cref="PreconditionResult" /> with the specified error and the reason.
-    /// </summary>
-    /// <param name="error">The type of error.</param>
-    /// <param name="reason">The reason of failure.</param>
+    /// <summary> 返回一个带有指定错误和原因的 <see cref="PreconditionResult" />。 </summary>
+    /// <param name="error"> 错误类型。 </param>
+    /// <param name="reason"> 失败原因。 </param>
     public static TypeConverterResult FromError(InteractionCommandError error, string reason) =>
         new TypeConverterResult(null, error, reason);
 
-    /// <summary>
-    ///     Returns a <see cref="PreconditionResult" /> with the specified <paramref name="result"/> type.
-    /// </summary>
-    /// <param name="result">The result of failure.</param>
+    /// <summary> 返回一个带有指定 <paramref name="result"/> 类型的 <see cref="PreconditionResult" />。 </summary>
+    /// <param name="result"> 失败的结果。 </param>
     public static TypeConverterResult FromError(IResult result) =>
         new TypeConverterResult(null, result.Error, result.ErrorReason);
 

@@ -1,7 +1,7 @@
 ﻿namespace HeyBox;
 
 /// <summary>
-///     表示一个通用的 HeyBox 交互实体。
+///     表示一个通用的黑盒语音交互实体。
 /// </summary>
 public interface IHeyBoxInteraction : IEntity<ulong>
 {
