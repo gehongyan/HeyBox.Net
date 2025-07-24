@@ -16,7 +16,7 @@ public struct RoomPermissions
     /// <summary>
     ///     获取一个包含所有可以为房间设置的权限的 <see cref="RoomPermissions"/>。
     /// </summary>
-    public static readonly RoomPermissions All = new(0b1_1111_1111_1111_1111_1111_1111_1111_1111_1111);
+    public static readonly RoomPermissions All = new(0b1_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111);
 
     /// <summary>
     ///     获取此权限集的原始值。
@@ -209,6 +209,26 @@ public struct RoomPermissions
     public bool UseBotCommands => Permissions.GetValue(RawValue, RoomPermission.UseBotCommands);
 
     /// <summary>
+    ///     获取此权限集的相关用户是否可以创建投票。
+    /// </summary>
+    public bool CreatePoll => Permissions.GetValue(RawValue, RoomPermission.CreatePoll);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以管理房间活动。
+    /// </summary>
+    public bool ManageActivities => Permissions.GetValue(RawValue, RoomPermission.ManageActivities);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以发送图片或 Markdown 格式的图片消息。
+    /// </summary>
+    public bool SendImages => Permissions.GetValue(RawValue, RoomPermission.SendImages);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以开启录音。
+    /// </summary>
+    public bool RecordAudio => Permissions.GetValue(RawValue, RoomPermission.RecordAudio);
+
+    /// <summary>
     ///     使用指定的权限原始值创建一个 <see cref="RoomPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="rawValue"> 权限原始值。 </param>
@@ -254,8 +274,11 @@ public struct RoomPermissions
         bool? shareAudio = null,
         bool? shareScreen = null,
         bool? postTeamUps = null,
-        bool? useBotCommands = null
-    )
+        bool? useBotCommands = null,
+        bool? createPoll = null,
+        bool? manageActivities = null,
+        bool? sendImages = null,
+        bool? recordAudio = null)
     {
         ulong value = initialValue;
 
@@ -296,6 +319,10 @@ public struct RoomPermissions
         Permissions.SetValue(ref value, shareScreen, RoomPermission.ShareScreen);
         Permissions.SetValue(ref value, postTeamUps, RoomPermission.PostTeamUps);
         Permissions.SetValue(ref value, useBotCommands, RoomPermission.UseBotCommands);
+        Permissions.SetValue(ref value, createPoll, RoomPermission.CreatePoll);
+        Permissions.SetValue(ref value, manageActivities, RoomPermission.ManageActivities);
+        Permissions.SetValue(ref value, sendImages, RoomPermission.SendImages);
+        Permissions.SetValue(ref value, recordAudio, RoomPermission.RecordAudio);
 
         RawValue = value;
     }
@@ -340,6 +367,10 @@ public struct RoomPermissions
     /// <param name="shareScreen"> 共享屏幕。 </param>
     /// <param name="postTeamUps"> 发布组队。 </param>
     /// <param name="useBotCommands"> 使用机器人命令。 </param>
+    /// <param name="createPoll"> 创建投票。 </param>
+    /// <param name="manageActivities"> 管理房间活动。 </param>
+    /// <param name="sendImages"> 发送图片或 Markdown 格式的图片消息。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     public RoomPermissions(
         bool administrator = false,
         bool viewChannel = false,
@@ -377,14 +408,19 @@ public struct RoomPermissions
         bool shareAudio = false,
         bool shareScreen = false,
         bool postTeamUps = false,
-        bool useBotCommands = false)
+        bool useBotCommands = false,
+        bool createPoll = false,
+        bool manageActivities = false,
+        bool sendImages = false,
+        bool recordAudio = false)
         : this(0,
             administrator, viewChannel, manageChannels, viewAuditLogs, manageRoles, manageRoom, createInvites,
             manageInvites, changeNickname, manageNicknames, kickMembers, kickFromChannel, banMembers, silenceMembers,
             sendMessages, attachFiles, mentionEveryone, addReactions, manageMessages, receiveOfflineMessages,
             createTeamUpInvitations, manageTeamUpInvitations, connect, speak, useVoiceActivity, muteChannels,
             muteMembers, moveMembers, manageStatements, modifyChannelInvites, manageEmojisAndStickers, manageSoundPacks,
-            playSoundPacks, shareAudio, shareScreen, postTeamUps, useBotCommands)
+            playSoundPacks, shareAudio, shareScreen, postTeamUps, useBotCommands, createPoll, manageActivities,
+            sendImages, recordAudio)
     {
     }
 
@@ -428,6 +464,10 @@ public struct RoomPermissions
     /// <param name="shareScreen"> 共享屏幕。 </param>
     /// <param name="postTeamUps"> 发布组队。 </param>
     /// <param name="useBotCommands"> 使用机器人命令。 </param>
+    /// <param name="createPoll"> 创建投票。 </param>
+    /// <param name="manageActivities"> 管理房间活动。 </param>
+    /// <param name="sendImages"> 发送图片或 Markdown 格式的图片消息。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     /// <returns> 更改了指定权限的新的权限集。 </returns>
     public RoomPermissions Modify(
         bool? administrator = null,
@@ -466,14 +506,19 @@ public struct RoomPermissions
         bool? shareAudio = null,
         bool? shareScreen = null,
         bool? postTeamUps = null,
-        bool? useBotCommands = null) =>
+        bool? useBotCommands = null,
+        bool? createPoll = null,
+        bool? manageActivities = null,
+        bool? sendImages = null,
+        bool? recordAudio = null) =>
         new(RawValue,
             administrator, viewChannel, manageChannels, viewAuditLogs, manageRoles, manageRoom, createInvites,
             manageInvites, changeNickname, manageNicknames, kickMembers, kickFromChannel, banMembers, silenceMembers,
             sendMessages, attachFiles, mentionEveryone, addReactions, manageMessages, receiveOfflineMessages,
             createTeamUpInvitations, manageTeamUpInvitations, connect, speak, useVoiceActivity, muteChannels,
             muteMembers, moveMembers, manageStatements, modifyChannelInvites, manageEmojisAndStickers, manageSoundPacks,
-            playSoundPacks, shareAudio, shareScreen, postTeamUps, useBotCommands);
+            playSoundPacks, shareAudio, shareScreen, postTeamUps, useBotCommands, createPoll, manageActivities,
+            sendImages, recordAudio);
 
     /// <summary>
     ///     获取当前权限集是否包含指定的权限。

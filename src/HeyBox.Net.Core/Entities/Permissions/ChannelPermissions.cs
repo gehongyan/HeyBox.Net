@@ -16,17 +16,17 @@ public struct ChannelPermissions
     /// <summary>
     ///     获取一个包含所有可以为文字频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Text = new(0b1_0000_0000_0000_0001_0101_0100_0000_0100_0110);
+    public static readonly ChannelPermissions Text = new(0b0_1011_0000_0000_0000_0001_0101_0100_0000_0100_0110);
 
     /// <summary>
     ///     获取一个包含所有可以为语音频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Voice = new(0b1_0111_0000_0101_1101_0101_0100_0000_0100_0110);
+    public static readonly ChannelPermissions Voice = new(0b1_0001_0111_0000_0101_1101_0101_0100_0000_0100_0110);
 
     /// <summary>
     ///     获取一个包含所有可以为分组频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Category = new(0b1_0000_0000_0000_0001_0101_0100_0000_0100_0110);
+    public static readonly ChannelPermissions Category = new(0b1_1011_0000_0000_0000_0001_0101_0100_0000_0100_0110);
 
     /// <summary>
     ///     为指定的频道根据其类型获取一个包含所有权限的 <see cref="ChannelPermissions"/>。
@@ -62,9 +62,19 @@ public struct ChannelPermissions
     public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
 
     /// <summary>
+    ///     获取此权限集的相关用户是否可以将某人踢出频道。
+    /// </summary>
+    public bool KickFromChannel => Permissions.GetValue(RawValue, ChannelPermission.KickFromChannel);
+
+    /// <summary>
     ///     获取此权限集的相关用户是否可以发送消息。
     /// </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以上传文件。
+    /// </summary>
+    public bool AttachFiles => Permissions.GetValue(RawValue, ChannelPermission.AttachFiles);
 
     /// <summary>
     ///     获取此权限集的相关用户是否可以 @全体、@在线和所有权限组。
@@ -82,6 +92,11 @@ public struct ChannelPermissions
     public bool CreateTeamUpInvitations => Permissions.GetValue(RawValue, ChannelPermission.CreateTeamUpInvitations);
 
     /// <summary>
+    ///     获取此权限集的相关用户是否可以管理开黑邀约。
+    /// </summary>
+    public bool ManageTeamUpInvitations => Permissions.GetValue(RawValue, ChannelPermission.ManageTeamUpInvitations);
+
+    /// <summary>
     ///     获取此权限集的相关用户是否可以加入语音频道。
     /// </summary>
     public bool Connect => Permissions.GetValue(RawValue, ChannelPermission.Connect);
@@ -97,9 +112,19 @@ public struct ChannelPermissions
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, ChannelPermission.UseVoiceActivity);
 
     /// <summary>
+    ///     获取此权限集的相关用户是否可以频道静音。
+    /// </summary>
+    public bool MuteChannels => Permissions.GetValue(RawValue, ChannelPermission.MuteChannels);
+
+    /// <summary>
     ///     获取此权限集的相关用户是否可以静音成员。
     /// </summary>
     public bool MuteMembers => Permissions.GetValue(RawValue, ChannelPermission.MuteMembers);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以移动成员。
+    /// </summary>
+    public bool MoveMembers => Permissions.GetValue(RawValue, ChannelPermission.MoveMembers);
 
     /// <summary>
     ///     获取此权限集的相关用户是否可以播放语音包。
@@ -122,6 +147,21 @@ public struct ChannelPermissions
     public bool UseBotCommands => Permissions.GetValue(RawValue, ChannelPermission.UseBotCommands);
 
     /// <summary>
+    ///     获取此权限集的相关用户是否可以创建投票。
+    /// </summary>
+    public bool CreatePoll => Permissions.GetValue(RawValue, ChannelPermission.CreatePoll);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以发送图片或 Markdown 格式的图片消息。
+    /// </summary>
+    public bool SendImages => Permissions.GetValue(RawValue, ChannelPermission.SendImages);
+
+    /// <summary>
+    ///     获取此权限集的相关用户是否可以开启录音。
+    /// </summary>
+    public bool RecordAudio => Permissions.GetValue(RawValue, ChannelPermission.RecordAudio);
+
+    /// <summary>
     ///     使用指定的权限原始值创建一个 <see cref="ChannelPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="rawValue"> 权限原始值。 </param>
@@ -131,40 +171,55 @@ public struct ChannelPermissions
     }
 
     private ChannelPermissions(ulong initialValue,
-        bool? viewChannel = null,
-        bool? manageChannels = null,
-        bool? createInvites = null,
-        bool? sendMessages = null,
-        bool? mentionEveryone = null,
-        bool? manageMessages = null,
-        bool? createTeamUpInvitations = null,
-        bool? connect = null,
-        bool? speak = null,
-        bool? useVoiceActivity = null,
-        bool? muteMembers = null,
-        bool? playSoundPacks = null,
-        bool? shareAudio = null,
-        bool? shareScreen = null,
-        bool? useBotCommands = null
-    )
+            bool? viewChannel = null,
+            bool? manageChannels = null,
+            bool? createInvites = null,
+            bool? kickFromChannel = null,
+            bool? sendMessages = null,
+            bool? attachFiles = null,
+            bool? mentionEveryone = null,
+            bool? manageMessages = null,
+            bool? createTeamUpInvitations = null,
+            bool? manageTeamUpInvitations = null,
+            bool? connect = null,
+            bool? speak = null,
+            bool? useVoiceActivity = null,
+            bool? muteChannels = null,
+            bool? muteMembers = null,
+            bool? moveMembers = null,
+            bool? playSoundPacks = null,
+            bool? shareAudio = null,
+            bool? shareScreen = null,
+            bool? useBotCommands = null,
+            bool? createPoll = null,
+            bool? sendImages = null,
+            bool? recordAudio = null)
     {
         ulong value = initialValue;
 
         Permissions.SetValue(ref value, viewChannel, ChannelPermission.ViewChannel);
         Permissions.SetValue(ref value, manageChannels, ChannelPermission.ManageChannels);
         Permissions.SetValue(ref value, createInvites, ChannelPermission.CreateInvites);
+        Permissions.SetValue(ref value, kickFromChannel, ChannelPermission.KickFromChannel);
         Permissions.SetValue(ref value, sendMessages, ChannelPermission.SendMessages);
+        Permissions.SetValue(ref value, attachFiles, ChannelPermission.AttachFiles);
         Permissions.SetValue(ref value, mentionEveryone, ChannelPermission.MentionEveryone);
         Permissions.SetValue(ref value, manageMessages, ChannelPermission.ManageMessages);
         Permissions.SetValue(ref value, createTeamUpInvitations, ChannelPermission.CreateTeamUpInvitations);
+        Permissions.SetValue(ref value, manageTeamUpInvitations, ChannelPermission.ManageTeamUpInvitations);
         Permissions.SetValue(ref value, connect, ChannelPermission.Connect);
         Permissions.SetValue(ref value, speak, ChannelPermission.Speak);
         Permissions.SetValue(ref value, useVoiceActivity, ChannelPermission.UseVoiceActivity);
+        Permissions.SetValue(ref value, muteChannels, ChannelPermission.MuteChannels);
         Permissions.SetValue(ref value, muteMembers, ChannelPermission.MuteMembers);
+        Permissions.SetValue(ref value, moveMembers, ChannelPermission.MoveMembers);
         Permissions.SetValue(ref value, playSoundPacks, ChannelPermission.PlaySoundPacks);
         Permissions.SetValue(ref value, shareAudio, ChannelPermission.ShareAudio);
         Permissions.SetValue(ref value, shareScreen, ChannelPermission.ShareScreen);
         Permissions.SetValue(ref value, useBotCommands, ChannelPermission.UseBotCommands);
+        Permissions.SetValue(ref value, createPoll, ChannelPermission.CreatePoll);
+        Permissions.SetValue(ref value, sendImages, ChannelPermission.SendImages);
+        Permissions.SetValue(ref value, recordAudio, ChannelPermission.RecordAudio);
 
         RawValue = value;
     }
@@ -175,38 +230,55 @@ public struct ChannelPermissions
     /// <param name="viewChannel"> 查看频道。 </param>
     /// <param name="manageChannels"> 管理频道。 </param>
     /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="kickFromChannel"> 将某人踢出频道。 </param>
     /// <param name="sendMessages"> 发送消息。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
     /// <param name="mentionEveryone"> @全体、@在线和所有权限组。 </param>
     /// <param name="manageMessages"> 管理消息。 </param>
     /// <param name="createTeamUpInvitations"> 创建开黑邀约。 </param>
+    /// <param name="manageTeamUpInvitations"> 管理开黑邀约。 </param>
     /// <param name="connect"> 加入语音频道。 </param>
     /// <param name="speak"> 语音频道内说话。 </param>
     /// <param name="useVoiceActivity"> 允许直接讲话。 </param>
+    /// <param name="muteChannels"> 频道静音。 </param>
     /// <param name="muteMembers"> 静音成员。 </param>
+    /// <param name="moveMembers"> 移动成员。 </param>
     /// <param name="playSoundPacks"> 播放语音包。 </param>
     /// <param name="shareAudio"> 播放伴奏。 </param>
     /// <param name="shareScreen"> 共享屏幕。 </param>
     /// <param name="useBotCommands"> 使用机器人命令。 </param>
+    /// <param name="createPoll"> 创建投票。 </param>
+    /// <param name="sendImages"> 发送图片或 Markdown 格式的图片消息。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     public ChannelPermissions(
         bool viewChannel = false,
         bool manageChannels = false,
         bool createInvites = false,
+        bool kickFromChannel = false,
         bool sendMessages = false,
+        bool attachFiles = false,
         bool mentionEveryone = false,
         bool manageMessages = false,
         bool createTeamUpInvitations = false,
+        bool manageTeamUpInvitations = false,
         bool connect = false,
         bool speak = false,
         bool useVoiceActivity = false,
+        bool muteChannels = false,
         bool muteMembers = false,
+        bool moveMembers = false,
         bool playSoundPacks = false,
         bool shareAudio = false,
         bool shareScreen = false,
-        bool useBotCommands = false)
+        bool useBotCommands = false,
+        bool createPoll = false,
+        bool sendImages = false,
+        bool recordAudio = false)
         : this(0,
-            viewChannel, manageChannels, createInvites, sendMessages, mentionEveryone, manageMessages,
-            createTeamUpInvitations, connect, speak, useVoiceActivity, muteMembers, playSoundPacks, shareAudio,
-            shareScreen, useBotCommands)
+            viewChannel, manageChannels, createInvites, kickFromChannel, sendMessages, attachFiles, mentionEveryone,
+            manageMessages, createTeamUpInvitations, manageTeamUpInvitations, connect, speak, useVoiceActivity,
+            muteChannels, muteMembers, moveMembers, playSoundPacks, shareAudio, shareScreen, useBotCommands, createPoll,
+            sendImages, recordAudio)
     {
     }
 
@@ -216,39 +288,56 @@ public struct ChannelPermissions
     /// <param name="viewChannel"> 查看频道。 </param>
     /// <param name="manageChannels"> 管理频道。 </param>
     /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="kickFromChannel"> 将某人踢出频道。 </param>
     /// <param name="sendMessages"> 发送消息。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
     /// <param name="mentionEveryone"> @全体、@在线和所有权限组。 </param>
     /// <param name="manageMessages"> 管理消息。 </param>
     /// <param name="createTeamUpInvitations"> 创建开黑邀约。 </param>
+    /// <param name="manageTeamUpInvitations"> 管理开黑邀约。 </param>
     /// <param name="connect"> 加入语音频道。 </param>
     /// <param name="speak"> 语音频道内说话。 </param>
     /// <param name="useVoiceActivity"> 允许直接讲话。 </param>
+    /// <param name="muteChannels"> 频道静音。 </param>
     /// <param name="muteMembers"> 静音成员。 </param>
+    /// <param name="moveMembers"> 移动成员。 </param>
     /// <param name="playSoundPacks"> 播放语音包。 </param>
     /// <param name="shareAudio"> 播放伴奏。 </param>
     /// <param name="shareScreen"> 共享屏幕。 </param>
     /// <param name="useBotCommands"> 使用机器人命令。 </param>
+    /// <param name="createPoll"> 创建投票。 </param>
+    /// <param name="sendImages"> 发送图片或 Markdown 格式的图片消息。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     /// <returns> 更改了指定权限的新的权限集。 </returns>
     public ChannelPermissions Modify(
         bool? viewChannel = null,
         bool? manageChannels = null,
         bool? createInvites = null,
+        bool? kickFromChannel = null,
         bool? sendMessages = null,
+        bool? attachFiles = null,
         bool? mentionEveryone = null,
         bool? manageMessages = null,
         bool? createTeamUpInvitations = null,
+        bool? manageTeamUpInvitations = null,
         bool? connect = null,
         bool? speak = null,
         bool? useVoiceActivity = null,
+        bool? muteChannels = null,
         bool? muteMembers = null,
+        bool? moveMembers = null,
         bool? playSoundPacks = null,
         bool? shareAudio = null,
         bool? shareScreen = null,
-        bool? useBotCommands = null) =>
+        bool? useBotCommands = null,
+        bool? createPoll = null,
+        bool? sendImages = null,
+        bool? recordAudio = null) =>
         new(RawValue,
-            viewChannel, manageChannels, createInvites, sendMessages, mentionEveryone, manageMessages,
-            createTeamUpInvitations, connect, speak, useVoiceActivity, muteMembers, playSoundPacks, shareAudio,
-            shareScreen, useBotCommands);
+            viewChannel, manageChannels, createInvites, kickFromChannel, sendMessages, attachFiles, mentionEveryone,
+            manageMessages, createTeamUpInvitations, manageTeamUpInvitations, connect, speak, useVoiceActivity,
+            muteChannels, muteMembers, moveMembers, playSoundPacks, shareAudio, shareScreen, useBotCommands, createPoll,
+            sendImages, recordAudio);
 
     /// <summary>
     ///     获取当前权限集是否包含指定的权限。

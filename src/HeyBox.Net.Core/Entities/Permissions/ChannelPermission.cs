@@ -31,12 +31,28 @@ public enum ChannelPermission : ulong
     CreateInvites = 1UL << 6,
 
     /// <summary>
+    ///     将某人踢出频道
+    /// </summary>
+    /// <remarks>
+    ///     允许成员将某人踢出频道。
+    /// </remarks>
+    KickFromChannel = 1UL << 11,
+
+    /// <summary>
     ///     发送消息
     /// </summary>
     /// <remarks>
     ///     允许成员发送消息。
     /// </remarks>
     SendMessages = 1UL << 14,
+
+    /// <summary>
+    ///     上传文件
+    /// </summary>
+    /// <remarks>
+    ///     允许成员上传文件。
+    /// </remarks>
+    AttachFiles = 1UL << 15,
 
     /// <summary>
     ///     @全体、@在线和所有权限组
@@ -63,6 +79,14 @@ public enum ChannelPermission : ulong
     CreateTeamUpInvitations = 1UL << 20,
 
     /// <summary>
+    ///     管理开黑邀约
+    /// </summary>
+    /// <remarks>
+    ///     允许成员管理开黑邀约。
+    /// </remarks>
+    ManageTeamUpInvitations = 1UL << 21,
+
+    /// <summary>
     ///     加入语音频道
     /// </summary>
     /// <remarks>
@@ -87,12 +111,28 @@ public enum ChannelPermission : ulong
     UseVoiceActivity = 1UL << 24,
 
     /// <summary>
+    ///     频道静音
+    /// </summary>
+    /// <remarks>
+    ///     静音频道中所有用户。
+    /// </remarks>
+    MuteChannels = 1UL << 25,
+
+    /// <summary>
     ///     静音成员
     /// </summary>
     /// <remarks>
     ///     被静音的成员说话将无法被他人听到。
     /// </remarks>
     MuteMembers = 1UL << 26,
+
+    /// <summary>
+    ///     移动成员
+    /// </summary>
+    /// <remarks>
+    ///     允许成员断开连接或在语音频道之间移动其他成员。
+    /// </remarks>
+    MoveMembers = 1UL << 27,
 
     /// <summary>
     ///     播放语音包
@@ -108,7 +148,7 @@ public enum ChannelPermission : ulong
     /// <remarks>
     ///     允许成员在房间共享伴奏。
     /// </remarks>
-    ShareAudio = 1L << 33,
+    ShareAudio = 1UL << 33,
 
     /// <summary>
     ///     共享屏幕
@@ -116,7 +156,7 @@ public enum ChannelPermission : ulong
     /// <remarks>
     ///     允许成员在此房间内进行屏幕共享。
     /// </remarks>
-    ShareScreen = 1L << 34,
+    ShareScreen = 1UL << 34,
 
     /// <summary>
     ///     使用机器人命令
@@ -124,6 +164,29 @@ public enum ChannelPermission : ulong
     /// <remarks>
     ///     允许成员使用机器人指令，包括直接输入指令或选择输入框中的“使用机器人指令”。
     /// </remarks>
-    UseBotCommands = 1L << 36
+    UseBotCommands = 1UL << 36,
 
+    /// <summary>
+    ///     创建投票
+    /// </summary>
+    /// <remarks>
+    ///     允许成员创建投票。
+    /// </remarks>
+    CreatePoll = 1UL << 37,
+
+    /// <summary>
+    ///     发送频道。
+    /// </summary>
+    /// <remarks>
+    ///     允许成员在频道内发送图片或 Markdown 格式的图片消息。
+    /// </remarks>
+    SendImages = 1UL << 39,
+
+    /// <summary>
+    ///     开启录音。
+    /// </summary>
+    /// <remarks>
+    ///     允许成员在语音频道内开启录音。
+    /// </remarks>
+    RecordAudio = 1UL << 40,
 }

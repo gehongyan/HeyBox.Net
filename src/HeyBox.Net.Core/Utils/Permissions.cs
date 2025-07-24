@@ -4,7 +4,7 @@ namespace HeyBox;
 
 internal static class Permissions
 {
-    public const int MaxBits = 29;
+    public const int MaxBits = 41;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PermValue GetValue(ulong allow, ulong deny, ChannelPermission flag) =>

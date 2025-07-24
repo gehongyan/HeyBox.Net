@@ -276,7 +276,7 @@ public enum RoomPermission : ulong
     /// <remarks>
     ///     允许成员在房间共享伴奏。
     /// </remarks>
-    ShareAudio = 1L << 33,
+    ShareAudio = 1UL << 33,
 
     /// <summary>
     ///     共享屏幕
@@ -284,7 +284,7 @@ public enum RoomPermission : ulong
     /// <remarks>
     ///     允许成员在此房间内进行屏幕共享。
     /// </remarks>
-    ShareScreen = 1L << 34,
+    ShareScreen = 1UL << 34,
 
     /// <summary>
     ///     发布组队
@@ -292,7 +292,7 @@ public enum RoomPermission : ulong
     /// <remarks>
     ///     允许成员发布组队。
     /// </remarks>
-    PostTeamUps = 1L << 35,
+    PostTeamUps = 1UL << 35,
 
     /// <summary>
     ///     使用机器人命令
@@ -300,5 +300,37 @@ public enum RoomPermission : ulong
     /// <remarks>
     ///     允许成员使用机器人指令，包括直接输入指令或选择输入框中的“使用机器人指令”。
     /// </remarks>
-    UseBotCommands = 1L << 36
+    UseBotCommands = 1UL << 36,
+
+    /// <summary>
+    ///     创建投票
+    /// </summary>
+    /// <remarks>
+    ///     允许成员创建投票。
+    /// </remarks>
+    CreatePoll = 1UL << 37,
+
+    /// <summary>
+    ///     管理房间活动
+    /// </summary>
+    /// <remarks>
+    ///     允许成员管理房间活动。
+    /// </remarks>
+    ManageActivities = 1UL << 38,
+
+    /// <summary>
+    ///     发送图片或 Markdown 格式的图片消息
+    /// </summary>
+    /// <remarks>
+    ///     允许成员在频道内发送图片或 Markdown 格式的图片消息。
+    /// </remarks>
+    SendImages = 1UL << 39,
+
+    /// <summary>
+    ///     开启录音
+    /// </summary>
+    /// <remarks>
+    ///     允许成员在语音频道内开启录音。
+    /// </remarks>
+    RecordAudio = 1UL << 40,
 }
