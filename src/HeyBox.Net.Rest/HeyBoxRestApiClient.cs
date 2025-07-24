@@ -338,7 +338,7 @@ internal class HeyBoxRestApiClient : IDisposable
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         RequestOptions? options = null)
         where TResponse : class
-        where TPaged : PagedResponseBase
+        where TPaged : IPageInfoProvider
     {
         int currentOffset = offset;
         int total = int.MaxValue;
@@ -354,7 +354,7 @@ internal class HeyBoxRestApiClient : IDisposable
             IReadOnlyCollection<TItem> items = [..itemsSelector(pagedResponse)];
             yield return items;
             currentOffset += items.Count;
-            total = pagedResponse.Total;
+            total = pagedResponse.TotalCount;
             if (items.Count == 0 || currentOffset >= total)
                 yield break;
         }
@@ -364,16 +364,174 @@ internal class HeyBoxRestApiClient : IDisposable
 
     #region Rooms
 
+    public async Task ModifyGuildMemberNicknameAsync(ModifyRoomMemberNicknameParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room/nickname?{HeyBoxConfig.CommonQueryString}",
+                args, ids, ClientBucketType.SendEdit, options)
+            .ConfigureAwait(false);
+    }
+
     public IAsyncEnumerable<IReadOnlyCollection<Room>> GetJoinedRoomsAsync(
         int limit = HeyBoxConfig.MaxRoomsPerBatchByDefault, int fromOffset = 0,
         RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         BucketIds ids = new();
+
         return SendPagedAsync<GetRoomsResponse, GetRoomsPagedResponse, Room>(HttpMethod.Get,
             (o, l) => $"chatroom/v2/room/joined?offset={o}&limit={l}&{HeyBoxConfig.CommonQueryString}",
             fromOffset, limit, x => x.Rooms, x => x.Rooms, ids, options: options);
     }
+
+    public async Task<ExtendedRoom> GetRoomAsync(ulong roomId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(roomId, 0, nameof(roomId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(roomId);
+        return await SendAsync<ExtendedRoom>(HttpMethod.Get,
+                () => $"chatroom/v2/room/view?room_id={roomId}&{HeyBoxConfig.CommonQueryString}",
+                ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task LeaveRoomAsync(LeaveRoomParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room/leave?{HeyBoxConfig.CommonQueryString}",
+                args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public IAsyncEnumerable<IReadOnlyCollection<ExtendedRoomUser>> GetRoomUsersAsync(ulong userId, ulong roomId,
+        int limit = HeyBoxConfig.MaxRoomsPerBatchByDefault, int fromOffset = 0, RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new();
+
+        return SendPagedAsync<GetRoomUsersResponse, GetRoomUsersPagedResponse, ExtendedRoomUser>(HttpMethod.Get,
+            (o, l) => $"chatroom/v2/room/users?heybox_id={userId}&room_id={roomId}&offset={o}&limit={l}&{HeyBoxConfig.CommonQueryString}",
+            fromOffset, limit, x => x.RoomInfo, x => x.UserInfo, ids, options: options);
+    }
+
+    public async Task KickOutFromRoomAsync(KickOutFromRoomParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room/kick_out?{HeyBoxConfig.CommonQueryString}",
+                args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task MoveMemberAsync(ulong originalChannelId, IReadOnlyCollection<ulong> toUserIds,
+        ulong roomId, ulong channelId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(originalChannelId, 0, nameof(originalChannelId));
+        if (toUserIds.Count == 0)
+            throw new InvalidOperationException("toUserIds cannot be empty.");
+        Preconditions.NotEqual(roomId, 0, nameof(roomId));
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(roomId, channelId);
+        string toUserIdsString = Uri.EscapeDataString($"""["[{string.Join(',', toUserIds.Select(x => x.ToString()))}]"]""");
+        await SendAsync(HttpMethod.Post,
+                () => $"chatroom/v2/channel/move_member?origin_channel_id={originalChannelId}&to_user_ids={toUserIdsString}&room_id={roomId}&channel_id={channelId}&{HeyBoxConfig.CommonQueryString}",
+                ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task KickOutFromChannelAsync(ulong roomId, ulong channelId, ulong operatorUserId,
+        KickOutFromChannelParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(roomId, 0, nameof(roomId));
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotEqual(operatorUserId, 0, nameof(operatorUserId));
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(roomId, channelId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/channel/kick_out?heybox_id={operatorUserId}&room_id={roomId}&channel_id={channelId}&{HeyBoxConfig.CommonQueryString}",
+                args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task BanOperationAsync(BanOperationParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.AtLeast(args.DurationSeconds, 0, nameof(args.DurationSeconds));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+        Preconditions.NotNullOrWhiteSpace(args.Reason, nameof(args.Reason));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room/ban?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task MuteUserInChannelAsync(MuteUserInChannelParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(args.RoomId, args.ChannelId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/channel/mute_user?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task MuteUserInRoomAsync(MuteDeafenUserInRoomParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room/user?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeafenUserInRoomAsync(MuteDeafenUserInRoomParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ToUserId, 0, nameof(args.ToUserId));
+        Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
+
+        options = RequestOptions.CreateOrClone(options);
+        BucketIds ids = new(args.RoomId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"chatroom/v2/room/mute_earphone?{HeyBoxConfig.CommonQueryString}", args, ids, options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<ulong>
 
     #endregion
 

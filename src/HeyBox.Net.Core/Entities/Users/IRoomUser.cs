@@ -115,4 +115,23 @@ public interface IRoomUser : IUser
     Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null);
 
     #endregion
+
+    #region Rooms
+
+    // /// <summary>
+    // ///     修改此用户在该房间内的昵称。
+    // /// </summary>
+    // /// <remarks>
+    // ///     此方法使用指定的属性修改当前用户在该房间内的昵称。 <br />
+    // ///     如要清除此用户在该房间内的昵称，请将 <paramref name="name"/> 设置为 <see langword="null"/>。 <br />
+    // ///     <note type="warning">
+    // ///         如果将昵称设置为与用户名相同，黑盒语音也会将该用户在此房间内的昵称清除，显示名称将跟随用户名，而不是固定为指定的昵称。
+    // ///     </note>
+    // /// </remarks>
+    // /// <param name="name"> 要设置到此用户在该房间内的新昵称。 </param>
+    // /// <param name="options"> 发送请求时要使用的选项。 </param>
+    // /// <returns> 一个表示异步修改操作的任务。 </returns>
+    // Task ModifyNicknameAsync(string? name, RequestOptions? options = null);
+
+    #endregion
 }

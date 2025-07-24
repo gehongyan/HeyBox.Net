@@ -40,7 +40,7 @@ public class HeyBoxConfig
     /// <summary>
     ///     获取黑盒语音的版本号。
     /// </summary>
-    public const string ChatVersion = "1.29.0";
+    public const string ChatVersion = "1.30.0";
 
     /// <summary>
     ///     获取用于 API 请求的公共查询参数。
@@ -71,6 +71,11 @@ public class HeyBoxConfig
     ///     获取黑盒语音允许在每个请求中获取的最大房间数量。
     /// </summary>
     public const int MaxRoomsPerBatchByDefault = 20;
+
+    /// <summary>
+    ///     获取黑盒语音允许在每个请求中获取的最大房间用户数量。
+    /// </summary>
+    public const int MaxRoomUsersPerBatchByDefault = 300;
 
     /// <summary>
     ///     获取或设置请求在出现错误时的默认行为。

@@ -18,7 +18,7 @@ internal class RoomUser
     public int Level { get; set; }
 
     [JsonPropertyName("medals")]
-    public JsonElement Medals { get; set; }
+    public required Medal Medals { get; set; }
 
     [JsonPropertyName("nickname")]
     public required string Nickname { get; set; }

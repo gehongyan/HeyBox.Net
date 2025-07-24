@@ -6,4 +6,4 @@ internal class GetRoomRolesResponse
 {
     [JsonPropertyName("roles")]
     public required IReadOnlyCollection<Role> Roles { get; init; }
- }
+}
