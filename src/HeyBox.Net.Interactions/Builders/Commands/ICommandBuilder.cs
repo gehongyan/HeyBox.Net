@@ -1,115 +1,115 @@
 namespace HeyBox.Interactions.Builders;
 
 /// <summary>
-///     Represent a command builder for creating <see cref="ICommandInfo"/>.
+///     表示用于创建 <see cref="ICommandInfo"/> 的命令生成器。
 /// </summary>
 public interface ICommandBuilder
 {
     /// <summary>
-    ///     Gets the execution delegate of this command.
+    ///     获取此命令的执行委托。
     /// </summary>
     ExecuteCallback? Callback { get; }
 
     /// <summary>
-    ///     Gets the parent module of this command.
+    ///     获取此命令的父模块。
     /// </summary>
     ModuleBuilder Module { get; }
 
     /// <summary>
-    ///     Gets the name of this command.
+    ///     获取此命令的名称。
     /// </summary>
     string? Name { get; }
 
     /// <summary>
-    ///     Gets or sets the method name of this command.
+    ///     获取或设置此命令的方法名。
     /// </summary>
     string? MethodName { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether the <see cref="Name"/> should be directly used as a Regex pattern.
+    ///     获取或设置 <see cref="Name"/> 是否应直接作为正则表达式模式使用。
     /// </summary>
     bool TreatNameAsRegex { get; set; }
 
     /// <summary>
-    ///     Gets or sets the run mode this command gets executed with.
+    ///     获取或设置此命令的运行模式。
     /// </summary>
     RunMode RunMode { get; set; }
 
     /// <summary>
-    ///     Gets a collection of the attributes of this command.
+    ///     获取此命令的特性集合。
     /// </summary>
     IReadOnlyList<Attribute> Attributes { get; }
 
     /// <summary>
-    ///     Gets a collection of the parameters of this command.
+    ///     获取此命令的参数集合。
     /// </summary>
     IReadOnlyList<IParameterBuilder> Parameters { get; }
 
     /// <summary>
-    ///     Gets a collection of the preconditions of this command.
+    ///     获取此命令的先决条件集合。
     /// </summary>
     IReadOnlyList<PreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Sets <see cref="Name"/>.
+    ///     设置 <see cref="Name"/>。
     /// </summary>
-    /// <param name="name">New value of the <see cref="Name"/>.</param>
+    /// <param name="name"> <see cref="Name"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder WithName(string name);
 
     /// <summary>
-    ///     Sets <see cref="MethodName"/>.
+    ///     设置 <see cref="MethodName"/>。
     /// </summary>
-    /// <param name="name">New value of the <see cref="MethodName"/>.</param>
+    /// <param name="name"> <see cref="MethodName"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder WithMethodName(string name);
 
     /// <summary>
-    ///     Adds attributes to <see cref="Attributes"/>.
+    ///     向 <see cref="Attributes"/> 添加特性。
     /// </summary>
-    /// <param name="attributes">New attributes to be added to <see cref="Attributes"/>.</param>
+    /// <param name="attributes"> 要添加到 <see cref="Attributes"/> 的新特性。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder WithAttributes(params Attribute[] attributes);
 
     /// <summary>
-    ///     Sets <see cref="RunMode"/>.
+    ///     设置 <see cref="RunMode"/>。
     /// </summary>
-    /// <param name="runMode">New value of the <see cref="RunMode"/>.</param>
+    /// <param name="runMode"> <see cref="RunMode"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder SetRunMode(RunMode runMode);
 
     /// <summary>
-    ///     Sets <see cref="TreatNameAsRegex"/>.
+    ///     设置 <see cref="TreatNameAsRegex"/>。
     /// </summary>
-    /// <param name="value">New value of the <see cref="TreatNameAsRegex"/>.</param>
+    /// <param name="value"> <see cref="TreatNameAsRegex"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder WithNameAsRegex(bool value);
 
     /// <summary>
-    ///     Adds parameter builders to <see cref="Parameters"/>.
+    ///     向 <see cref="Parameters"/> 添加参数生成器。
     /// </summary>
-    /// <param name="parameters">New parameter builders to be added to <see cref="Parameters"/>.</param>
+    /// <param name="parameters"> 要添加到 <see cref="Parameters"/> 的新参数生成器。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder AddParameters(params IParameterBuilder[] parameters);
 
     /// <summary>
-    ///     Adds preconditions to <see cref="Preconditions"/>.
+    ///     向 <see cref="Preconditions"/> 添加先决条件。
     /// </summary>
-    /// <param name="preconditions">New preconditions to be added to <see cref="Preconditions"/>.</param>
+    /// <param name="preconditions"> 要添加到 <see cref="Preconditions"/> 的新先决条件。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     ICommandBuilder WithPreconditions(params PreconditionAttribute[] preconditions);
 }

@@ -1,8 +1,6 @@
 namespace HeyBox;
 
-/// <summary>
-///     Represents an object for storing a CustomId wild card match.
-/// </summary>
+/// <summary> 表示用于存储 CustomId 通配符匹配的对象。 </summary>
 internal record RouteSegmentMatch : IRouteSegmentMatch
 {
     /// <inheritdoc/>

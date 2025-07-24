@@ -1,101 +1,101 @@
 namespace HeyBox.Interactions.Builders;
 
 /// <summary>
-///     Represent a command builder for creating <see cref="IParameterInfo"/>.
+///     表示用于创建 <see cref="IParameterInfo"/> 的命令参数生成器。
 /// </summary>
 public interface IParameterBuilder
 {
     /// <summary>
-    ///     Gets the parent command of this parameter.
+    ///     获取此参数所属的父命令。
     /// </summary>
     ICommandBuilder Command { get; }
 
     /// <summary>
-    ///     Gets the name of this parameter.
+    ///     获取此参数的名称。
     /// </summary>
     string? Name { get; }
 
     /// <summary>
-    ///     Gets the type of this parameter.
+    ///     获取此参数的类型。
     /// </summary>
     Type? ParameterType { get; }
 
     /// <summary>
-    ///     Gets whether this parameter is required.
+    ///     获取此参数是否为必填项。
     /// </summary>
     bool IsRequired { get; }
 
     /// <summary>
-    ///     Gets whether this parameter is <see langword="params"/>.
+    ///     获取此参数是否为 <see langword="params"/>。
     /// </summary>
     bool IsParameterArray { get; }
 
     /// <summary>
-    ///     Gets the default value of this parameter.
+    ///     获取此参数的默认值。
     /// </summary>
     object? DefaultValue { get; }
 
     /// <summary>
-    ///     Gets a collection of the attributes of this command.
+    ///     获取此命令的特性集合。
     /// </summary>
     IReadOnlyCollection<Attribute> Attributes { get; }
 
     /// <summary>
-    ///     Gets a collection of the preconditions of this command.
+    ///     获取此命令的先决条件集合。
     /// </summary>
     IReadOnlyCollection<ParameterPreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Sets <see cref="Name"/>.
+    ///     设置 <see cref="Name"/>。
     /// </summary>
-    /// <param name="name">New value of the <see cref="Name"/>.</param>
+    /// <param name="name"> <see cref="Name"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     IParameterBuilder WithName(string name);
 
     /// <summary>
-    ///     Sets <see cref="ParameterType"/>.
+    ///     设置 <see cref="ParameterType"/>。
     /// </summary>
-    /// <param name="type">New value of the <see cref="ParameterType"/>.</param>
+    /// <param name="type"> <see cref="ParameterType"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     IParameterBuilder SetParameterType(Type type);
 
     /// <summary>
-    ///     Sets <see cref="IsRequired"/>.
+    ///     设置 <see cref="IsRequired"/>。
     /// </summary>
-    /// <param name="isRequired">New value of the <see cref="IsRequired"/>.</param>
+    /// <param name="isRequired"> <see cref="IsRequired"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     IParameterBuilder SetRequired(bool isRequired);
 
     /// <summary>
-    ///     Sets <see cref="DefaultValue"/>.
+    ///     设置 <see cref="DefaultValue"/>。
     /// </summary>
-    /// <param name="defaultValue">New value of the <see cref="DefaultValue"/>.</param>
+    /// <param name="defaultValue"> <see cref="DefaultValue"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     IParameterBuilder SetDefaultValue(object defaultValue);
 
     /// <summary>
-    ///     Adds attributes to <see cref="Attributes"/>.
+    ///     向 <see cref="Attributes"/> 添加特性。
     /// </summary>
-    /// <param name="attributes">New attributes to be added to <see cref="Attributes"/>.</param>
+    /// <param name="attributes"> 要添加到 <see cref="Attributes"/> 的新特性。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     IParameterBuilder AddAttributes(params Attribute[] attributes);
 
     /// <summary>
-    ///     Adds preconditions to <see cref="Preconditions"/>.
+    ///     向 <see cref="Preconditions"/> 添加先决条件。
     /// </summary>
-    /// <param name="preconditions">New attributes to be added to <see cref="Preconditions"/>.</param>
+    /// <param name="preconditions"> 要添加到 <see cref="Preconditions"/> 的新先决条件。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     IParameterBuilder AddPreconditions(params ParameterPreconditionAttribute[] preconditions);
 }

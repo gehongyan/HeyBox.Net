@@ -3,14 +3,14 @@ using System.Collections.Immutable;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents the info class of an attribute based method for command type <see cref="ApplicationCommandType.Slash"/>.
+///     表示基于特性的方法信息类，适用于 <see cref="ApplicationCommandType.Slash"/> 类型的命令。
 /// </summary>
 public class SlashCommandInfo : CommandInfo<SlashCommandParameterInfo>, IApplicationCommandInfo
 {
     internal IReadOnlyDictionary<string, SlashCommandParameterInfo> _flattenedParameterDictionary { get; }
 
     /// <summary>
-    ///     Gets the command description that will be displayed on HeyBox.
+    ///     获取将在黑盒语音上显示的命令描述。
     /// </summary>
     public string? Description { get; }
 
@@ -21,7 +21,7 @@ public class SlashCommandInfo : CommandInfo<SlashCommandParameterInfo>, IApplica
     public override IReadOnlyList<SlashCommandParameterInfo> Parameters { get; }
 
     /// <summary>
-    ///     Gets the flattened collection of command parameters and complex parameter fields.
+    ///     获取命令参数及复杂参数字段的扁平集合。
     /// </summary>
     public IReadOnlyList<SlashCommandParameterInfo> FlattenedParameters { get; }
 
@@ -54,7 +54,12 @@ public class SlashCommandInfo : CommandInfo<SlashCommandParameterInfo>, IApplica
         return base.ExecuteAsync(context, services);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     解析斜线命令参数。
+    /// </summary>
+    /// <param name="context"> 命令上下文。 </param>
+    /// <param name="services"> 服务集合。 </param>
+    /// <returns> 解析结果。 </returns>
     protected override async Task<IResult> ParseArgumentsAsync(IInteractionContext context, IServiceProvider? services)
     {
         List<ISlashCommandInteractionDataOption>? GetOptions()
@@ -115,11 +120,20 @@ public class SlashCommandInfo : CommandInfo<SlashCommandParameterInfo>, IApplica
         return readResult;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     调用斜线命令事件。
+    /// </summary>
+    /// <param name="context"> 命令上下文。 </param>
+    /// <param name="result"> 命令执行结果。 </param>
+    /// <returns> 异步任务。 </returns>
     protected override Task InvokeModuleEvent(IInteractionContext context, IResult result)
         => CommandService._slashCommandExecutedEvent.InvokeAsync(this, context, result);
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取斜线命令的日志字符串。
+    /// </summary>
+    /// <param name="context"> 命令上下文。 </param>
+    /// <returns> 日志字符串。 </returns>
     protected override string GetLogString(IInteractionContext context) =>
         context.Room != null
             ? $"Slash Command: \"{base.ToString()}\" for {context.User} in {context.Room}/{context.Channel}"

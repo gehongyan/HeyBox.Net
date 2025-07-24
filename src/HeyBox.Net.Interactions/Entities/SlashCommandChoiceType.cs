@@ -1,22 +1,22 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Supported types of pre-defined parameter choices.
+///     支持的预设参数选项类型。
 /// </summary>
 public enum SlashCommandChoiceType
 {
     /// <summary>
-    ///     HeyBox type for <see cref="string"/>.
+    ///     <see cref="string"/> 类型。
     /// </summary>
     String,
 
     /// <summary>
-    ///     HeyBox type for <see cref="int"/>.
+    ///     <see cref="int"/> 类型。
     /// </summary>
     Integer,
 
     /// <summary>
-    ///     HeyBox type for <see cref="double"/>.
+    ///     <see cref="double"/> 类型。
     /// </summary>
     Number
 }

@@ -105,7 +105,7 @@ internal static class ReflectionUtils<T>
     }
 
     /// <summary>
-    /// Create a type initializer using compiled lambda expressions
+    ///     使用编译的 Lambda 表达式创建类型初始化器。
     /// </summary>
     internal static Func<IServiceProvider?, T> CreateLambdaBuilder(TypeInfo typeInfo, InteractionService commandService)
     {
@@ -150,7 +150,7 @@ internal static class ReflectionUtils<T>
     }
 
     /// <summary>
-    ///     Create a compiled lambda property setter.
+    ///     创建一个编译的 Lambda 属性设置器。
     /// </summary>
     internal static Action<T, object> CreateLambdaPropertySetter(PropertyInfo propertyInfo)
     {

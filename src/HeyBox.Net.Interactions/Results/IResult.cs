@@ -1,32 +1,32 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Contains information of the result related to a command.
+///     包含与命令相关的结果信息。
 /// </summary>
 public interface IResult
 {
     /// <summary>
-    ///     Gets the error type that may have occurred during the operation.
+    ///     获取操作过程中可能发生的错误类型。
     /// </summary>
     /// <returns>
-    ///     A <see cref="InteractionCommandError" /> indicating the type of error that may have occurred during the operation;
-    ///     <see langword="null"/> if the operation was successful.
+    ///     一个 <see cref="InteractionCommandError" />，指示操作过程中可能发生的错误类型；
+    ///     如果操作成功，则为 <see langword="null"/>。
     /// </returns>
     InteractionCommandError? Error { get; }
 
     /// <summary>
-    ///     Gets the reason for the error.
+    ///     获取错误原因。
     /// </summary>
     /// <returns>
-    ///     A string containing the error reason.
+    ///     包含错误原因的字符串。
     /// </returns>
     string? ErrorReason { get; }
 
     /// <summary>
-    ///     Indicates whether the operation was successful or not.
+    ///     指示操作是否成功。
     /// </summary>
     /// <returns>
-    ///     <see langword="true"/> if the result is positive; otherwise <see langword="false"/>.
+    ///     如果结果为正，则为 <see langword="true"/>；否则为 <see langword="false"/>。
     /// </returns>
     bool IsSuccess { get; }
 }

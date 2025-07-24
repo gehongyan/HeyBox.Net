@@ -35,7 +35,7 @@ public class InteractionContext : IInteractionContext, IRouteMatchContainer
     /// <summary>
     ///     初始化一个 <see cref="InteractionContext"/> 类的新实例。
     /// </summary>
-    /// <param name="client"> HeyBox 客户端。 </param>
+    /// <param name="client"> 黑盒语音客户端。 </param>
     /// <param name="interaction"> 交互事件。 </param>
     /// <param name="channel"> 交互事件发生的频道。 </param>
     /// <param name="messageId"> 交互事件来源的消息 ID。 </param>

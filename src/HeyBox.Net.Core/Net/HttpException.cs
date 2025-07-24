@@ -4,17 +4,17 @@ using System.Net;
 namespace HeyBox.Net;
 
 /// <summary>
-///     当处理 HeyBox HTTP 请求时发生错误时引发的异常。
+///     当处理黑盒语音HTTP 请求时发生错误时引发的异常。
 /// </summary>
 public class HttpException : Exception
 {
     /// <summary>
-    ///     获取 HeyBox 返回的 HTTP 状态码。
+    ///     获取黑盒语音返回的 HTTP 状态码。
     /// </summary>
     public HttpStatusCode HttpCode { get; }
 
     /// <summary>
-    ///     获取由 HeyBox 返回的 JSON 负载中的错误代码；也有可能是表示操作成功的代码；
+    ///     获取由黑盒语音返回的 JSON 负载中的错误代码；也有可能是表示操作成功的代码；
     ///     如果无法从响应中解析出错误代码，则为 <see langword="null"/>。
     /// </summary>
     public HeyBoxErrorCode? HeyBoxCode { get; }
@@ -44,7 +44,7 @@ public class HttpException : Exception
     /// </summary>
     /// <param name="httpCode"> 返回的 HTTP 状态码。 </param>
     /// <param name="request"> 引发异常前发送的请求。 </param>
-    /// <param name="heyBoxCode"> 由 HeyBox 返回的 JSON 负载中解析出的状态码。 </param>
+    /// <param name="heyBoxCode"> 由黑盒语音返回的 JSON 负载中解析出的状态码。 </param>
     /// <param name="reason"> 引发异常的原因。 </param>
     /// <param name="errors"> 描述请求错误的所有 JSON 错误。 </param>
     public HttpException(HttpStatusCode httpCode, IRequest request,

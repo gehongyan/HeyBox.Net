@@ -3,20 +3,20 @@ using System.Collections.Immutable;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Specify the target channel types for a <see cref="SlashCommandOptionType.Channel"/> option.
+///     指定 <see cref="SlashCommandOptionType.Channel"/> 选项允许的目标频道类型。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public sealed class ChannelTypesAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the allowed channel types for this option.
+    ///     获取此选项允许的频道类型。
     /// </summary>
     public IReadOnlyCollection<ChannelType> ChannelTypes { get; }
 
     /// <summary>
-    ///     Specify the target channel types for a <see cref="SlashCommandOptionType.Channel"/> option.
+    ///     指定 <see cref="SlashCommandOptionType.Channel"/> 选项允许的目标频道类型。
     /// </summary>
-    /// <param name="channelTypes">The allowed channel types for this option.</param>
+    /// <param name="channelTypes"> 此选项允许的频道类型。 </param>
     public ChannelTypesAttribute(params ChannelType[] channelTypes)
     {
         if (channelTypes is null)

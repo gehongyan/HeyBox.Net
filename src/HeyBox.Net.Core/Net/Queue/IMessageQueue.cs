@@ -3,7 +3,7 @@
 namespace HeyBox.Net.Queue;
 
 /// <summary>
-///     表示一个消息队列，用于从 HeyBox 网关接收并处理事件。
+///     表示一个消息队列，用于从黑盒语音网关接收并处理事件。
 /// </summary>
 public interface IMessageQueue
 {

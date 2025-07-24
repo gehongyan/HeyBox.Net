@@ -1,25 +1,25 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Registers a parameter as a complex parameter.
+///     将参数注册为复杂参数。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public class ComplexParameterAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the parameter array of the constructor method that should be prioritized.
+    ///     获取应优先使用的构造方法参数数组。
     /// </summary>
     public Type[]? PrioritizedCtorSignature { get; }
 
     /// <summary>
-    ///     Registers a slash command parameter as a complex parameter.
+    ///     将斜线命令参数注册为复杂参数。
     /// </summary>
     public ComplexParameterAttribute() { }
 
     /// <summary>
-    ///     Registers a slash command parameter as a complex parameter with a specified constructor signature.
+    ///     将斜线命令参数注册为具有指定构造方法签名的复杂参数。
     /// </summary>
-    /// <param name="types">Type array of the preferred constructor parameters.</param>
+    /// <param name="types"> 首选构造方法参数的类型数组。 </param>
     public ComplexParameterAttribute(Type[] types)
     {
         PrioritizedCtorSignature = types;

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Reflection;
 
 namespace HeyBox.Interactions;

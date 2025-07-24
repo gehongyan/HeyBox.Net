@@ -4,44 +4,44 @@ using HeyBox.Interactions.Builders;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Contains the information of a Interactions Module.
+///     表示交互模块的信息。
 /// </summary>
 public class ModuleInfo
 {
     internal ILookup<string?, PreconditionAttribute> GroupedPreconditions { get; }
 
     /// <summary>
-    ///     Gets the underlying command service.
+    ///     获取底层交互服务。
     /// </summary>
     public InteractionService CommandService { get; }
 
     /// <summary>
-    ///     Gets the name of this module class.
+    ///     获取此模块的名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets the description of this module.
+    ///     获取此模块的描述。
     /// </summary>
     public string? Description { get; }
 
     /// <summary>
-    ///     Gets the Slash Commands that are declared in this module.
+    ///     获取在此模块中声明的斜线命令。
     /// </summary>
     public IReadOnlyList<SlashCommandInfo> SlashCommands { get; }
 
     /// <summary>
-    ///     Gets a collection of the attributes of this module.
+    ///     获取此模块的属性集合。
     /// </summary>
     public IReadOnlyCollection<Attribute> Attributes { get; }
 
     /// <summary>
-    ///     Gets a collection of the preconditions of this module.
+    ///     获取此模块的前置条件集合。
     /// </summary>
     public IReadOnlyCollection<PreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Gets the context types commands in this module can be executed in.
+    ///     获取可以在其中执行此模块命令的上下文类型。
     /// </summary>
     public IReadOnlyCollection<InteractionContextType> ContextTypes { get; }
 

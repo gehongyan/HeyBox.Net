@@ -1,8 +1,6 @@
 namespace HeyBox.Interactions;
 
-/// <summary>
-///     Represents the base class for creating command result containers.
-/// </summary>
+/// <summary> 表示用于创建命令结果容器的基类。 </summary>
 public abstract class RuntimeResult : IResult
 {
     /// <inheritdoc/>
@@ -14,23 +12,18 @@ public abstract class RuntimeResult : IResult
     /// <inheritdoc/>
     public bool IsSuccess => !Error.HasValue;
 
-    /// <summary>
-    ///     Initializes a new <see cref="RuntimeResult" /> class with the type of error and reason.
-    /// </summary>
-    /// <param name="error">The type of failure, or <see langword="null" /> if none.</param>
-    /// <param name="reason">The reason of failure.</param>
+    /// <summary> 使用错误类型和原因初始化 <see cref="RuntimeResult" /> 类的新实例。 </summary>
+    /// <param name="error"> 失败类型，若无则为 <see langword="null" />。 </param>
+    /// <param name="reason"> 失败原因。 </param>
     protected RuntimeResult(InteractionCommandError? error, string? reason)
     {
         Error = error;
         ErrorReason = reason;
     }
 
-    /// <summary>
-    ///     Gets a string that indicates the runtime result.
-    /// </summary>
+    /// <summary> 获取指示运行时结果的字符串。 </summary>
     /// <returns>
-    ///     <c>Success</c> if <see cref="IsSuccess"/> is <see langword="true" />; otherwise "<see cref="Error"/>:
-    ///     <see cref="ErrorReason"/>".
+    ///     如果 <see cref="IsSuccess"/> 为 <see langword="true" />，则为 <c>Success</c>；否则为 "<see cref="Error"/>: <see cref="ErrorReason"/>"。
     /// </returns>
     public override string ToString() => ErrorReason ?? (IsSuccess ? "Successful" : "Unsuccessful");
 }

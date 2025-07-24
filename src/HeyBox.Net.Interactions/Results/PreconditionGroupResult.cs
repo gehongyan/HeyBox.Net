@@ -2,14 +2,10 @@ using System.Collections.Immutable;
 
 namespace HeyBox.Interactions;
 
-/// <summary>
-///     Represents a result type for grouped command preconditions.
-/// </summary>
+/// <summary> 表示分组先决条件的结果类型。 </summary>
 public class PreconditionGroupResult : PreconditionResult
 {
-    /// <summary>
-    ///     Gets the results of the preconditions of this group.
-    /// </summary>
+    /// <summary> 获取此分组下所有先决条件的结果。 </summary>
     public IReadOnlyCollection<PreconditionResult>? Results { get; }
 
     private PreconditionGroupResult(InteractionCommandError? error, string? reason, IEnumerable<PreconditionResult>? results)
@@ -18,31 +14,22 @@ public class PreconditionGroupResult : PreconditionResult
         Results = results?.ToImmutableArray();
     }
 
-    /// <summary>
-    ///     Returns a <see cref="PreconditionGroupResult" /> with no errors.
-    /// </summary>
+    /// <summary> 获取一个无错误的 <see cref="PreconditionGroupResult" />。 </summary>
     public static new PreconditionGroupResult FromSuccess() => new(null, null, null);
 
-    /// <summary>
-    ///     Returns a <see cref="PreconditionGroupResult" /> with <see cref="InteractionCommandError.Exception" /> and the <see cref="Exception.Message"/>.
-    /// </summary>
-    /// <param name="exception">The exception that caused the precondition check to fail.</param>
+    /// <summary> 获取一个 <see cref="PreconditionGroupResult" />，其 <see cref="InteractionCommandError.Exception" /> 及 <see cref="Exception.Message"/>。 </summary>
+    /// <param name="exception"> 导致先决条件检查失败的异常。 </param>
     public static new PreconditionGroupResult FromError(Exception exception) =>
         new(InteractionCommandError.Exception, exception.Message, null);
 
-    /// <summary>
-    ///     Returns a <see cref="PreconditionGroupResult" /> with the specified <paramref name="result"/> type.
-    /// </summary>
-    /// <param name="result">The result of failure.</param>
+    /// <summary> 获取一个 <see cref="PreconditionGroupResult" />，其类型为指定 <paramref name="result"/>。 </summary>
+    /// <param name="result"> 失败的结果。 </param>
     public static new PreconditionGroupResult FromError(IResult result) =>
         new(result.Error, result.ErrorReason, null);
 
-    /// <summary>
-    ///     Returns a <see cref="PreconditionGroupResult" /> with <see cref="InteractionCommandError.UnmetPrecondition" /> and the
-    ///     specified reason.
-    /// </summary>
-    /// <param name="reason">The reason of failure.</param>
-    /// <param name="results">Precondition results of this group</param>
+    /// <summary> 获取一个 <see cref="PreconditionGroupResult" />，其 <see cref="InteractionCommandError.UnmetPrecondition" /> 及指定原因。 </summary>
+    /// <param name="reason"> 失败原因。 </param>
+    /// <param name="results"> 此分组下所有先决条件的结果。 </param>
     public static PreconditionGroupResult FromError(string reason, IEnumerable<PreconditionResult> results) =>
         new(InteractionCommandError.UnmetPrecondition, reason, results);
 }

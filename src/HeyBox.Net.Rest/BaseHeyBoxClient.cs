@@ -3,7 +3,7 @@
 namespace HeyBox.Rest;
 
 /// <summary>
-///     表示一个可以连接到 HeyBox API 的通用的 HeyBox Bot 客户端。
+///     表示一个可以连接到黑盒语音API 的通用的黑盒语音Bot 客户端。
 /// </summary>
 public abstract class BaseHeyBoxClient : IHeyBoxClient
 {

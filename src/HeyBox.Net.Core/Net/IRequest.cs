@@ -1,7 +1,7 @@
 namespace HeyBox.Net;
 
 /// <summary>
-///     表示一个要发送到 HeyBox 的通用的请求。
+///     表示一个要发送到黑盒语音的通用的请求。
 /// </summary>
 public interface IRequest
 {

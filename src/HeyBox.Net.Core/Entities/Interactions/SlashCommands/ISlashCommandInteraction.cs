@@ -1,7 +1,7 @@
 namespace HeyBox;
 
 /// <summary>
-///     表示一个通用的 HeyBox 斜线命令交互实体。
+///     表示一个通用的黑盒语音斜线命令交互实体。
 /// </summary>
 public interface ISlashCommandInteraction : IHeyBoxInteraction
 {
@@ -10,7 +10,7 @@ public interface ISlashCommandInteraction : IHeyBoxInteraction
 }
 
 /// <summary>
-///     表示一个通用的 HeyBox 按钮点击交互实体。
+///     表示一个通用的黑盒语音按钮点击交互实体。
 /// </summary>
 public interface IButtonClickInteraction : IHeyBoxInteraction
 {

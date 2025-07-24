@@ -1,20 +1,20 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Sets the maximum length allowed for a string type parameter.
+///     设置字符串类型参数允许的最大长度。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public class MaxLengthAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the maximum length allowed for a string type parameter.
+    ///     获取字符串类型参数允许的最大长度。
     /// </summary>
     public int Length { get; }
 
     /// <summary>
-    ///     Sets the maximum length allowed for a string type parameter.
+    ///     设置字符串类型参数允许的最大长度。
     /// </summary>
-    /// <param name="length">Maximum string length allowed.</param>
+    /// <param name="length"> 允许的最大字符串长度。 </param>
     public MaxLengthAttribute(int length)
     {
         Length = length;

@@ -1,20 +1,20 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Set the maximum value permitted for a number type parameter.
+///     设置数字类型参数允许的最大值。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public sealed class MaxValueAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the maximum value permitted.
+    ///     获取允许的最大值。
     /// </summary>
     public double Value { get; }
 
     /// <summary>
-    ///     Set the maximum value permitted for a number type parameter.
+    ///     设置数字类型参数允许的最大值。
     /// </summary>
-    /// <param name="value">The maximum value permitted.</param>
+    /// <param name="value"> 允许的最大值。 </param>
     public MaxValueAttribute(double value)
     {
         Value = value;

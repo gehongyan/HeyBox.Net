@@ -1,15 +1,9 @@
 namespace HeyBox;
 
-/// <summary>
-///     Represents an object for storing a CustomId wild card match.
-/// </summary>
+/// <summary> 表示用于存储 CustomId 通配符匹配的对象。 </summary>
 public interface IRouteSegmentMatch
 {
-    /// <summary>
-    ///     Gets the captured value of this wild card match.
-    /// </summary>
-    /// <returns>
-    ///    The value of this wild card.
-    /// </returns>
+    /// <summary> 获取此通配符匹配捕获的值。 </summary>
+    /// <returns> 此通配符的值。 </returns>
     string Value { get; }
 }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace HeyBox.Interactions.Builders;
 
 /// <summary>
-///     Represents a builder for creating <see cref="ModuleInfo"/>.
+///     表示用于创建 <see cref="ModuleInfo"/> 的生成器。
 /// </summary>
 public class ModuleBuilder
 {
@@ -13,37 +13,37 @@ public class ModuleBuilder
     private readonly List<SlashCommandBuilder> _slashCommands;
 
     /// <summary>
-    ///     Gets the underlying Interaction Service.
+    ///     获取底层交互服务。
     /// </summary>
     public InteractionService InteractionService { get; }
 
     /// <summary>
-    ///     Gets the name of this module.
+    ///     获取此模块的名称。
     /// </summary>
     public string? Name { get; internal set; }
 
     /// <summary>
-    ///     Gets and sets the description of this module.
+    ///     获取或设置此模块的描述。
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    ///     Gets a collection of the attributes of this module.
+    ///     获取此模块的特性集合。
     /// </summary>
     public IReadOnlyList<Attribute> Attributes => _attributes;
 
     /// <summary>
-    ///     Gets a collection of the preconditions of this module.
+    ///     获取此模块的先决条件集合。
     /// </summary>
     public IReadOnlyCollection<PreconditionAttribute> Preconditions => _preconditions;
 
     /// <summary>
-    ///     Gets a collection of the Slash Commands of this module.
+    ///     获取此模块的斜线命令集合。
     /// </summary>
     public IReadOnlyList<SlashCommandBuilder> SlashCommands => _slashCommands;
 
     /// <summary>
-    ///     Gets or sets the context types this command can be executed in.
+    ///     获取或设置此命令可在哪些上下文类型中执行。
     /// </summary>
     public HashSet<InteractionContextType> ContextTypes { get; set; }
 
@@ -60,10 +60,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="ModuleBuilder"/>.
+    ///     初始化一个新的 <see cref="ModuleBuilder"/>。
     /// </summary>
-    /// <param name="interactionService">The underlying Interaction Service.</param>
-    /// <param name="name">Name of this module.</param>
+    /// <param name="interactionService"> 底层交互服务。 </param>
+    /// <param name="name"> 此模块的名称。 </param>
     public ModuleBuilder(InteractionService interactionService, string name)
         : this(interactionService)
     {
@@ -71,11 +71,11 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Sets <see cref="Description"/>.
+    ///     设置 <see cref="Description"/>。
     /// </summary>
-    /// <param name="description">New value of the <see cref="Description"/>.</param>
+    /// <param name="description"> <see cref="Description"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public ModuleBuilder WithDescription(string description)
     {
@@ -84,11 +84,11 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds attributes to <see cref="Attributes"/>.
+    ///     向 <see cref="Attributes"/> 添加特性。
     /// </summary>
-    /// <param name="attributes">New attributes to be added to <see cref="Attributes"/>.</param>
+    /// <param name="attributes"> 要添加到 <see cref="Attributes"/> 的新特性。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public ModuleBuilder AddAttributes(params Attribute[] attributes)
     {
@@ -97,11 +97,11 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds preconditions to <see cref="Preconditions"/>.
+    ///     向 <see cref="Preconditions"/> 添加先决条件。
     /// </summary>
-    /// <param name="preconditions">New preconditions to be added to <see cref="Preconditions"/>.</param>
+    /// <param name="preconditions"> 要添加到 <see cref="Preconditions"/> 的新先决条件。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public ModuleBuilder AddPreconditions(params PreconditionAttribute[] preconditions)
     {
@@ -110,11 +110,11 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds slash command builder to <see cref="SlashCommands"/>.
+    ///     向 <see cref="SlashCommands"/> 添加斜线命令生成器。
     /// </summary>
-    /// <param name="configure"><see cref="SlashCommandBuilder"/> factory.</param>
+    /// <param name="configure"> <see cref="SlashCommandBuilder"/> 工厂方法。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public ModuleBuilder AddSlashCommand(Action<SlashCommandBuilder> configure)
     {
@@ -125,13 +125,13 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds slash command builder to <see cref="SlashCommands"/>.
+    ///     向 <see cref="SlashCommands"/> 添加斜线命令生成器。
     /// </summary>
-    /// <param name="name">Name of the command.</param>
-    /// <param name="callback">Command callback to be executed.</param>
-    /// <param name="configure"><see cref="SlashCommandBuilder"/> factory.</param>
+    /// <param name="name"> 命令名称。 </param>
+    /// <param name="callback"> 要执行的命令回调。 </param>
+    /// <param name="configure"> <see cref="SlashCommandBuilder"/> 工厂方法。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public ModuleBuilder AddSlashCommand(string name, ExecuteCallback callback, Action<SlashCommandBuilder> configure)
     {
@@ -142,10 +142,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Sets  the <see cref="ContextTypes"/> on this <see cref="ModuleBuilder"/>.
+    ///     设置此 <see cref="ModuleBuilder"/> 的 <see cref="ContextTypes"/>。
     /// </summary>
-    /// <param name="contextTypes">Context types the command can be executed in.</param>
-    /// <returns>The builder instance.</returns>
+    /// <param name="contextTypes"> 命令可执行的上下文类型。 </param>
+    /// <returns>生成器实例。</returns>
     public ModuleBuilder WithContextTypes(params InteractionContextType[] contextTypes)
     {
         ContextTypes = [..contextTypes];

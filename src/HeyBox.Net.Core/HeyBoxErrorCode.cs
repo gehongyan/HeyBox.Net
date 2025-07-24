@@ -1,7 +1,7 @@
 namespace HeyBox;
 
 /// <summary>
-///     表示从 HeyBox 接收到的错误代码。
+///     表示从黑盒语音接收到的错误代码。
 /// </summary>
 public readonly record struct HeyBoxErrorCode
 {

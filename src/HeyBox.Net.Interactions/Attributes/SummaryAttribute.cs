@@ -1,26 +1,26 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Customize the name and description of a Slash Application Command parameter.
+///     自定义斜线命令参数的名称和描述。
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public class SummaryAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the name of the parameter.
+    ///     获取参数名称。
     /// </summary>
     public string? Name { get; } = null;
 
     /// <summary>
-    ///     Gets the description of the parameter.
+    ///     获取参数描述。
     /// </summary>
     public string? Description { get; } = null;
 
     /// <summary>
-    ///     Modify the default name and description values of a Slash Command parameter.
+    ///     修改斜线命令参数的默认名称和描述。
     /// </summary>
-    /// <param name="name">Name of the parameter.</param>
-    /// <param name="description">Description of the parameter.</param>
+    /// <param name="name"> 参数名称。 </param>
+    /// <param name="description"> 参数描述。 </param>
     public SummaryAttribute(string? name = null, string? description = null)
     {
         Name = name;

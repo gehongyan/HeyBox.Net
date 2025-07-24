@@ -5,13 +5,13 @@ using StandardColor = System.Drawing.Color;
 namespace HeyBox;
 
 /// <summary>
-///     表示 HeyBox 中使用的颜色。
+///     表示黑盒语音中使用的颜色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public readonly struct Color
 {
     /// <summary>
-    ///     获取一个 HeyBox 颜色的最大值的原始值。
+    ///     获取一个黑盒语音颜色的最大值的原始值。
     /// </summary>
     public const uint MaxDecimalValue = 0xFFFFFF;
 

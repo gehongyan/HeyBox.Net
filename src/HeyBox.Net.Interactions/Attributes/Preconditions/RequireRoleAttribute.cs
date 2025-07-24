@@ -1,25 +1,24 @@
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Requires the user invoking the command to have a specified role.
+///     要求调用命令的用户拥有指定的角色。
 /// </summary>
 public class RequireRoleAttribute : PreconditionAttribute
 {
     /// <summary>
-    ///     Gets the specified Role ID of the precondition.
+    ///     获取此先决条件指定的角色 ID。
     /// </summary>
     public ulong RoleId { get; }
 
     /// <summary>
-    ///     Gets or sets the error message if the precondition
-    ///     fails due to being run outside of a Guild channel.
+    ///     获取或设置如果由于在非群组频道运行而导致先决条件失败时的错误消息。
     /// </summary>
     public string? NotAGuildErrorMessage { get; set; }
 
     /// <summary>
-    ///     Requires that the user invoking the command to have a specific Role.
+    ///     要求调用命令的用户拥有特定角色。
     /// </summary>
-    /// <param name="roleId">Id of the role that the user must have.</param>
+    /// <param name="roleId"> 需要用户拥有的角色 ID。 </param>
     public RequireRoleAttribute(ulong roleId)
     {
         RoleId = roleId;

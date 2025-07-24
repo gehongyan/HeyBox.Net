@@ -16,7 +16,7 @@ public enum CreateAttachmentMode
     Stream,
 
     /// <summary>
-    ///     通过指向 HeyBox 服务器上的文件的 <see cref="System.Uri"/> 创建附件。
+    ///     通过指向黑盒语音服务器上的文件的 <see cref="System.Uri"/> 创建附件。
     /// </summary>
     AssetUri
 }

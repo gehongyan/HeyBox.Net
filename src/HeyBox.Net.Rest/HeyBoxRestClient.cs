@@ -7,7 +7,7 @@ using HeyBox.API;
 namespace HeyBox.Rest;
 
 /// <summary>
-///     表示一个基于 REST 的 HeyBox 客户端。
+///     表示一个基于 REST 的黑盒语音客户端。
 /// </summary>
 public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
 {

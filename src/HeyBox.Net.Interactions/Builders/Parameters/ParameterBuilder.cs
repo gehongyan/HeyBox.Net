@@ -1,10 +1,10 @@
 namespace HeyBox.Interactions.Builders;
 
 /// <summary>
-///     Represents the base builder class for creating <see cref="IParameterInfo"/>.
+///     表示用于创建 <see cref="IParameterInfo"/> 的基础生成器类。
 /// </summary>
-/// <typeparam name="TInfo">The <see cref="IParameterInfo"/> this builder yields when built.</typeparam>
-/// <typeparam name="TBuilder">Inherited <see cref="ParameterBuilder{TInfo, TBuilder}"/> type.</typeparam>
+/// <typeparam name="TInfo"> 构建后生成的 <see cref="IParameterInfo"/> 类型。 </typeparam>
+/// <typeparam name="TBuilder"> 继承的 <see cref="ParameterBuilder{TInfo, TBuilder}"/> 类型。 </typeparam>
 public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     where TInfo : class, IParameterInfo
     where TBuilder : ParameterBuilder<TInfo, TBuilder>
@@ -37,7 +37,7 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     public IReadOnlyCollection<ParameterPreconditionAttribute> Preconditions => _preconditions;
 
     /// <summary>
-    ///     Gets the builder instance.
+    ///     获取生成器实例。
     /// </summary>
     protected abstract TBuilder Instance { get; }
 
@@ -50,11 +50,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Initializes a new instance of <see cref="ParameterBuilder{TInfo, TBuilder}"/>.
+    ///     初始化一个新的 <see cref="ParameterBuilder{TInfo, TBuilder}"/>。
     /// </summary>
-    /// <param name="command"> The command this parameter belongs to. </param>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="type"> The type of the parameter. </param>
+    /// <param name="command"> 此参数所属的命令。 </param>
+    /// <param name="name"> 参数名称。 </param>
+    /// <param name="type"> 参数类型。 </param>
     protected ParameterBuilder(ICommandBuilder command, string name, Type type) : this(command)
     {
         Name = name;
@@ -62,11 +62,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Sets <see cref="Name"/>.
+    ///     设置 <see cref="Name"/>。
     /// </summary>
-    /// <param name="name">New value of the <see cref="Name"/>.</param>
+    /// <param name="name"> <see cref="Name"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public virtual TBuilder WithName(string name)
     {
@@ -75,11 +75,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Sets <see cref="ParameterType"/>.
+    ///     设置 <see cref="ParameterType"/>。
     /// </summary>
-    /// <param name="type">New value of the <see cref="ParameterType"/>.</param>
+    /// <param name="type"> <see cref="ParameterType"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public virtual TBuilder SetParameterType(Type type)
     {
@@ -88,11 +88,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Sets <see cref="IsRequired"/>.
+    ///     设置 <see cref="IsRequired"/>。
     /// </summary>
-    /// <param name="isRequired">New value of the <see cref="IsRequired"/>.</param>
+    /// <param name="isRequired"> <see cref="IsRequired"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public virtual TBuilder SetRequired(bool isRequired)
     {
@@ -101,11 +101,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Sets <see cref="DefaultValue"/>.
+    ///     设置 <see cref="DefaultValue"/>。
     /// </summary>
-    /// <param name="defaultValue">New value of the <see cref="DefaultValue"/>.</param>
+    /// <param name="defaultValue"> <see cref="DefaultValue"/> 的新值。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public virtual TBuilder SetDefaultValue(object defaultValue)
     {
@@ -114,11 +114,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Adds attributes to <see cref="Attributes"/>
+    ///     向 <see cref="Attributes"/> 添加特性。
     /// </summary>
-    /// <param name="attributes">New attributes to be added to <see cref="Attributes"/>.</param>
+    /// <param name="attributes"> 要添加到 <see cref="Attributes"/> 的新特性。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public virtual TBuilder AddAttributes(params Attribute[] attributes)
     {
@@ -127,11 +127,11 @@ public abstract class ParameterBuilder<TInfo, TBuilder> : IParameterBuilder
     }
 
     /// <summary>
-    ///     Adds preconditions to <see cref="Preconditions"/>
+    ///     向 <see cref="Preconditions"/> 添加先决条件。
     /// </summary>
-    /// <param name="attributes">New attributes to be added to <see cref="Preconditions"/>.</param>
+    /// <param name="attributes"> 要添加到 <see cref="Preconditions"/> 的新先决条件。 </param>
     /// <returns>
-    ///     The builder instance.
+    ///     生成器实例。
     /// </returns>
     public virtual TBuilder AddPreconditions(params ParameterPreconditionAttribute[] attributes)
     {

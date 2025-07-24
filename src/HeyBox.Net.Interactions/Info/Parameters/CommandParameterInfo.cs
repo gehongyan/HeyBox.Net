@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 namespace HeyBox.Interactions;
 
 /// <summary>
-///     Represents the base parameter info class for <see cref="InteractionService"/> commands.
+///     表示 <see cref="InteractionService"/> 命令的基础参数信息类。
 /// </summary>
 public class CommandParameterInfo : IParameterInfo
 {
