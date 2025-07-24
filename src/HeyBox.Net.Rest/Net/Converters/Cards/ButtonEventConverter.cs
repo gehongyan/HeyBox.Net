@@ -12,7 +12,9 @@ internal class ButtonEventConverter : JsonConverter<ButtonEvent>
         {
             "link-to" => ButtonEvent.LinkTo,
             "server" => ButtonEvent.Server,
-            _ => throw new ArgumentOutOfRangeException(nameof(ButtonEvent))
+            "internal" => ButtonEvent.Internal,
+            "none" => ButtonEvent.None,
+            _ => throw new ArgumentOutOfRangeException(nameof(ButtonEvent), type, $"Unknown button event type: {type}")
         };
     }
 
@@ -21,6 +23,8 @@ internal class ButtonEventConverter : JsonConverter<ButtonEvent>
         {
             ButtonEvent.LinkTo => "link-to",
             ButtonEvent.Server => "server",
+            ButtonEvent.Internal => "internal",
+            ButtonEvent.None => "none",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
 }
