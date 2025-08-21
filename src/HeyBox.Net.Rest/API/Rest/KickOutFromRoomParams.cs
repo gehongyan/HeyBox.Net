@@ -9,5 +9,5 @@ internal class KickOutFromRoomParams
     public required ulong RoomId { get; init; }
 
     [JsonPropertyName("to_user_id")]
-    public required ulong ToUserId { get; set; }
+    public required uint ToUserId { get; set; }
 }

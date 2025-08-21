@@ -6,6 +6,11 @@
 public enum TokenType
 {
     /// <summary>
+    ///     OAuth 令牌。
+    /// </summary>
+    Bearer,
+
+    /// <summary>
     ///     机器人令牌。
     /// </summary>
     BotToken

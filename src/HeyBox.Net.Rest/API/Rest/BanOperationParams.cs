@@ -15,5 +15,5 @@ internal class BanOperationParams
     public required ulong RoomId { get; set; }
 
     [JsonPropertyName("to_user_id")]
-    public required ulong ToUserId { get; set; }
+    public required uint ToUserId { get; set; }
 }

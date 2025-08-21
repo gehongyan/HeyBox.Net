@@ -2,16 +2,17 @@
 
 namespace HeyBox.API.Rest;
 
-internal class MuteUserInChannelParams
+internal class UserPermissionOverwrite
 {
     [JsonPropertyName("to_user_id")]
+    [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
     public required uint ToUserId { get; set; }
 
-    [JsonPropertyName("channel_id")]
+    [JsonPropertyName("allow")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
-    public required ulong ChannelId { get; init; }
+    public required ulong Allow { get; set; }
 
-    [JsonPropertyName("room_id")]
+    [JsonPropertyName("deny")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
-    public required ulong RoomId { get; set; }
+    public required ulong Deny { get; set; }
 }

@@ -211,7 +211,7 @@ internal class HeyBoxSocketApiClient : HeyBoxRestApiClient
             WebSocketClient.SetCancellationToken(_connectCancellationToken.Token);
             if (AuthToken == null)
                 throw new InvalidOperationException("The client must be logged in before connecting.");
-            WebSocketClient.SetHeader("token", GetPrefixedToken(AuthTokenType, AuthToken));
+            WebSocketClient.SetHeader(GetTokenHeader(AuthTokenType), GetPrefixedToken(AuthTokenType, AuthToken));
 
             if (!_isExplicitUrl || _gatewayUrl == null)
                 _gatewayUrl = $"{HeyBoxSocketConfig.DefaultGatewayUrl}?{HeyBoxConfig.CommonQueryString}";

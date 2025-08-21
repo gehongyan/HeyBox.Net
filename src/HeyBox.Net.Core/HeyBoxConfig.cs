@@ -78,6 +78,11 @@ public class HeyBoxConfig
     public const int MaxRoomUsersPerBatchByDefault = 300;
 
     /// <summary>
+    ///     获取黑盒语音在获取用户在房间内的语音时长时可以指定的最大查询时间跨度。
+    /// </summary>
+    public static readonly TimeSpan MaxUserVoiceQueryTimeSpan = TimeSpan.FromDays(30);
+
+    /// <summary>
     ///     获取或设置请求在出现错误时的默认行为。
     /// </summary>
     /// <seealso cref="HeyBox.RequestOptions.RetryMode"/>

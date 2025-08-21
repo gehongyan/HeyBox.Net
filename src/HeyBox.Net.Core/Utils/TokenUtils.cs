@@ -189,9 +189,11 @@ public static class TokenUtils
 
         switch (tokenType)
         {
+            case TokenType.Bearer:
+            // no validation is performed on Bearer tokens
             case TokenType.BotToken:
                 // bot tokens are assumed to be at least 64 characters in length
-                // this value was determined by referencing examples in the黑盒语音documentation, and by comparing with
+                // this value was determined by referencing examples in the HeyBoxChat documentation, and by comparing with
                 // pre-existing tokens
                 if (token.Length < MinBotTokenLength || token.TrimEnd('=').Length > StandardBotTokenLength)
                     throw new ArgumentException(

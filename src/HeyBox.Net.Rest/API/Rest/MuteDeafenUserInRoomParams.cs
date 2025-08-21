@@ -5,7 +5,7 @@ namespace HeyBox.API.Rest;
 internal class MuteDeafenUserInRoomParams
 {
     [JsonPropertyName("to_user_id")]
-    public required ulong ToUserId { get; set; }
+    public required uint ToUserId { get; set; }
 
     [JsonPropertyName("mute")]
     public required bool Mute { get; set; }
