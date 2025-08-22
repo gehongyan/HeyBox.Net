@@ -400,13 +400,13 @@ internal class HeyBoxRestApiClient : IDisposable
             fromOffset, limit, x => x.Rooms, x => x.Rooms, ids, options: options);
     }
 
-    public async Task<ExtendedRoom> GetRoomAsync(ulong roomId, RequestOptions? options = null)
+    public async Task<GetRoomResponse> GetRoomAsync(ulong roomId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(roomId, 0, nameof(roomId));
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(roomId);
-        return await SendAsync<ExtendedRoom>(HttpMethod.Get,
+        return await SendAsync<GetRoomResponse>(HttpMethod.Get,
                 () => $"chatroom/v2/room/view?room_id={roomId}&{HeyBoxConfig.CommonQueryString}",
                 ids, options: options)
             .ConfigureAwait(false);
@@ -626,8 +626,11 @@ internal class HeyBoxRestApiClient : IDisposable
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.RoomId, 0, nameof(args.RoomId));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
-        foreach (ChannelType channelType in args.Roles.Select(x => x.ChannelType))
-            Preconditions.NotEqual(channelType, ChannelType.Unspecified, nameof(RolePermissionOverwrite.ChannelType));
+        foreach (RolePermissionOverwriteParams role in args.Roles)
+        {
+            Preconditions.NotEqual(role.RoleId, 0, nameof(role.RoleId));
+            Preconditions.NotEqual(role.ChannelType, ChannelType.Unspecified, nameof(role.ChannelType));
+        }
         foreach (uint toUserId in args.Users.Select(x => x.ToUserId))
             Preconditions.NotEqual(toUserId, 0, nameof(UserPermissionOverwrite.ToUserId));
 
@@ -924,7 +927,7 @@ internal class HeyBoxRestApiClient : IDisposable
     }
 
     public async Task<IReadOnlyCollection<GetVoiceDurationItem>> GetVoiceDurationsAsync(ulong roomId,
-        DateTimeOffset? from = null, DateTimeOffset? to = null, string? appId = null,
+        DateTimeOffset? from = null, DateTimeOffset? to = null, int? appId = null,
         RequestOptions? options = null)
     {
         Preconditions.NotEqual(roomId, 0, nameof(roomId));
@@ -958,7 +961,7 @@ internal class HeyBoxRestApiClient : IDisposable
         long toTimestamp = toTime.ToUnixTimeSeconds();
 
         BucketIds ids = new(roomId);
-        string appIdQuery = appId is null ? string.Empty : $"&app_id={Uri.EscapeDataString(appId)}";
+        string appIdQuery = appId.HasValue ? $"&appid={appId.Value}" : string.Empty;
         GetVoiceDurationsResponse response = await SendAsync<GetVoiceDurationsResponse>(HttpMethod.Get,
                 () => $"chatroom/api/duration/chat?room_id={roomId}&begin_time={fromTimestamp}&end_time={toTimestamp}{appIdQuery}",
                 ids, options: options)

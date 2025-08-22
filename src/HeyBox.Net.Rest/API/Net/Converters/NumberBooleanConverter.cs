@@ -13,46 +13,40 @@ internal class NumberBooleanConverter : JsonConverter<bool>
         Format = format;
     }
 
-    public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        switch (Format)
+    public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        Format switch
         {
-            case BooleanFormat.Auto:
-                return reader.TokenType switch
-                {
-                    JsonTokenType.True => true,
-                    JsonTokenType.False => false,
-                    JsonTokenType.Number => reader.TryGetInt32(out int value) && value == 1,
-                    JsonTokenType.String => reader.GetString() == "1",
-                    _ => throw new JsonException(
-                        $"{nameof(NumberBooleanConverter)} expects boolean, string or number token, but got {reader.TokenType}")
-                };
-            case BooleanFormat.Boolean:
-                return reader.TokenType switch
-                {
-                    JsonTokenType.True => true,
-                    JsonTokenType.False => false,
-                    _ => throw new JsonException(
-                        $"{nameof(NumberBooleanConverter)} expects boolean token, but got {reader.TokenType}")
-                };
-            case BooleanFormat.Number:
-                return reader.TokenType switch
-                {
-                    JsonTokenType.Number => reader.TryGetInt32(out int value) && value == 1,
-                    _ => throw new JsonException(
-                        $"{nameof(NumberBooleanConverter)} expects number token, but got {reader.TokenType}")
-                };
-            case BooleanFormat.String:
-                return reader.TokenType switch
-                {
-                    JsonTokenType.String => reader.GetString() == "1",
-                    _ => throw new JsonException(
-                        $"{nameof(NumberBooleanConverter)} expects string token, but got {reader.TokenType}")
-                };
-            default:
-                throw new JsonException($"Unknown {nameof(BooleanFormat)}: {Format}");
-        }
-    }
+            BooleanFormat.Auto => reader.TokenType switch
+            {
+                JsonTokenType.True => true,
+                JsonTokenType.False or JsonTokenType.Null => false,
+                JsonTokenType.Number => reader.TryGetInt32(out int value) && value == 1,
+                JsonTokenType.String => reader.GetString() == "1",
+                _ => throw new JsonException(
+                    $"{nameof(NumberBooleanConverter)} expects boolean, string or number token, but got {reader.TokenType}")
+            },
+            BooleanFormat.Boolean => reader.TokenType switch
+            {
+                JsonTokenType.True => true,
+                JsonTokenType.False or JsonTokenType.Null => false,
+                _ => throw new JsonException(
+                    $"{nameof(NumberBooleanConverter)} expects boolean token, but got {reader.TokenType}")
+            },
+            BooleanFormat.Number => reader.TokenType switch
+            {
+                JsonTokenType.Number => reader.TryGetInt32(out int value) && value == 1,
+                JsonTokenType.Null => false,
+                _ => throw new JsonException(
+                    $"{nameof(NumberBooleanConverter)} expects number token, but got {reader.TokenType}")
+            },
+            BooleanFormat.String => reader.TokenType switch
+            {
+                JsonTokenType.String => reader.GetString() == "1",
+                _ => throw new JsonException(
+                    $"{nameof(NumberBooleanConverter)} expects string token, but got {reader.TokenType}")
+            },
+            _ => throw new JsonException($"Unknown {nameof(BooleanFormat)}: {Format}")
+        };
 
     public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
     {

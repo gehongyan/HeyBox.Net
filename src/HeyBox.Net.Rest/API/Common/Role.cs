@@ -12,7 +12,7 @@ internal class Role
     public required string Icon { get; set; }
 
     [JsonPropertyName("color_list")]
-    [JsonConverter(typeof(GradientColorConverter))]
+    [JsonConverter(typeof(RoleGradientColorConverter))]
     public GradientColor? GradientColor { get; set; }
 
     [JsonPropertyName("id")]
@@ -28,7 +28,7 @@ internal class Role
     public RoleType Type { get; set; }
 
     [JsonPropertyName("color")]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(NumberColorJsonConverter))]
     public Color Color { get; set; }
 
     [JsonPropertyName("position")]

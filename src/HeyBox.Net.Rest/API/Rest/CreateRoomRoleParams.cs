@@ -12,7 +12,7 @@ internal class CreateRoomRoleParams
     public string? Icon { get; init; }
 
     [JsonPropertyName("color_list")]
-    [JsonConverter(typeof(GradientColorConverter))]
+    [JsonConverter(typeof(RoleGradientColorConverter))]
     public GradientColor? ColorList { get; init; }
 
     [JsonPropertyName("room_id")]
@@ -27,7 +27,7 @@ internal class CreateRoomRoleParams
     public required RoleType Type { get; init; }
 
     [JsonPropertyName("color")]
-    [JsonConverter(typeof(NullableColorConverter))]
+    [JsonConverter(typeof(NullableNumberColorJsonConverter))]
     public Color? Color { get; init; }
 
     [JsonPropertyName("hoist")]

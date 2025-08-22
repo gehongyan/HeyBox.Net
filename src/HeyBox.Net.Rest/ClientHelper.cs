@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using HeyBox.API;
+using HeyBox.API.Rest;
 
 namespace HeyBox.Rest;
 
@@ -7,6 +8,7 @@ internal static class ClientHelper
 {
     public static async Task<Room?> GetRoomAsync(HeyBoxRestClient client, ulong id, RequestOptions? options)
     {
+        GetRoomResponse response = await client.ApiClient.GetRoomAsync(id, options);
         await foreach (IReadOnlyCollection<Room> models in client.ApiClient.GetJoinedRoomsAsync(options: options).ConfigureAwait(false))
         {
             if (models.Count == 0)

@@ -5,8 +5,8 @@ namespace HeyBox.API;
 internal class AvatarDecoration
 {
     [JsonPropertyName("src_type")]
-    public required string SourceType { get; set; }
+    public required string SrcType { get; set; }
 
     [JsonPropertyName("src_url")]
-    public required string SourceUrl { get; set; }
+    public required string SrcUrl { get; set; }
 }

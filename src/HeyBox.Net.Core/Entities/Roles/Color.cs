@@ -389,7 +389,7 @@ public readonly struct Color
         if (rawValue.StartsWith("0x"))
             rawValue = rawValue.Substring(2);
 
-        if (!uint.TryParse(rawValue, System.Globalization.NumberStyles.HexNumber, null, out var parsedValue))
+        if (!uint.TryParse(rawValue, System.Globalization.NumberStyles.HexNumber, null, out uint parsedValue))
             return false;
 
         uint r;

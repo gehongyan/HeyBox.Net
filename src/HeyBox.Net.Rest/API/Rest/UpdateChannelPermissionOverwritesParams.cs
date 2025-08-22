@@ -13,7 +13,7 @@ internal class UpdateChannelPermissionOverwritesParams
     public required ulong ChannelId { get; set; }
 
     [JsonPropertyName("roles")]
-    public required RolePermissionOverwrite[] Roles { get; set; }
+    public required RolePermissionOverwriteParams[] Roles { get; set; }
 
     [JsonPropertyName("users")]
     public required UserPermissionOverwrite[] Users { get; set; }

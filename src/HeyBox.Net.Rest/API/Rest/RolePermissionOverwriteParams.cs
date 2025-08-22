@@ -2,7 +2,7 @@
 
 namespace HeyBox.API.Rest;
 
-internal class RolePermissionOverwrite
+internal class RolePermissionOverwriteParams
 {
     [JsonPropertyName("role_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]

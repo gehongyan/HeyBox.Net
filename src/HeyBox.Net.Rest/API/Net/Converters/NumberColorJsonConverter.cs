@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace HeyBox.Net.Converters;
 
-internal class ColorConverter : JsonConverter<Color>
+internal class NumberColorJsonConverter : JsonConverter<Color>
 {
     public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         new(reader.GetUInt32());
@@ -12,7 +12,7 @@ internal class ColorConverter : JsonConverter<Color>
         writer.WriteNumberValue(value.RawValue);
 }
 
-internal class NullableColorConverter : JsonConverter<Color?>
+internal class NullableNumberColorJsonConverter : JsonConverter<Color?>
 {
     public override Color? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         reader.TokenType == JsonTokenType.Null ? null : new Color(reader.GetUInt32());

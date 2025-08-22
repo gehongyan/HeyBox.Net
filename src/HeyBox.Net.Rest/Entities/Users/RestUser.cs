@@ -42,8 +42,8 @@ public class RestUser : RestEntity<uint>, IUser
         Username = model.Nickname;
         IsBot = model.Bot;
         Avatar = model.Avatar;
-        AvatarDecorationType = model.AvatarDecoration?.SourceType;
-        AvatarDecorationUrl = model.AvatarDecoration?.SourceUrl;
+        AvatarDecorationType = model.AvatarDecoration?.SrcType;
+        AvatarDecorationUrl = model.AvatarDecoration?.SrcUrl;
         Level = model.Level;
 
         IsPopulated = true;
