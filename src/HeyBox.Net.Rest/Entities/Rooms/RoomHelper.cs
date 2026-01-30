@@ -7,7 +7,7 @@ internal class RoomHelper
     public static async Task UpdateAsync(RestRoom room, BaseHeyBoxClient client, RequestOptions? options)
     {
         GetRoomRolesResponse roles = await client.ApiClient.GetRoomRolesAsync(room.Id, options);
-        room.Update(roles);
+        room.Update(roles.Roles);
     }
 
     public static Task<RestRoomChannel> GetChannelAsync(IRoom room, BaseHeyBoxClient client,

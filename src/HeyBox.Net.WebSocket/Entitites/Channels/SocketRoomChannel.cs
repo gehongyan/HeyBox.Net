@@ -10,7 +10,7 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
     public SocketRoom Room { get; }
 
     /// <inheritdoc />
-    public string? Name { get; private set; }
+    public string Name { get; private set; }
 
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }

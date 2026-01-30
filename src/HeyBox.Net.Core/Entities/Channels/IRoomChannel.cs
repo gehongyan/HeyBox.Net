@@ -19,4 +19,14 @@ public interface IRoomChannel : IChannel
     ///     获取此频道的类型。
     /// </summary>
     ChannelType Type { get; }
+
+    /// <summary>
+    ///     获取创建此频道的用户的 ID。
+    /// </summary>
+    ulong? CreatorId { get; }
+
+    /// <summary>
+    ///     获取此频道的角色的所有权限重写配置。
+    /// </summary>
+    IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
 }

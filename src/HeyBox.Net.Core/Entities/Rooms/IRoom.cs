@@ -47,7 +47,7 @@ public interface IRoom : IEntity<ulong>
     /// <summary>
     ///     获取加入到此房间的时间。
     /// </summary>
-    DateTimeOffset JoinedAt { get; }
+    DateTimeOffset? JoinedAt { get; }
 
     /// <summary>
     ///     获取此房间内指定的频道。
@@ -91,6 +91,14 @@ public interface IRoom : IEntity<ulong>
     IRole? GetRole(ulong id);
 
     /// <summary>
+    ///     获取此房间的所有角色。
+    /// </summary>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此房间的所有角色。 </returns>
+    Task<IReadOnlyCollection<IRole>> GetRolesAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    /// <summary>
     ///     在此房间内创建一个新角色。
     /// </summary>
     /// <remarks>
@@ -113,9 +121,10 @@ public interface IRoom : IEntity<ulong>
     /// <summary>
     ///     获取此房间的所有自定义小表情。
     /// </summary>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含此房间的所有自定义小表情。 </returns>
-    Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null);
+    Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     获取此房间的指定自定义小表情。
@@ -154,9 +163,10 @@ public interface IRoom : IEntity<ulong>
     /// <summary>
     ///     获取此房间的所有自定义大表情。
     /// </summary>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含此房间的所有自定义大表情。 </returns>
-    Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null);
+    Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     获取此房间的指定自定义大表情。

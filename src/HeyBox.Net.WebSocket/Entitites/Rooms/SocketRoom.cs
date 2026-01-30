@@ -43,7 +43,7 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     public bool IsHot { get; private set; }
 
     /// <inheritdoc />
-    public DateTimeOffset JoinedAt { get; private set; }
+    public DateTimeOffset? JoinedAt { get; private set; }
 
     /// <summary>
     ///     获取此房间内已缓存的成员数量。
@@ -230,6 +230,13 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     /// <inheritdoc cref="HeyBox.IRoom.GetRole(System.UInt64)" />
     public SocketRole? GetRole(ulong id) => _roles.GetValueOrDefault(id);
 
+    /// <inheritdoc cref="HeyBox.IRoom.GetRolesAsync(HeyBox.CacheMode,HeyBox.RequestOptions)" />
+    public async Task<IReadOnlyCollection<RestRole>> GetRolesAsync(RequestOptions? options = null)
+    {
+        GetRoomRolesResponse model = await Client.ApiClient.GetRoomRolesAsync(Id, options);
+        return [..model.Roles.Select(x => RestRole.Create(Client, this, x))];
+    }
+
     /// <inheritdoc cref="HeyBox.IRoom.CreateRoleAsync(System.Action{RoleProperties},HeyBox.RequestOptions)" />
     public async Task<SocketRole> CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options = null)
     {
@@ -328,8 +335,10 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     #region Emotes
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
     {
+        if (mode is not CacheMode.AllowDownload)
+            return Emotes;
         GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
         Update(Client.State, model);
         return _emotes.ToReadOnlyCollection();
@@ -352,8 +361,10 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         RoomHelper.DeleteMemeAsync(this, Client, emote, options);
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
     {
+        if (mode is not CacheMode.AllowDownload)
+            return [];
         GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
         Update(Client.State, model);
         return _stickers.ToReadOnlyCollection();
@@ -395,6 +406,10 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
 
     /// <inheritdoc />
     IRole? IRoom.GetRole(ulong id) => GetRole(id);
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IRole>> IRoom.GetRolesAsync(CacheMode mode, RequestOptions? options) =>
+        mode == CacheMode.AllowDownload ? await GetRolesAsync(options).ConfigureAwait(false) : Roles;
 
     /// <inheritdoc />
     async Task<IRole> IRoom.CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options) =>

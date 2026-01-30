@@ -8,7 +8,7 @@ public interface IChannel : IEntity<ulong>
     /// <summary>
     ///     获取此频道的名称。
     /// </summary>
-    string? Name { get; }
+    string Name { get; }
 
     /// <summary>
     ///     获取此频道中的用户。

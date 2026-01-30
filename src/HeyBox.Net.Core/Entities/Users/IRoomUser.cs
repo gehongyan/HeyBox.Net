@@ -48,6 +48,14 @@ public interface IRoomUser : IUser
     /// <returns> 一个表示此用户在指定频道内所拥有的频道权限的权限集。 </returns>
     ChannelPermissions GetPermissions(IRoomChannel channel);
 
+    /// <summary>
+    ///     修改此用户在该房间内的昵称。
+    /// </summary>
+    /// <param name="name"> 要设置到此用户在该房间内的新昵称。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
+    Task ModifyNicknameAsync(string name, RequestOptions? options = null);
+
     #region Roles
 
     /// <summary>

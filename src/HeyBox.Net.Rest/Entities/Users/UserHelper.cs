@@ -4,6 +4,19 @@ namespace HeyBox.Rest;
 
 internal static class UserHelper
 {
+    public static async Task<string?> ModifyNicknameAsync(IRoomUser user, BaseHeyBoxClient client,
+        string nickname, RequestOptions? options)
+    {
+        ModifyRoomMemberNicknameParams args = new()
+        {
+            RoomId = user.RoomId,
+            Nickname = nickname,
+            ToUserId = user.Id
+        };
+        await client.ApiClient.ModifyGuildMemberNicknameAsync(args, options).ConfigureAwait(false);
+        return nickname;
+    }
+
     public static async Task AddRolesAsync(RestRoomUser user, BaseHeyBoxClient client,
         IEnumerable<ulong> roleIds, RequestOptions? options)
     {

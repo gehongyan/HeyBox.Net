@@ -86,11 +86,10 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
     /// </summary>
     /// <param name="id"> 房间的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间。若指定 ID 的房间不存在，则为 <c>null</c>。 </returns>
-    public async Task<RestRoom?> GetRoomAsync(ulong id, RequestOptions? options = null)
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的房间。 </returns>
+    public async Task<RestRoom> GetRoomAsync(ulong id, RequestOptions? options = null)
     {
-        Room? model = await ClientHelper.GetRoomAsync(this, id, options);
-        if (model == null) return null;
+        RoomInfo model = await ClientHelper.GetRoomAsync(this, id, options);
         return RestRoom.Create(this, model);
     }
 
@@ -157,7 +156,7 @@ public class HeyBoxRestClient : BaseHeyBoxClient, IHeyBoxClient
     {
         if (mode == CacheMode.AllowDownload)
             return await GetRoomsAsync(options).ConfigureAwait(false);
-        return ImmutableArray.Create<IRoom>();
+        return [];
     }
 
     /// <inheritdoc />

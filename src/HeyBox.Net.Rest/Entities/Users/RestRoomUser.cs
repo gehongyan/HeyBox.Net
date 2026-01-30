@@ -89,4 +89,11 @@ public class RestRoomUser : RestUser, IRoomUser
         RoomPermissions roomPerms = RoomPermissions;
         return new ChannelPermissions(Permissions.ResolveChannel(Room, this, channel, roomPerms.RawValue));
     }
+
+    /// <inheritdoc />
+    public async Task ModifyNicknameAsync(string name, RequestOptions? options = null)
+    {
+        string? nickname = await UserHelper.ModifyNicknameAsync(this, Client, name, options);
+        Nickname = nickname;
+    }
 }

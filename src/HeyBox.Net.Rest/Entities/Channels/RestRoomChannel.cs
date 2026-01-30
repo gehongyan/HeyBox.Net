@@ -24,7 +24,7 @@ public class RestRoomChannel : RestChannel, IRoomChannel
     #region IRoomChannel
 
     /// <inheritdoc />
-    string? IChannel.Name => null;
+    string IChannel.Name => null;
 
     /// <inheritdoc />
     IRoom IRoomChannel.Room => Room;

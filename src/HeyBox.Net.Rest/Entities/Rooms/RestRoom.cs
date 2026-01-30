@@ -3,6 +3,7 @@ using System.Diagnostics;
 using HeyBox.API;
 using HeyBox.API.Rest;
 using Model = HeyBox.API.Room;
+using RichModel = HeyBox.API.RoomInfo;
 using RoleModel = HeyBox.API.Role;
 
 namespace HeyBox.Rest;
@@ -37,7 +38,7 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     public bool IsHot { get; private set; }
 
     /// <inheritdoc />
-    public DateTimeOffset JoinedAt { get; private set; }
+    public DateTimeOffset? JoinedAt { get; private set; }
 
     /// <inheritdoc cref="HeyBox.IRoom.Roles" />
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
@@ -62,6 +63,13 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
         return entity;
     }
 
+    internal static RestRoom Create(BaseHeyBoxClient client, RichModel model)
+    {
+        RestRoom entity = new(client, model.RoomId);
+        entity.Update(model);
+        return entity;
+    }
+
     internal void Update(Model model)
     {
         Name = model.RoomName;
@@ -74,11 +82,25 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
         JoinedAt = model.JoinTime;
     }
 
-    internal void Update(GetRoomRolesResponse model)
+    internal void Update(RichModel model)
+    {
+        Name = model.Room.RoomName;
+        Icon = model.Room.RoomAvatar;
+        CreatorId = model.Room.CreateBy;
+        Banner = model.Room.RoomPic;
+        IsPublic = model.Room.IsPublic;
+        PublicId = model.Room.IsPublic ? uint.Parse(model.Room.PublicId) : null;
+        IsHot = model.Room.IsHot;
+        JoinedAt = model.BotInfos.FirstOrDefault(x => x.BotAccountInfo.UserId == Client.CurrentUser?.Id)?.JoinedTime;
+        Update(model.Roles);
+        // TODO
+    }
+
+    internal void Update(IEnumerable<RoleModel> model)
     {
         ImmutableDictionary<ulong, RestRole>.Builder roles =
             ImmutableDictionary.CreateBuilder<ulong, RestRole>();
-        foreach (RoleModel roleModel in model.Roles)
+        foreach (RoleModel roleModel in model)
             roles[roleModel.Id] = RestRole.Create(Client, this, roleModel);
         _roles = roles.ToImmutable();
     }
@@ -117,6 +139,13 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 
     #region Roles
 
+    /// <inheritdoc cref="HeyBox.IRoom.GetRolesAsync(HeyBox.CacheMode,HeyBox.RequestOptions)" />
+    public async Task<IReadOnlyCollection<RestRole>> GetRolesAsync(RequestOptions? options = null)
+    {
+        GetRoomRolesResponse model = await Client.ApiClient.GetRoomRolesAsync(Id, options);
+        return [..model.Roles.Select(x => RestRole.Create(Client, this, x))];
+    }
+
     /// <inheritdoc cref="HeyBox.IRoom.CreateRoleAsync(System.Action{RoleProperties},HeyBox.RequestOptions)" />
     public async Task<RestRole> CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options = null)
     {
@@ -131,8 +160,10 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
     #region Emotes
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<RoomEmote>> GetEmotesAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
     {
+        if (mode is not CacheMode.AllowDownload)
+            return [];
         GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
         return
         [
@@ -165,8 +196,11 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
         RoomHelper.DeleteMemeAsync(this, Client, emote, options);
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<RoomSticker>> GetStickersAsync(
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
     {
+        if (mode is not CacheMode.AllowDownload)
+            return [];
         GetRoomMemesResponse model = await Client.ApiClient.GetRoomMemesAsync(Id, options);
         return
         [
@@ -221,6 +255,10 @@ public class RestRoom : RestEntity<ulong>, IRoom, IUpdateable
 
     /// <inheritdoc />
     IReadOnlyCollection<RoomSticker> IRoom.Stickers => [];
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IRole>> IRoom.GetRolesAsync(CacheMode mode, RequestOptions? options) =>
+        mode == CacheMode.AllowDownload ? await GetRolesAsync(options).ConfigureAwait(false) : Roles;
 
     /// <inheritdoc />
     async Task<IRole> IRoom.CreateRoleAsync(Action<RoleProperties> func, RequestOptions? options) =>
