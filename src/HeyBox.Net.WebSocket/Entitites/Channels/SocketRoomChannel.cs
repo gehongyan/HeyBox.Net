@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+
 namespace HeyBox.WebSocket;
 using Model = API.Gateway.ChannelBaseInfo;
 
@@ -6,6 +8,8 @@ using Model = API.Gateway.ChannelBaseInfo;
 /// </summary>
 public class SocketRoomChannel : SocketChannel, IRoomChannel
 {
+    private ImmutableArray<RolePermissionOverwrite> _rolePermissionOverwrites;
+
     /// <inheritdoc cref="HeyBox.IRoomChannel.Room" />
     public SocketRoom Room { get; }
 
@@ -15,10 +19,18 @@ public class SocketRoomChannel : SocketChannel, IRoomChannel
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
 
+    /// <inheritdoc />
+    public ulong? CreatorId { get; internal set; }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => _rolePermissionOverwrites;
+
     internal SocketRoomChannel(HeyBoxSocketClient client, ulong id, SocketRoom room)
         : base(client, id)
     {
         Room = room;
+        Name = string.Empty;
+        _rolePermissionOverwrites = [];
     }
 
     internal static SocketRoomChannel Create(SocketRoom room, ulong id, ChannelType type) =>

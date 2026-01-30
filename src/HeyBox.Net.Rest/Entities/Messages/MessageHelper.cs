@@ -170,7 +170,7 @@ internal class MessageHelper
         return i;
     }
 
-    public static async Task ModifyAsync(RestUserMessage message,
+    public static async Task ModifyAsync(IUserMessage message,
         Action<MessageProperties> func, BaseHeyBoxClient client, RequestOptions? options)
     {
         if (message.Channel is not IRoomChannel roomChannel)
@@ -179,7 +179,7 @@ internal class MessageHelper
         {
             Content = message.Content,
             Reference = message.Reference,
-            ImageFileInfos = message.ImageFileInfos is not null ? [..message.ImageFileInfos] : null
+            ImageFileInfos = message is RestUserMessage { ImageFileInfos: { } imageFileInfos } ? [..imageFileInfos] : null
         };
         func(properties);
         ImmutableArray<ITag> tags = ParseTags(properties.Content, message.Channel, roomChannel.Room, []);

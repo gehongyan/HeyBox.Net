@@ -9,13 +9,29 @@ using Model = API.Gateway.ChannelBaseInfo;
 /// </summary>
 public class SocketTextChannel : SocketRoomChannel, ITextChannel, ISocketMessageChannel
 {
+    private readonly MessageCache? _messages;
+
+    /// <inheritdoc />
+    public bool IsPrivate { get; private set; }
+
+    /// <inheritdoc />
+    public ulong? CategoryId { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsPermissionSynced { get; private set; }
+
     /// <inheritdoc />
     public string Mention => MentionUtils.MentionChannel(Id);
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> CachedMessages => _messages?.Messages ?? [];
 
     internal SocketTextChannel(HeyBoxSocketClient client, ulong id, SocketRoom room)
         : base(client, id, room)
     {
         Type = ChannelType.Text;
+        if (Client.MessageCacheSize > 0)
+            _messages = new MessageCache(Client);
     }
 
     internal static new SocketTextChannel Create(SocketRoom room, ClientState state, Model model)
@@ -24,6 +40,32 @@ public class SocketTextChannel : SocketRoomChannel, ITextChannel, ISocketMessage
         entity.Update(state, model);
         return entity;
     }
+
+    internal void AddMessage(SocketMessage msg) => _messages?.Add(msg);
+
+    internal SocketMessage? RemoveMessage(ulong id) => _messages?.Remove(id);
+
+    #region Messages
+
+    /// <inheritdoc />
+    public SocketMessage? GetCachedMessage(ulong id) => _messages?.Get(id);
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = HeyBoxConfig.MaxMessagesPerBatch) =>
+        SocketChannelHelper.GetCachedMessages(this, Client, _messages, null, Direction.Before, limit);
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(ulong referenceMessageId,
+        Direction dir, int limit = HeyBoxConfig.MaxMessagesPerBatch) =>
+        SocketChannelHelper.GetCachedMessages(this, Client, _messages, referenceMessageId, dir, limit);
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage referenceMessage,
+        Direction dir, int limit = HeyBoxConfig.MaxMessagesPerBatch) =>
+        SocketChannelHelper.GetCachedMessages(this, Client, _messages, referenceMessage.Id, dir, limit);
+
+
+    #endregion
 
     #region Users
 

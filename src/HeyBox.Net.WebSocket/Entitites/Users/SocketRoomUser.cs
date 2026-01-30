@@ -93,6 +93,13 @@ public class SocketRoomUser : SocketUser, IRoomUser
         return entity;
     }
 
+    internal static SocketRoomUser Create(SocketRoom room, ClientState state, API.Gateway.MessageUserInfo model)
+    {
+        SocketRoomUser entity = new(room, room.Client.GetOrCreateUser(state, model.UserBaseInfo.UserId));
+        entity.Update(state, model);
+        return entity;
+    }
+
     /// <inheritdoc />
     internal override void Update(ClientState state, API.RoomUser model)
     {
@@ -100,6 +107,17 @@ public class SocketRoomUser : SocketUser, IRoomUser
         Nickname = string.IsNullOrEmpty(model.RoomNickname) ? null : model.RoomNickname;
         if (model.Roles is not null)
             _roleIds = [..model.Roles];
+    }
+
+    internal void Update(ClientState state, API.Gateway.MessageUserInfo model)
+    {
+        Username = model.UserBaseInfo.Nickname;
+        Avatar = model.UserBaseInfo.Avatar;
+        Level = model.UserBaseInfo.Level;
+        if (model.UserBaseInfo.Roles is not null)
+            _roleIds = [..model.UserBaseInfo.Roles];
+
+        IsPopulated = true;
     }
 
     internal void AddRole(ulong roleId)

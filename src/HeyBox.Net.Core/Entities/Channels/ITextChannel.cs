@@ -25,8 +25,6 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel
     ///     获取此频道是否已被密码锁定。
     /// </summary>
     bool HasPassword { get; }
-
-
 }
 
 

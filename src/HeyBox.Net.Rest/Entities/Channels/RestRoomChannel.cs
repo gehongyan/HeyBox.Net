@@ -14,6 +14,12 @@ public class RestRoomChannel : RestChannel, IRoomChannel
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
 
+    /// <inheritdoc />
+    public ulong? CreatorId { get; internal set; }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => [];
+
     internal RestRoomChannel(BaseHeyBoxClient heyBox, IRoom room, ulong id)
         : base(heyBox, id)
     {
@@ -24,7 +30,7 @@ public class RestRoomChannel : RestChannel, IRoomChannel
     #region IRoomChannel
 
     /// <inheritdoc />
-    string IChannel.Name => null;
+    string IChannel.Name => string.Empty;
 
     /// <inheritdoc />
     IRoom IRoomChannel.Room => Room;

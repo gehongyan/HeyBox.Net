@@ -47,6 +47,11 @@ public interface IMessage : IEntity<ulong>
     string CleanContent { get; }
 
     /// <summary>
+    ///     获取此消息的发送时间。
+    /// </summary>
+    DateTimeOffset Timestamp { get; }
+
+    /// <summary>
     ///     获取此消息的引用信息。
     /// </summary>
     IMessageReference? Reference { get; }

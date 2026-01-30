@@ -10,6 +10,15 @@ public class RestTextChannel : RestRoomChannel, IRestMessageChannel, ITextChanne
     #region RestTextChannel
 
     /// <inheritdoc />
+    public bool IsPrivate { get; private set; }
+
+    /// <inheritdoc />
+    public ulong? CategoryId { get; private set; }
+
+    /// <inheritdoc />
+    public bool IsPermissionSynced { get; private set; }
+
+    /// <inheritdoc />
     public string Mention => MentionUtils.MentionChannel(Id);
 
     internal RestTextChannel(BaseHeyBoxClient client, IRoom room, ulong id)

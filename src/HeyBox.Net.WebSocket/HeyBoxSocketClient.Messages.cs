@@ -156,6 +156,29 @@ public partial class HeyBoxSocketClient
 
     #endregion
 
+    #region Messages
+
+    private async Task HandleMessageReceived(JsonElement payload)
+    {
+        if (DeserializePayload<MessageEvent>(payload) is not { } messageEvent) return;
+        if (GetRoom(messageEvent.RoomId) is not { } room)
+        {
+            await UnknownGuildAsync("5", messageEvent.RoomId, payload).ConfigureAwait(false);
+            return;
+        }
+        if (room.GetTextChannel(messageEvent.ChannelId) is not { } channel)
+        {
+            await UnknownChannelAsync("5", messageEvent.ChannelId, payload).ConfigureAwait(false);
+            return;
+        }
+        SocketRoomUser author = room.AddOrUpdateUser(messageEvent.UserInfo);
+        SocketUserMessage message = SocketUserMessage.Create(this, State, author, channel, messageEvent);
+        SocketChannelHelper.AddMessage(channel, this, message);
+        await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), message, author, channel).ConfigureAwait(false);
+    }
+
+    #endregion
+
     #region Room Members
 
     private async Task HandleJoinedLeftRoom(JsonElement payload)

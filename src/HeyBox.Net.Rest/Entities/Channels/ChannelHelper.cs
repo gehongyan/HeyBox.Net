@@ -149,7 +149,7 @@ internal static class ChannelHelper
     {
         if (client.CurrentUser is null)
             throw new InvalidOperationException("The client must have a current user.");
-        RestUserMessage message = RestUserMessage.Create(client, channel, client.CurrentUser, args, model);
+        RestUserMessage message = RestUserMessage.Create(client, channel, client.CurrentUser, DateTimeOffset.Now, args, model);
         message.Update(imageFileInfos);
         return message;
     }
@@ -268,7 +268,7 @@ internal static class ChannelHelper
     {
         if (client.CurrentUser is null)
             throw new InvalidOperationException("The client must have a current user.");
-        RestUserMessage message = RestUserMessage.Create(client, channel, client.CurrentUser, args, model);
+        RestUserMessage message = RestUserMessage.Create(client, channel, client.CurrentUser, DateTimeOffset.Now, args, model);
         message.Update(imageFileInfos);
         return message;
     }

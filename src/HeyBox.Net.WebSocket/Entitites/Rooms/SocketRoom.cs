@@ -122,6 +122,17 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
         JoinedAt = model.JoinTime;
     }
 
+    internal void Update(ClientState state, API.ExtendedRoom model)
+    {
+        Name = model.RoomName;
+        Icon = model.RoomAvatar;
+        CreatorId = model.CreateBy;
+        Banner = model.RoomPic;
+        IsPublic = model.IsPublic;
+        PublicId = model.IsPublic ? uint.Parse(model.PublicId) : null;
+        IsHot = model.IsHot;
+    }
+
     internal void Update(ClientState state, GetRoomRolesResponse model)
     {
         _roles.Clear();
@@ -286,6 +297,20 @@ public class SocketRoom : SocketEntity<ulong>, IRoom, IUpdateable
     internal SocketRoomUser AddOrUpdateUser(API.RoomUser model)
     {
         if (_members.TryGetValue(model.UserId, out SocketRoomUser? cachedMember))
+        {
+            cachedMember.Update(Client.State, model);
+            return cachedMember;
+        }
+
+        SocketRoomUser member = SocketRoomUser.Create(this, Client.State, model);
+        member.GlobalUser.AddRef();
+        _members[member.Id] = member;
+        return member;
+    }
+
+    internal SocketRoomUser AddOrUpdateUser(API.Gateway.MessageUserInfo model)
+    {
+        if (_members.TryGetValue(model.UserBaseInfo.UserId, out SocketRoomUser? cachedMember))
         {
             cachedMember.Update(Client.State, model);
             return cachedMember;

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
 using HeyBox.Rest;
@@ -20,6 +21,14 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
 
     /// <inheritdoc cref="HeyBox.IDMChannel.Recipient" />
     public SocketUser Recipient { get; }
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="important">
+    ///         私聊消息频道不支持缓存消息，此属性将始终返回空集合。
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<SocketMessage> CachedMessages => ImmutableArray.Create<SocketMessage>();
 
     /// <summary>
     ///     获取参与到此私聊频道中的所有用户。
@@ -86,6 +95,50 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     public override string ToString() => $"@{Recipient}";
 
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";
+
+    internal void AddMessage(SocketMessage msg)
+    {
+    }
+
+    internal SocketMessage? RemoveMessage(Guid id) => null;
+
+    #region Messages
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="important">
+    ///         私聊消息频道不支持缓存消息，此方法将始终返回 <c>null</c>。
+    ///     </note>
+    /// </remarks>
+    public SocketMessage? GetCachedMessage(ulong id) => null;
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="important">
+    ///         私聊消息频道不支持缓存消息，此属性将始终返回空集合。
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = HeyBoxConfig.MaxMessagesPerBatch) => [];
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="important">
+    ///         私聊消息频道不支持缓存消息，此属性将始终返回空集合。
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(ulong referenceMessageId,
+        Direction dir, int limit = HeyBoxConfig.MaxMessagesPerBatch) => [];
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="important">
+    ///         私聊消息频道不支持缓存消息，此属性将始终返回空集合。
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage referenceMessage,
+        Direction dir, int limit = HeyBoxConfig.MaxMessagesPerBatch) => [];
+
+    #endregion
 
     #region IDMChannel
 

@@ -55,6 +55,11 @@ public class HeyBoxSocketConfig : HeyBoxRestConfig
     public int? HandlerTimeout { get; set; } = 3000;
 
     /// <summary>
+    ///     获取或设置应在缓存中保留的每个频道的消息数量。将此属性设置为零将完全禁用消息缓存。
+    /// </summary>
+    public int MessageCacheSize { get; set; } = 10;
+
+    /// <summary>
     ///     获取或设置用于创建 WebSocket 客户端的委托。
     /// </summary>
     public WebSocketProvider WebSocketProvider { get; set; }

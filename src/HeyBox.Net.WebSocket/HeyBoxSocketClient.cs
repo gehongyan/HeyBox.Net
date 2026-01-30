@@ -80,7 +80,7 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     internal HeyBoxSocketClient(HeyBoxSocketConfig config, HeyBoxSocketApiClient client)
         : base(config, client)
     {
-
+        MessageCacheSize = config.MessageCacheSize;
         WebSocketProvider = config.WebSocketProvider;
         MessageQueue = config.MessageQueueProvider(ProcessGatewayEventAsync);
         HandlerTimeout = config.HandlerTimeout;
@@ -285,7 +285,9 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
     {
         switch (type)
         {
-            // 斜线命令
+            case "5":
+                await HandleMessageReceived(payload).ConfigureAwait(false);
+                break;
             case "50":
                 await HandleSlashCommand(payload).ConfigureAwait(false);
                 break;
@@ -450,6 +452,19 @@ public partial class HeyBoxSocketClient : BaseSocketClient, IHeyBoxClient
                 .ConfigureAwait(false);
         }
     }
+
+    private async Task UnknownGuildAsync(string evnt, ulong guildId, object payload)
+    {
+        string details = $"{evnt} Guild={guildId}";
+        await _gatewayLogger.WarningAsync($"Unknown Guild ({details}). Payload: {SerializePayload(payload)}").ConfigureAwait(false);
+    }
+
+    private async Task UnknownChannelAsync(string evnt, ulong channelId, object payload)
+    {
+        string details = $"{evnt} Channel={channelId}";
+        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {SerializePayload(payload)}").ConfigureAwait(false);
+    }
+
 
     #region Helpers
 

@@ -1,26 +1,26 @@
-﻿using System.Collections.Immutable;
-using HeyBox.API.Rest;
+using System.Collections.Immutable;
+using HeyBox.Rest;
 
-namespace HeyBox.Rest;
+namespace HeyBox.WebSocket;
 
 /// <summary>
-///     表示一个基于 REST 的通用消息。
+///     表示一个通过 WebSocket 接收的消息。
 /// </summary>
-public abstract class RestMessage : RestEntity<ulong>, IMessage
+public abstract class SocketMessage : SocketEntity<ulong>, IMessage
 {
     private ImmutableArray<ITag> _tags = [];
 
     /// <inheritdoc/>
-    public MessageType Type { get; }
+    public MessageType Type { get; private set; }
 
     /// <inheritdoc />
-    public MessageSource Source { get; }
+    public MessageSource Source { get; private set; }
 
     /// <inheritdoc />
-    public IMessageChannel Channel { get; }
+    public IMessageChannel Channel { get; private set; }
 
     /// <inheritdoc />
-    public IUser Author { get; }
+    public IUser Author { get; private set; }
 
     /// <inheritdoc />
     public string Content { get; internal set; } = string.Empty;
@@ -29,49 +29,31 @@ public abstract class RestMessage : RestEntity<ulong>, IMessage
     public string CleanContent => MessageHelper.SanitizeMessage(this);
 
     /// <inheritdoc />
-    public DateTimeOffset Timestamp { get; internal set; }
+    public DateTimeOffset Timestamp { get; private set; }
 
     /// <inheritdoc />
-    public IMessageReference? Reference { get; internal set; }
+    public IMessageReference? Reference { get; private set; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<ITag> Tags => _tags;
+    public virtual IReadOnlyCollection<ITag> Tags => _tags;
 
-    internal IReadOnlyCollection<FileAttachment>? ImageFileInfos { get; private set; }
-
-    /// <inheritdoc />
-    public virtual IReadOnlyCollection<ICard> Cards => [];
-
-    /// <inheritdoc />
-    protected RestMessage(BaseHeyBoxClient client, ulong id, MessageType messageType,
-        IMessageChannel channel, IUser author, DateTimeOffset timestamp, MessageSource source)
+    internal SocketMessage(HeyBoxSocketClient client, ulong id, MessageType messageType,
+        ISocketMessageChannel channel, SocketUser author, MessageSource source)
         : base(client, id)
     {
         Type = messageType;
         Channel = channel;
         Author = author;
         Source = source;
-        Timestamp = timestamp;
     }
 
-    internal virtual void Update(SendChannelMessageParams args, SendChannelMessageResponse model)
+    internal virtual void Update(ClientState state, API.Gateway.MessageEvent model)
     {
-        Content = args.Message;
-        Reference = args.ReplyId.HasValue ? new MessageReference(args.ReplyId.Value) : null;
+        Content = model.Msg;
+        Timestamp = model.SendTime;
 
         IRoom? room = (Channel as IRoomChannel)?.Room;
-        _tags = MessageHelper.ParseTags(args.Message, Channel, room, []);
-    }
-
-    internal virtual void Update(SendUserMessageParams args, SendUserMessageResponse model)
-    {
-        Content = args.Message;
-        _tags = MessageHelper.ParseTags(args.Message, Channel, null, []);
-    }
-
-    internal virtual void Update(IReadOnlyCollection<FileAttachment>? imageFileInfos)
-    {
-        ImageFileInfos = imageFileInfos;
+        _tags = MessageHelper.ParseTags(model.Msg, Channel, room, []);
     }
 
     #region Reactions
